@@ -1,0 +1,55 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.55.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 2f41f550e8f33d7796593cba1ce823eda9925ce5 Changes
+SHA1 bf8f2d5cd21f11f71793b75d35e91f3d73a799bf Changes.ttl
+SHA1 e65e7d591658b5f70b093784d3aabc26a9707cb4 MANIFEST
+SHA1 72d98972146ef2556779a53388cc4ba3d9e9543f MANIFEST.SKIP
+SHA1 7fcd14cdea90745389a29d4e39fbf468bd755158 META.yml
+SHA1 a2ca943c2d339e88ccc4de8a8975de7e4c3b1be8 Makefile.PL
+SHA1 cd41d7108d19e5a6c867d43278e4171f01715447 README
+SHA1 1ebec4119486a032a5612a403e8d7b7be973e938 inc/Module/Install.pm
+SHA1 24038af925a69df41972971356ccce885b0fe2ad inc/Module/Install/Base.pm
+SHA1 7dc35fbe1e7a4ce02ce00b02470cbf1d4eddce19 inc/Module/Install/Bugtracker.pm
+SHA1 8f96eddfef548c9328457fbb17a121631cda356b inc/Module/Install/Can.pm
+SHA1 b19da2715a136aba51510f687a7b4e431e0a4bec inc/Module/Install/DOAPChangeSets.pm
+SHA1 ec29048e48edd9c9c55f9de7b773bd7c904335ad inc/Module/Install/Fetch.pm
+SHA1 0384525d85d51e99532e3ad8729d870113646d14 inc/Module/Install/Makefile.pm
+SHA1 38c657de4d91f5a60ff8e6c6f6a5547daf7c4ab2 inc/Module/Install/Metadata.pm
+SHA1 fd81bc0e85a1193f278760edb82928d8b4dff2c1 inc/Module/Install/Repository.pm
+SHA1 5c25f1104c0038041e3b93e0660c39171e4caf2b inc/Module/Install/Win32.pm
+SHA1 94d47349c803c4bd2a9230d25e4db0b6aaf1acd8 inc/Module/Install/WriteAll.pm
+SHA1 d8d0b2ee9a8820633c7f03a5e337a46f689de2cc lib/RDF/LinkedData.pm
+SHA1 bf6cfe217463920dcfa7b5dda2cec4c1965ce9f1 script/linked_data_mojoserver.json
+SHA1 85b9f31e726147417c231f447e2161d70991b862 script/linked_data_mojoserver.pl
+SHA1 2ee1c7cdc531b0ca4636df88c4f67df13f87973a script/write_sqlite-db.pl
+SHA1 06ccc450c1a6820c7b09735809bd0740e6c896e8 t/00-load.t
+SHA1 fc283daae8d5adbf24824a401fbab4699c73e083 t/10-basic.t
+SHA1 bf6cfe217463920dcfa7b5dda2cec4c1965ce9f1 t/20-mojolicious.json
+SHA1 b6a82adf1f1c4d7b201c95e01b3d3a915358cc86 t/20-mojolicious.t
+SHA1 23e06c35fa74a9103981299ccefa555692913457 t/boilerplate.t
+SHA1 bc590f9b29edb6d5b2cfb934ffad44dc3e5bb2d3 t/data/basic.db
+SHA1 e748101dc6bc80e2d9f6cffdeb6c722420ae2859 t/data/basic.ttl
+SHA1 0b1c5a2d59be6bfa7d60c64cd964fea6a0331705 t/pod-coverage.t
+SHA1 640935336dc1123c0069bcf5432bcaedc2cf22d3 t/pod.t
+SHA1 6027ca8dcc9ba30201cef5639abdab726a7ff2e5 xt/0-signature.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.9 (GNU/Linux)
+
+iEYEARECAAYFAkvZVYAACgkQ1vWp4xRc4UhHnACgyCm4afiEtECjDfIVPObx6NbF
+4BUAoKviDpgRygESDJaX3k9tglYzTf7d
+=Aw2R
+-----END PGP SIGNATURE-----

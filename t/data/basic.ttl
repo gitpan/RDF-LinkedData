@@ -1,0 +1,2 @@
+</foo> <http://www.w3.org/2000/01/rdf-schema#label> "This is a test"@en .
+</bar/baz/bing> <http://www.w3.org/2000/01/rdf-schema#label> "Testing with longer URI."@en .

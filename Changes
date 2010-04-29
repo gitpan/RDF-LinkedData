@@ -1,0 +1,16 @@
+############################################################################
+## DOAP for RDF-LinkedData #################################################
+############################################################################
+
+RDF-RDFa-Template
+=================
+
+Created:      2009-04-23
+Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-RDFa-Template>
+Maintainer:   Gregory Todd Williams <mailto:gwilliams@cpan.org>
+Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
+
+0.001_01 # Code on Github by Gregory Todd Williams.
+
+0.01 [2010-04-29] # Initial release. Kjetil Kjernsmo refactored Gregs code to separate the web server logic from the rest.
+

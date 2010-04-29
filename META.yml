@@ -1,0 +1,36 @@
+---
+abstract: 'Base class for Linked Data implementations'
+author:
+  - 'Most of the code was written by Gregory Todd Williams C<< <gwilliams@cpan.org> >> for L<RDF::LinkedData::Apache>, but refactored into this class for use by other modules by Kjetil Kjernsmo, C<< <kjetilk at cpan.org> >>'
+  - 'Kjetil Kjernsmo <kjetilk@cpan.org>'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+  FindBin: 0
+  Test::More: 0
+  Test::WWW::Mechanize::Mojo: 0
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
+distribution_type: module
+generated_by: 'Module::Install version 0.95'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: RDF-LinkedData
+no_index:
+  directory:
+    - inc
+    - t
+    - xt
+recommends:
+  Mojolicious::Lite: 0
+requires:
+  Error: 0
+  HTTP::Negotiate: 0
+  Log::Log4perl: 0
+  RDF::Trine: 0.115
+  Scalar::Util: 0
+resources:
+  bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=RDF-LinkedData
+  license: http://dev.perl.org/licenses/
+version: 0.01
