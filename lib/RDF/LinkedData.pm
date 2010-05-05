@@ -3,11 +3,10 @@ package RDF::LinkedData;
 use warnings;
 use strict;
 
-use RDF::Trine 0.115;
+use RDF::Trine 0.118;
 use RDF::Trine qw(iri variable statement);
 use RDF::Trine::Serializer::NTriples;
 use RDF::Trine::Serializer::RDFXML;
-use HTTP::Negotiate qw(choose);
 use Log::Log4perl;
 
 use Scalar::Util qw(blessed);
@@ -20,11 +19,11 @@ RDF::LinkedData - Base class for Linked Data implementations
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 =head1 SYNOPSIS
@@ -51,35 +50,34 @@ From the L<Mojolicious::Lite> example:
 
 =over
 
-=item C<< new ( $config | $model , $base [, $request] ) >>
+=item C<< new ( config => $config, model => $model, base => $base, request => $request, headers => $headers ) >>
 
-Creates a new handler object, given a config string or model and a
-base URI. Optionally, you may pass a Apache request object
+Creates a new handler object based on named parameters, given a config
+string or model and a base URI. Optionally, you may pass a Apache
+request object, and you will need to pass a L<HTTP::Headers> object if
+you plan to call C<content>.
 
 =cut
 
 sub new {
-	my $class = shift;
-        my $modelorconfig = shift;
-        my $base = shift || "http://localhost:3000"; 
-        my $r = shift;
-	
-        throw Error -text => "Config or model is missing" unless defined($modelorconfig);
+	my ($class, %params) = @_;
+        my $base = $params{base} || "http://localhost:3000";
 
-        my $model;
-        if ($modelorconfig->isa('RDF::Trine::Model')) {
-            $model = $modelorconfig;
-        } else {
-            my $store	= RDF::Trine::Store->new_with_string( $modelorconfig );
+        my $model = $params{model};
+        unless($model && $model->isa('RDF::Trine::Model')) {
+            my $store	= RDF::Trine::Store->new_with_string( $params{config} );
             $model	= RDF::Trine::Model->new( $store );
 	}
 
-        throw Error -text => "No valid RDF::Trine::Model" unless ($model->isa('RDF::Trine::Model'));
+        throw Error -text => "No valid RDF::Trine::Model, need either a config string or a model." unless ($model->isa('RDF::Trine::Model'));
+
+        my $headers = $params{headers}; # TODO: Is there a way to get this from the Apache2::RequestRec object?
 
 	my $self = bless( {
-		_r		=> $r,
+		_r	=> $params{request},
 		_model	=> $model,
 		_base	=> $base,
+                _headers => $headers,
 		_cache	=> {
 			title	=> {
 				'<http://www.w3.org/2000/01/rdf-schema#label>'	=> 'label',
@@ -111,24 +109,39 @@ sub request {
 	return $self->{_r};
 }
 
-=item C<< negotiate >>
 
-Returns the chosen variant based on acceptable formats. This is based on the C<HTTP_ACCEPT> header.
+=item C<< headers ( [ $headers ] ) >>
+
+Returns the L<HTTP::Headers> object if it exists or sets it if a L<HTTP::Headers> object is given as parameter.
 
 =cut
 
-sub negotiate {
-    my $variants = [
-		['html',	1.000, 'text/html', undef, undef, undef, 1],
-		['html',	0.500, 'application/xhtml+xml', undef, undef, undef, 1],
-		['rdf-nt',	0.900, 'text/plain', undef, undef, undef, 1],
-		['rdf-nt',	0.900, 'text/rdf', undef, undef, undef, 1],
-		['rdf-nt',  0.900, 'application/x-turtle', undef, undef, undef, 1],
-		['rdf-nt',  0.900, 'application/turtle', undef, undef, undef, 1],
-		['rdf-nt',  0.900, 'text/n3', undef, undef, undef, 1],
-		['rdf-xml',	0.950, 'application/rdf+xml', undef, undef, undef, 1],
-	];
-    return choose($variants) || 'html';
+sub headers {
+	my $self	= shift;
+        my $headers     = shift;
+        if (defined($headers)) {
+            if ($headers->isa('HTTP::Headers')) {
+                $self->{_headers} = $headers;
+            } else {
+                throw Error -text => 'Argument not a HTTP::Headers object';
+            }
+        }
+	return $self->{_headers};
+}
+
+=item C<< type >>
+
+Returns the chosen variant based on acceptable formats.
+
+=cut
+
+sub type {
+    my $self = shift;
+    unless (defined($self->{_type})) {
+        my ($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers);
+        $self->{_type} = ($ct =~ /rdf|turtle/) ? "data" : "page";
+    }
+    return $self->{_type};
 }
 
 =item C<< my_node >>
@@ -182,18 +195,13 @@ sub content {
     my $model = $self->model;
     my %output;
     if ($type eq 'data') {
-        my $choice      = $self->negotiate;
-        if ($choice =~ /nt/) {
-            my $s	= RDF::Trine::Serializer::NTriples->new();
-            $output{content_type} = 'text/n3';
-            $output{body} = "# Data for " .$node->uri ."\n" . $s->_serialize_bounded_description( $model, $node );
-
-        } else {
-            my $s	= RDF::Trine::Serializer::RDFXML->new();
-            $output{content_type} = 'application/rdf+xml';
-            $output{body} = $s->_serialize_bounded_description( $model, $node );
-        }
+        $self->{_type} = 'data';
+        my ($type, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers);
+        my $iter = $model->bounded_description($node);
+        $output{content_type} = $type;
+        $output{body} = $s->serialize_iterator_to_string ( $iter );
     } else {
+        $self->{_type} = 'page';
         my $title		= $self->title( $node );
         my $desc		= $self->description( $node );
         my $description	= sprintf( "<table>%s</table>\n", join("\n\t\t", map { sprintf( '<tr><td>%s</td><td>%s</td></tr>', @$_ ) } @$desc) );

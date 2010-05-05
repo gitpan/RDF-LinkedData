@@ -88,19 +88,26 @@ predicate URI.
 use Mojolicious::Lite;
 
 use RDF::LinkedData;
+use HTTP::Headers;
+use Mojo::Log;
+
+my $log = Mojo::Log->new;
 
 my $config = plugin 'json_config';#  => {file => '/etc/linked-data-server.json'};
 
-
 get '(*uri)/:type' => [type => qr(data|page)] => sub {
     my $self = shift;
-    my $ld = RDF::LinkedData->new($config->{store}, $config->{base});
+    my $ld = RDF::LinkedData->new(config => $config->{store}, base => $config->{base});
 
     my $uri = $self->param('uri');
     my $type =  $self->param('type');
     my $node = $ld->my_node($uri);
 
+    $log->info("Try rendering $type page for subject node: " . $node->as_string);
     if ($ld->count($node) > 0) {
+        $log->debug("Will render $type page for Accept header: " . $self->req->headers->header('Accept'));
+        my $h = HTTP::Headers->new(%{$self->req->headers->to_hash});
+        $ld->headers($h);
         my $content = $ld->content($node, $type);
         $self->res->headers->header('Vary' => join(", ", qw(Accept)));
         $self->res->headers->content_type($content->{content_type});
@@ -112,14 +119,17 @@ get '(*uri)/:type' => [type => qr(data|page)] => sub {
 
 get '/(*relative)' => sub {
     my $self = shift;
-    my $ld = RDF::LinkedData->new($config->{store}, $config->{base});
+    my $ld = RDF::LinkedData->new(config => $config->{store}, base => $config->{base});
     my $node = $ld->my_node('/'.$self->param('relative'));
 
+    $log->info('Subject node: ' . $node->as_string);
     if ($ld->count($node) > 0) {
         $self->res->code(303);
-        $ENV{HTTP_ACCEPT} = $self->req->headers->header('Accept'); # OMG! What a horrible hack. TODO
-        my $choice = $ld->negotiate();
-        $self->res->headers->location($self->req->url->to_abs . (($choice =~ /^rdf/) ? "/data" : "/page"));
+        my $h = HTTP::Headers->new(%{$self->req->headers->to_hash});
+        $ld->headers($h);
+        my $newurl = $self->req->url->to_abs . '/' . $ld->type;
+        $log->debug('Will do a 303 redirect to ' . $newurl);
+        $self->res->headers->location($newurl);
         $self->res->headers->header('Vary' => join(", ", qw(Accept)));
     } else {
         $self->res->code(404);

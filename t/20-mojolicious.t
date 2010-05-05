@@ -3,8 +3,10 @@
 use strict;
 use warnings;
 
-use Test::More tests => 29 ;
+use Test::More tests => 28 ;
 use Test::WWW::Mechanize::Mojo;
+
+use Mojo::Log;
 
 require 'script/linked_data_mojoserver.pl';
 
@@ -12,6 +14,7 @@ require 'script/linked_data_mojoserver.pl';
 my $tester = Test::Mojo->new();
 
 {
+    diag "Get /foo, no redirects";
     my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester, requests_redirectable => []);
     my $res = $mech->get("/foo");
     is($mech->status, 303, "Returns 303");
@@ -19,6 +22,7 @@ my $tester = Test::Mojo->new();
 }
 
 {
+    diag "Get /foo, no redirects, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester, requests_redirectable => []);
     $mech->default_header('Accept' => 'application/rdf+xml');
     my $res = $mech->get("/foo");
@@ -27,6 +31,7 @@ my $tester = Test::Mojo->new();
 }
 
 {
+    diag "Get /dahut, no redirects, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester, requests_redirectable => []);
     $mech->default_header('Accept' => 'application/rdf+xml');
     my $res = $mech->get("/dahut");
@@ -34,6 +39,7 @@ my $tester = Test::Mojo->new();
 }
 
 {
+    diag "Get /foo";
     my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester);
     $mech->get_ok("/foo");
     is($mech->ct, 'text/html', "Correct content-type");
@@ -42,6 +48,7 @@ my $tester = Test::Mojo->new();
 }
 
 {
+    diag "Get /foo, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester);
     $mech->default_header('Accept' => 'application/rdf+xml');
     $mech->get_ok("/foo");
@@ -51,19 +58,17 @@ my $tester = Test::Mojo->new();
 }
 
 {
+    diag "Get /foo, ask for Turtle";
     my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester);
     $mech->default_header('Accept' => 'application/turtle');
     $mech->get_ok("/foo");
-    is($mech->ct, 'text/n3', "Correct content-type");
-  TODO: {
-        local $TODO = "Should really be a real Turtle syntax";
-        is($mech->ct, 'application/turtle', "Correct content-type");
-    }
+    is($mech->ct, 'application/turtle', "Correct content-type");
     like($mech->uri, qr|/foo/data$|, "Location is OK");
     $mech->content_contains('This is a test', "Test phrase in content");
 }
 
 {
+    diag "Get /bar/baz/bing, no redirects, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester, requests_redirectable => []);
     $mech->default_header('Accept' => 'application/rdf+xml');
     my $res = $mech->get("/bar/baz/bing");
@@ -73,6 +78,7 @@ my $tester = Test::Mojo->new();
 
 
 {
+    diag "Get /bar/baz/bing";
     my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester);
     $mech->get_ok("/bar/baz/bing");
     is($mech->ct, 'text/html', "Correct content-type");
@@ -81,6 +87,7 @@ my $tester = Test::Mojo->new();
 }
 
 {
+    diag "Get /bar/baz/bing, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester);
     $mech->default_header('Accept' => 'application/rdf+xml');
     $mech->get_ok("/bar/baz/bing");

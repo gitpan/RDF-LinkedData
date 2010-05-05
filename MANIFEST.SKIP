@@ -8,3 +8,4 @@
 ~$
 .bak$
 .tar.gz$
+^script/templates/

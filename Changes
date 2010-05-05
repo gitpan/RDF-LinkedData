@@ -10,6 +10,15 @@ Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-RDFa-Template>
 Maintainer:   Gregory Todd Williams <mailto:gwilliams@cpan.org>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.02 [2010-05-05] # Use RDF::Trine's conneg and bounded description code.
+ - (Removal) Remove the negotiate method.
+ - (Addition) Add some log messages.
+ - Require RDF::Trine 0.121.
+ - (Addition) Use a HTTP::Headers object for conneg.
+ - (Addition) Add and improve a type method that returns page or data.
+ - (Addition) Use RDF::Trine's content negotiation code.
+ - (Addition) Use RDF::Trine's bounded description code.
+
 0.001_01 # Code on Github by Gregory Todd Williams.
 
 0.01 [2010-04-29] # Initial release. Kjetil Kjernsmo refactored Gregs code to separate the web server logic from the rest.
