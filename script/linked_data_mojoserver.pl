@@ -101,7 +101,15 @@ get '(*uri)/:type' => [type => qr(data|page)] => sub {
 
     my $uri = $self->param('uri');
     my $type =  $self->param('type');
+    $DB::single = 1;
     my $node = $ld->my_node($uri);
+
+    my $page = $ld->page($node);
+    if (($type eq 'page') && ($page ne $node->uri_value . '/page')) {
+        # Then, we have a foaf:page set that we should redirect to
+        $self->res->code(301);
+        $self->res->headers->location($page);
+    }
 
     $log->info("Try rendering $type page for subject node: " . $node->as_string);
     if ($ld->count($node) > 0) {
@@ -128,6 +136,9 @@ get '/(*relative)' => sub {
         my $h = HTTP::Headers->new(%{$self->req->headers->to_hash});
         $ld->headers($h);
         my $newurl = $self->req->url->to_abs . '/' . $ld->type;
+        if ($ld->type eq 'page') {
+            $newurl = $ld->page($node);
+        }
         $log->debug('Will do a 303 redirect to ' . $newurl);
         $self->res->headers->location($newurl);
         $self->res->headers->header('Vary' => join(", ", qw(Accept)));

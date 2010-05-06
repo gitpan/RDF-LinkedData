@@ -13,7 +13,7 @@ test_requires 'Test::Exception';
 
 requires 'Error'			=> 0;
 requires 'Log::Log4perl'		=> 0;
-requires 'RDF::Trine'			=> 0.121;
+requires 'RDF::Trine'			=> 0.122;
 requires 'Scalar::Util'			=> 0;
 
 recommends 'Mojolicious::Lite'          => 0; # The built-in server uses this
@@ -24,7 +24,6 @@ auto_set_bugtracker;
 
 write_doap_changes;
 
-auto_install;
 sign;
 
 WriteAll;

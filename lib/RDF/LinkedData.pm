@@ -3,7 +3,7 @@ package RDF::LinkedData;
 use warnings;
 use strict;
 
-use RDF::Trine 0.118;
+use RDF::Trine;
 use RDF::Trine qw(iri variable statement);
 use RDF::Trine::Serializer::NTriples;
 use RDF::Trine::Serializer::RDFXML;
@@ -19,11 +19,11 @@ RDF::LinkedData - Base class for Linked Data implementations
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 =head1 SYNOPSIS
@@ -254,6 +254,34 @@ Returns the base URI for this handler.
 sub base {
 	my $self	= shift;
 	return $self->{_base};
+}
+
+=item C<< page ( $node ) >>
+
+A suitable page to redirect to, based on foaf:page or foaf:homepage
+
+=cut
+
+sub page {
+    my $self	= shift;
+    my $node	= shift;
+    throw Error -text => "Node argument needs to be a RDF::Trine::Node::Resource." unless ($node && $node->isa('RDF::Trine::Node::Resource'));
+
+    my $model	= $self->model;
+
+    my @props	= (
+                   iri( 'http://xmlns.com/foaf/0.1/homepage' ),
+                   iri( 'http://xmlns.com/foaf/0.1/page' ),
+                  );
+
+    # optimistically assume that we'll get back a valid page on the first try
+    my $objects	= $model->objects_for_predicate_list( $node, @props );
+    if (blessed($objects) && $objects->is_resource) {
+        return $objects->uri_value;
+    }
+
+    # Return the common link to ourselves
+    return $node->uri_value . '/page';
 }
 
 

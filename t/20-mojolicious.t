@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 28 ;
+use Test::More;# tests => 28 ;
 use Test::WWW::Mechanize::Mojo;
 
 use Mojo::Log;
@@ -18,7 +18,15 @@ my $tester = Test::Mojo->new();
     my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester, requests_redirectable => []);
     my $res = $mech->get("/foo");
     is($mech->status, 303, "Returns 303");
-    like($res->header('Location'), qr|/foo/page$|, "Location is OK");
+    is($res->header('Location'), 'http://en.wikipedia.org/wiki/Foo', "Location is Wikipedia page");
+}
+
+{
+    diag "Get /foo/page, no redirects";
+    my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester, requests_redirectable => []);
+    my $res = $mech->get("/foo/page");
+    is($mech->status, 301, "Returns 301");
+    is($res->header('Location'), 'http://en.wikipedia.org/wiki/Foo', "Location is Wikipedia page");
 }
 
 {
@@ -36,15 +44,6 @@ my $tester = Test::Mojo->new();
     $mech->default_header('Accept' => 'application/rdf+xml');
     my $res = $mech->get("/dahut");
     is($mech->status, 404, "Returns 404");
-}
-
-{
-    diag "Get /foo";
-    my $mech = Test::WWW::Mechanize::Mojo->new(tester => $tester);
-    $mech->get_ok("/foo");
-    is($mech->ct, 'text/html', "Correct content-type");
-    like($mech->uri, qr|/foo/page$|, "Location is OK");
-    $mech->title_is('This is a test', "Title is correct");
 }
 
 {
@@ -85,6 +84,7 @@ my $tester = Test::Mojo->new();
     like($mech->uri, qr|/bar/baz/bing/page$|, "Location is OK");
     $mech->title_is('Testing with longer URI.', "Title is correct");
 }
+
 
 {
     diag "Get /bar/baz/bing, ask for RDF/XML";
