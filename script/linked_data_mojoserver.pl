@@ -88,6 +88,7 @@ predicate URI.
 use Mojolicious::Lite;
 
 use RDF::LinkedData;
+use RDF::LinkedData::Predicates;
 use HTTP::Headers;
 use Mojo::Log;
 
@@ -101,10 +102,11 @@ get '(*uri)/:type' => [type => qr(data|page)] => sub {
 
     my $uri = $self->param('uri');
     my $type =  $self->param('type');
-    $DB::single = 1;
     my $node = $ld->my_node($uri);
 
-    my $page = $ld->page($node);
+    my $preds = RDF::LinkedData::Predicates->new($ld->model);
+
+    my $page = $preds->page($node);
     if (($type eq 'page') && ($page ne $node->uri_value . '/page')) {
         # Then, we have a foaf:page set that we should redirect to
         $self->res->code(301);
@@ -115,7 +117,7 @@ get '(*uri)/:type' => [type => qr(data|page)] => sub {
     if ($ld->count($node) > 0) {
         $log->debug("Will render $type page for Accept header: " . $self->req->headers->header('Accept'));
         my $h = HTTP::Headers->new(%{$self->req->headers->to_hash});
-        $ld->headers($h);
+        $ld->headers_in($h);
         my $content = $ld->content($node, $type);
         $self->res->headers->header('Vary' => join(", ", qw(Accept)));
         $self->res->headers->content_type($content->{content_type});
@@ -134,10 +136,11 @@ get '/(*relative)' => sub {
     if ($ld->count($node) > 0) {
         $self->res->code(303);
         my $h = HTTP::Headers->new(%{$self->req->headers->to_hash});
-        $ld->headers($h);
+        $ld->headers_in($h);
         my $newurl = $self->req->url->to_abs . '/' . $ld->type;
         if ($ld->type eq 'page') {
-            $newurl = $ld->page($node);
+            my $preds = RDF::LinkedData::Predicates->new($ld->model);
+            $newurl = $preds->page($node);
         }
         $log->debug('Will do a 303 redirect to ' . $newurl);
         $self->res->headers->location($newurl);

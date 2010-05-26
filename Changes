@@ -2,29 +2,29 @@
 ## DOAP for RDF-LinkedData #################################################
 ############################################################################
 
-RDF-RDFa-Template
-=================
+RDF-LinkedData
+==============
 
 Created:      2009-04-23
-Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-RDFa-Template>
+Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-LinkedData>
 Maintainer:   Gregory Todd Williams <mailto:gwilliams@cpan.org>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
 0.03 [2010-05-06] # Add page method to use foaf:page for redirects.
+ - Minor cleanups.
+ - (Removal) Remove boilerplate tests.
+ - (Bugfix) Really does require RDF::Trine 0.122.
  - (Addition) Add a page method that uses foaf:homepage or foaf:page to
    override the default page for redirect.
- - Minor cleanups.
- - (Bugfix) Really does require RDF::Trine 0.122.
- - (Removal) Remove boilerplate tests.
 
 0.02 [2010-05-05] # Use RDF::Trine's conneg and bounded description code.
- - (Addition) Add some log messages.
  - (Addition) Use RDF::Trine's bounded description code.
+ - Require RDF::Trine 0.121.
+ - (Addition) Add some log messages.
+ - (Addition) Use a HTTP::Headers object for conneg.
+ - (Removal) Remove the negotiate method.
  - (Addition) Add and improve a type method that returns page or data.
  - (Addition) Use RDF::Trine's content negotiation code.
- - Require RDF::Trine 0.121.
- - (Removal) Remove the negotiate method.
- - (Addition) Use a HTTP::Headers object for conneg.
 
 0.001_01 # Code on Github by Gregory Todd Williams.
 
