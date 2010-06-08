@@ -7,7 +7,17 @@ use namespace::autoclean;
 use RDF::Trine;
 use RDF::Trine::Serializer::NTriples;
 use RDF::Trine::Serializer::RDFXML;
-use Log::Log4perl;
+use Log::Log4perl qw(:easy);
+use Plack::Response;
+use RDF::LinkedData::Predicates;
+
+with 'MooseX::Log::Log4perl::Easy';
+
+BEGIN {
+    Log::Log4perl->easy_init();
+}
+
+
 
 
 =head1 NAME
@@ -16,11 +26,11 @@ RDF::LinkedData::ProviderRole - Role providing important functionality for Linke
 
 =head1 VERSION
 
-Version 0.04
+Version 0.05
 
 =cut
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 
 =head1 SYNOPSIS
@@ -47,7 +57,7 @@ From the L<Mojolicious::Lite> example:
 
 =over
 
-=item C<< new ( config => $config, model => $model, base => $base, request => $request, headers_in => $headers_in ) >>
+=item C<< new ( config => $config, model => $model, base => $base, headers_in => $headers_in ) >>
 
 Creates a new handler object based on named parameters, given a config
 string or model and a base URI. Optionally, you may pass a Apache
@@ -78,7 +88,12 @@ Returns the L<HTTP::Headers> object if it exists or sets it if a L<HTTP::Headers
 
 =cut
 
-has headers_in => ( is => 'rw', isa => 'HTTP::Headers');
+has headers_in => ( is => 'rw', isa => 'HTTP::Headers', builder => '_build_headers_in');
+
+sub _build_headers_in {
+    return HTTP::Headers->new() ;
+}
+
 
 
 =item C<< type >>
@@ -89,12 +104,7 @@ Returns the chosen variant based on acceptable formats.
 
 #requires 'type';
 
-sub type {
-    my $self = shift;
-    my ($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers_in);
-    return ($ct =~ /rdf|turtle/) ? "data" : "page";
-}
-
+has 'type' => (is => 'rw', isa => 'Str', default => ''); 
 
 
 =item C<< my_node >>
@@ -112,14 +122,13 @@ sub my_node {
     
     # not happy with this, but it helps for clients that do content sniffing based on filename
     $iri	=~ s/.(nt|rdf|ttl)$//;
-    my $l		= Log::Log4perl->get_logger("rdf.linkeddata");    
-    $l->trace("Subject URI to be used: $iri");
+    $self->logger->info("Subject URI to be used: $iri");
     return RDF::Trine::Node::Resource->new( $iri );
 }
 
 =item C<< count ( $node) >>
 
-Returns the number of statements that has the $node as subject
+Returns the number of statements that has the $node as subject, or all if $node is undef.
 
 =cut
 
@@ -202,6 +211,78 @@ Returns or sets the base URI for this handler.
 =cut
 
 has base => (is => 'rw', isa => 'Str', default => "http://localhost:3000" );
+
+
+=item C<< response ( $uri ) >>
+
+Will look up what to with the given URI and populate the response object.
+
+=cut
+
+sub response {
+    my ($self, $uri) = @_;
+    my $response = Plack::Response->new;
+
+    my $type = $self->type;
+    $self->type('');
+    my $node = $self->my_node($uri);
+    $self->logger->info("Try rendering '$type' page for subject node: " . $node->as_string);
+    if ($self->count($node) > 0) {
+        if ($type) {
+            my $preds = RDF::LinkedData::Predicates->new($self->model);
+            
+            my $page = $preds->page($node);
+            if (($type eq 'page') && ($page ne $node->uri_value . '/page')) {
+                # Then, we have a foaf:page set that we should redirect to
+                $response->status(301);
+                $response->headers->header('Location' => $page);
+                return $response;
+            }
+
+            $self->logger->debug("Will render '$type' page ");
+            if ($self->headers_in->can('header') && $self->headers_in->header('Accept')) {
+                $self->logger->debug('Found Accept header: ' . $self->headers_in->header('Accept'));
+            } else {
+                $self->headers_in(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
+                $self->logger->warn('Setting Accept header: ' . $self->headers_in->header('Accept'));
+            }
+            $response->status(200);
+            my $content = $self->content($node, $type);
+            $response->headers->header('Vary' => join(", ", qw(Accept)));
+            $response->headers->content_type($content->{content_type});
+            $response->content($content->{body});
+        } else {
+            $response->status(303);
+            my $ct;
+            eval {
+                ($ct) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers_in);
+            };
+            if ($@) {
+                $ct = 'text/html'; # Set it to HTML for now
+            }
+            my $newurl = $self->base . $uri . '/data';
+            unless ($ct =~ /rdf|turtle/) {
+                my $preds = RDF::LinkedData::Predicates->new($self->model);
+                $newurl = $preds->page($node);
+            }
+            $self->logger->debug('Will do a 303 redirect to ' . $newurl);
+            $response->headers->header('Location' => $newurl);
+            $response->headers->header('Vary' => join(", ", qw(Accept)));
+        }
+        return $response;
+    } else {
+        $response->status(404);
+        $response->headers->content_type('text/plain');
+        $response->body('HTTP 404: Unknown resource');
+        return $response;
+    }
+    # We should never get here.
+    $response->status(500);
+    $response->headers->content_type('text/plain');
+    $response->body('HTTP 500: No such functionality.');
+    return $response;
+}
+
 
 
 =back

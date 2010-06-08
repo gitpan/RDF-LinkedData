@@ -14,12 +14,12 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 922a93cb6b84a6cf4c8b9cf07fae83ed3264ae86 Changes
+SHA1 80a81e2cc0df6771ffc7c74fffdf58defe02fdc6 Changes
 SHA1 326d6c246e3d3a3d69e6d027efe921c09369fe8b Changes.ttl
-SHA1 84681c6477c4c1ce2c7617965e59137d117bdaf0 MANIFEST
+SHA1 aad55452cecc5cd37ca61c56ddf8ccc425cc8825 MANIFEST
 SHA1 5459fd67a6e826cfa2a829b37a18a9bbf4de3e2f MANIFEST.SKIP
-SHA1 b633c596a2218ee72acee51232964bbdb3518dc3 META.yml
-SHA1 acc320a240636fdb33eb709394d6998d4301de74 Makefile.PL
+SHA1 14a245cf72dd5a1fa1d06eb3ff72c8073945bfc8 META.yml
+SHA1 97d1458131ef0781ed18114dd22b46131f04d8b0 Makefile.PL
 SHA1 cd41d7108d19e5a6c867d43278e4171f01715447 README
 SHA1 1ebec4119486a032a5612a403e8d7b7be973e938 inc/Module/Install.pm
 SHA1 24038af925a69df41972971356ccce885b0fe2ad inc/Module/Install/Base.pm
@@ -32,16 +32,17 @@ SHA1 38c657de4d91f5a60ff8e6c6f6a5547daf7c4ab2 inc/Module/Install/Metadata.pm
 SHA1 fd81bc0e85a1193f278760edb82928d8b4dff2c1 inc/Module/Install/Repository.pm
 SHA1 5c25f1104c0038041e3b93e0660c39171e4caf2b inc/Module/Install/Win32.pm
 SHA1 94d47349c803c4bd2a9230d25e4db0b6aaf1acd8 inc/Module/Install/WriteAll.pm
-SHA1 d70a94487139af1417b2f8e0563d38a564785d21 lib/RDF/LinkedData.pm
+SHA1 54711acc2519eb39677cf7c10015994b8730f04f lib/RDF/LinkedData.pm
 SHA1 8b913b00f02c76dbce75adf3c81354e668526d1f lib/RDF/LinkedData/Predicates.pm
-SHA1 69ac1c9089b8320ec4cc72d83932cf4d26946635 lib/RDF/LinkedData/ProviderRole.pm
+SHA1 c40ef2978da9d9fdb1b15b5f001604fb2c80869d lib/RDF/LinkedData/ProviderRole.pm
+SHA1 b529b76a5c036f1a7744a1f484e6df855b067780 script/linked_data.psgi
 SHA1 bf6cfe217463920dcfa7b5dda2cec4c1965ce9f1 script/linked_data_mojoserver.json
-SHA1 9e063fe247fe15611b55483dfee8c4efb012643f script/linked_data_mojoserver.pl
 SHA1 2ee1c7cdc531b0ca4636df88c4f67df13f87973a script/write_sqlite-db.pl
 SHA1 06ccc450c1a6820c7b09735809bd0740e6c896e8 t/00-load.t
 SHA1 50b8f71adb9537b5ff3f9a25b4151f6a669d7f86 t/10-basic.t
+SHA1 841a89a7dbf6edf9ef8c2b48e489994fc5a1bf6d t/15-process.t
 SHA1 bf6cfe217463920dcfa7b5dda2cec4c1965ce9f1 t/20-mojolicious.json
-SHA1 29ee648544dc26d96724ffe7e9da03461b2bdfcf t/20-mojolicious.t
+SHA1 85e9759660cdb3266af1f31f86460388909baa63 t/20-psgi-basic.t
 SHA1 418cee8c0a7fb1538faf837ab76890888dafc503 t/data/basic.db
 SHA1 a7d01314978f5500260f1078e353401d396e5e91 t/data/basic.ttl
 SHA1 e5d02727dedb63edd5ecd0c662ad259dc34041fb t/pod-coverage.t
@@ -50,7 +51,7 @@ SHA1 6027ca8dcc9ba30201cef5639abdab726a7ff2e5 xt/0-signature.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEUEARECAAYFAkv9PAcACgkQ1vWp4xRc4UhYzACXTE4SJMbWIqv0EJlnCZcxWqje
-FwCg3glvy2tupDlJ5QxcSUERAbaHFhc=
-=QlDO
+iEYEARECAAYFAkwOYagACgkQ1vWp4xRc4Ui6NwCfebH30b28jIzQdAQv5oJ4ZLfi
+EPwAn2pzOfo79XnKMireW5PdjG7Z5pqA
+=rcgb
 -----END PGP SIGNATURE-----

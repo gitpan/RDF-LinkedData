@@ -19,14 +19,15 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
 README
+script/linked_data.psgi
 script/linked_data_mojoserver.json
-script/linked_data_mojoserver.pl
 script/write_sqlite-db.pl
 SIGNATURE
 t/00-load.t
 t/10-basic.t
+t/15-process.t
 t/20-mojolicious.json
-t/20-mojolicious.t
+t/20-psgi-basic.t
 t/data/basic.db
 t/data/basic.ttl
 t/pod-coverage.t

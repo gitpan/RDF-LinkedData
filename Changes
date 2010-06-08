@@ -13,18 +13,18 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 0.03 [2010-05-06] # Add page method to use foaf:page for redirects.
  - Minor cleanups.
  - (Removal) Remove boilerplate tests.
- - (Bugfix) Really does require RDF::Trine 0.122.
  - (Addition) Add a page method that uses foaf:homepage or foaf:page to
    override the default page for redirect.
+ - (Bugfix) Really does require RDF::Trine 0.122.
 
 0.02 [2010-05-05] # Use RDF::Trine's conneg and bounded description code.
+ - (Removal) Remove the negotiate method.
+ - (Addition) Use RDF::Trine's content negotiation code.
+ - (Addition) Use a HTTP::Headers object for conneg.
+ - (Addition) Add and improve a type method that returns page or data.
+ - (Addition) Add some log messages.
  - (Addition) Use RDF::Trine's bounded description code.
  - Require RDF::Trine 0.121.
- - (Addition) Add some log messages.
- - (Addition) Use a HTTP::Headers object for conneg.
- - (Removal) Remove the negotiate method.
- - (Addition) Add and improve a type method that returns page or data.
- - (Addition) Use RDF::Trine's content negotiation code.
 
 0.001_01 # Code on Github by Gregory Todd Williams.
 
