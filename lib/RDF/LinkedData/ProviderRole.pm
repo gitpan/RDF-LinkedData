@@ -35,34 +35,50 @@ our $VERSION = '0.05';
 
 =head1 SYNOPSIS
 
-From the L<Mojolicious::Lite> example:
+See L<RDF::LinkedData> for default usage.
 
-    my $ld = RDF::LinkedData->new($config->{store}, $config->{base});
 
-    my $uri = $self->param('uri');
-    my $type =  $self->param('type');
-    my $node = $ld->my_node($uri);
+=head1 DISCUSSION
 
-    if ($ld->count($node) > 0) {
-        my $content = $ld->content($node, $type);
-        $self->res->headers->header('Vary' => join(", ", qw(Accept)));
-        $self->res->headers->content_type($content->{content_type});
-        $self->render_text($content->{body});
-    } else {
-        $self->render_not_found;
-    }
+This module is now a L<Moose::Role>. The intention with this role is threefold:
+
+=over
+
+=item *This module may run standalone, in which case the default
+implementation in this role should be sufficient for a working Linked
+Data server. The empty L<RDF::LinkedData> class should provide such a
+default implementation.
+
+=item * This role may be implemented in classes that need to change
+some parts of its functionality, such as a L<mod_perl>-based server.
+
+=item * It may be a part of a larger server framework, for example a
+server that supports the SPARQL protocol and the SPARQL RESTful
+protocol.
+
+=back
+
+It is not completely clear at this point what the requirements are for
+these three scenarios, but it currently satisfies the first
+scenario. Thus, the role may need to be changed substantially and
+possibly split into different roles based on the usage that evolves
+over time.
+
+Consequently, one should not rely in the current API unless you are
+planning to keep track of the development of this module. It is still
+very much in flux, and may change without warning.
 
 
 =head1 METHODS
 
 =over
 
-=item C<< new ( config => $config, model => $model, base => $base, headers_in => $headers_in ) >>
+=item C<< new ( store => $store, model => $model, base => $base, headers_in => $headers_in ) >>
 
-Creates a new handler object based on named parameters, given a config
-string or model and a base URI. Optionally, you may pass a Apache
-request object, and you will need to pass a L<HTTP::Headers> object if
-you plan to call C<content>.
+Creates a new handler object based on named parameters, given a store
+config string or model and a base URI. Optionally, you may pass a
+Apache request object, and you will need to pass a L<HTTP::Headers>
+object if you plan to call C<content>.
 
 =cut
 
@@ -70,16 +86,16 @@ sub BUILD {
 	my $self = shift;
 
         unless($self->model) {
-            my $store	= RDF::Trine::Store->new_with_string( $self->config );
+            my $store	= RDF::Trine::Store->new_with_string( $self->store );
             $self->model(RDF::Trine::Model->new( $store ));
 	}
 
-        throw Error -text => "No valid RDF::Trine::Model, need either a config string or a model." unless ($self->model);
+        throw Error -text => "No valid RDF::Trine::Model, need either a store config string or a model." unless ($self->model);
 
 }
 
 
-has config => (is => 'rw', isa => 'Str' );
+has store => (is => 'rw', isa => 'Str' );
 
 
 =item C<< headers_in ( [ $headers ] ) >>
@@ -98,7 +114,7 @@ sub _build_headers_in {
 
 =item C<< type >>
 
-Returns the chosen variant based on acceptable formats.
+Returns or sets the type of result to return, i.e. C<page>, in the case of a human-intended page or C<data> for machine consumption, or an empty string if it is an actual resource URI that should be redirected.
 
 =cut
 
@@ -109,7 +125,7 @@ has 'type' => (is => 'rw', isa => 'Str', default => '');
 
 =item C<< my_node >>
 
-A node for the requested relative URI. This node is typically used as
+A node for the requested B<relative> URI. This node is typically used as
 the subject to find which statements to return as data. Note that the
 base URI, set in the constructor or using the C<base> method, is
 prepended to the argument.
@@ -148,6 +164,13 @@ by content negotiation. In the latter, a simple HTML document will be
 returned. The returned hashref has two keys: C<content_type> and
 C<body>. The former is self-explanatory, the latter contains the
 actual content.
+
+One may argue that a hashref with magic keys should be a class of its
+own, and for that reason, this method should be considered "at
+risk". Currently, it is only used in one place, and it may be turned
+into a private method, get passed the L<Plack::Response> object,
+removed altogether or turned into a role of its own, depending on the
+actual use cases that surfaces in the future.
 
 =cut
 
@@ -215,7 +238,7 @@ has base => (is => 'rw', isa => 'Str', default => "http://localhost:3000" );
 
 =item C<< response ( $uri ) >>
 
-Will look up what to with the given URI and populate the response object.
+Will look up what to do with the given URI and populate the response object.
 
 =cut
 
@@ -290,7 +313,9 @@ sub response {
 
 =head1 AUTHOR
 
-Most of the code was written by Gregory Todd Williams C<< <gwilliams@cpan.org> >> for L<RDF::LinkedData::Apache>, but refactored into this class for use by other modules by Kjetil Kjernsmo, C<< <kjetilk at cpan.org> >>
+This module was started by by Gregory Todd Williams C<<
+<gwilliams@cpan.org> >> for L<RDF::LinkedData::Apache>, but heavily
+refactored and rewritten by by Kjetil Kjernsmo, C<< <kjetilk@cpan.org> >>
 
 =head1 BUGS
 
@@ -299,36 +324,15 @@ the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-Linked
 automatically be notified of progress on your bug as I make changes.
 
 
-
-
 =head1 SUPPORT
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc RDF::LinkedData
+    perldoc RDF::LinkedData::ProviderRole
 
+The perlrdf mailing list is the right place to seek help and discuss this module:
 
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=RDF-LinkedData>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/RDF-LinkedData>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/RDF-LinkedData>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/RDF-LinkedData>
-
-=back
+L<http://lists.perlrdf.org/listinfo/dev>
 
 
 =head1 ACKNOWLEDGEMENTS
@@ -344,4 +348,4 @@ under the same terms as Perl itself.
 
 =cut
 
-1; # End of RDF::LinkedData
+1;
