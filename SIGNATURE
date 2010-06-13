@@ -14,11 +14,11 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 dd4f50190862000860f419c07a0c3d05de02dc93 Changes
-SHA1 98f62fda3521a5050585e18008b5b5f7c5ff3d9a Changes.ttl
+SHA1 b01e97241f77545688277df8ca8f73df2ddf7b45 Changes
+SHA1 677bda3c12aac36acb5fcdb8df51fc8afd8147e4 Changes.ttl
 SHA1 172f044ac968f4515214802fea25dd5dcacf991b MANIFEST
 SHA1 5459fd67a6e826cfa2a829b37a18a9bbf4de3e2f MANIFEST.SKIP
-SHA1 a4178660aa2e6f347d85f802baeb9f0c4e681bd3 META.yml
+SHA1 cd9f833400535ade82bf2b01fc35c586c305096e META.yml
 SHA1 e7a64b9a4b7bcfb5a48e1e9073f2c6c995191d57 Makefile.PL
 SHA1 764ede1da0ae6d16f2bea5729fc9b8dd7e771335 README
 SHA1 fd5f3c4f0418efee3b9b16cf8c3902e8374909df inc/Module/Install.pm
@@ -33,16 +33,16 @@ SHA1 fd81bc0e85a1193f278760edb82928d8b4dff2c1 inc/Module/Install/Repository.pm
 SHA1 3406c9015148c75406903e7382f8182613b5022a inc/Module/Install/Scripts.pm
 SHA1 f7ee667e878bd2faf22ee9358a7b5a2cc8e91ba4 inc/Module/Install/Win32.pm
 SHA1 8ed29d6cf217e0977469575d788599cbfb53a5ca inc/Module/Install/WriteAll.pm
-SHA1 36d88ed59adf7d666382f75272b627c463b0d535 lib/RDF/LinkedData.pm
+SHA1 280bca7d1abced18202d6715d9bb921ac2a0429c lib/RDF/LinkedData.pm
 SHA1 be2c2a70f2adf0f68d02126f1f5b8612e1d3e88c lib/RDF/LinkedData/Predicates.pm
 SHA1 a3af206bcf339b5bec74e4ac196081b09322987c lib/RDF/LinkedData/ProviderRole.pm
 SHA1 bf6cfe217463920dcfa7b5dda2cec4c1965ce9f1 rdf_linkeddata.json
-SHA1 82880d630305a54bf9abb4047a0370541d0f2375 script/linked_data.psgi
+SHA1 eb1efbbdc565f6659c8ba15eca979e0281299803 script/linked_data.psgi
 SHA1 2ee1c7cdc531b0ca4636df88c4f67df13f87973a script/write_sqlite-db.pl
 SHA1 06ccc450c1a6820c7b09735809bd0740e6c896e8 t/00-load.t
 SHA1 50b8f71adb9537b5ff3f9a25b4151f6a669d7f86 t/10-basic.t
 SHA1 841a89a7dbf6edf9ef8c2b48e489994fc5a1bf6d t/15-process.t
-SHA1 85e9759660cdb3266af1f31f86460388909baa63 t/20-psgi-basic.t
+SHA1 5ce07e8487d50641d9c250e060b85d4fc3135607 t/20-psgi-basic.t
 SHA1 418cee8c0a7fb1538faf837ab76890888dafc503 t/data/basic.db
 SHA1 a7d01314978f5500260f1078e353401d396e5e91 t/data/basic.ttl
 SHA1 e5d02727dedb63edd5ecd0c662ad259dc34041fb t/pod-coverage.t
@@ -51,7 +51,7 @@ SHA1 6027ca8dcc9ba30201cef5639abdab726a7ff2e5 xt/0-signature.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.9 (GNU/Linux)
 
-iD8DBQFMFAijlE/Gp2pqC7wRAnx+AJ4hyLSwNzHlL8TJKz+vJ699qs098wCdGsFe
-16e/w+9EimidNDwzWMfLzH0=
-=N9qs
+iD8DBQFMFRxVlE/Gp2pqC7wRAlY2AJ4z8DjKBZudUk1ju5Fo1fHSaKcLwwCcDz7B
+UQ4NMbA9PQ3aVMae8tlQCyc=
+=VfrJ
 -----END PGP SIGNATURE-----
