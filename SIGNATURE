@@ -1,5 +1,5 @@
 This file contains message digests of all files listed in MANIFEST,
-signed via the Module::Signature module, version 0.55.
+signed via the Module::Signature module, version 0.61.
 
 To verify the content in this distribution, first make sure you have
 Module::Signature installed, then type:
@@ -14,44 +14,42 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 b01e97241f77545688277df8ca8f73df2ddf7b45 Changes
-SHA1 677bda3c12aac36acb5fcdb8df51fc8afd8147e4 Changes.ttl
-SHA1 172f044ac968f4515214802fea25dd5dcacf991b MANIFEST
+SHA1 5da4915263f153669b72777fa6bab243c98339e8 Changes
+SHA1 4e8bd72a93e3715603752554cc4a16c8482e68be Changes.ttl
+SHA1 fd7f7d34738a4bdea1712e77a1c85a9d7b23b583 MANIFEST
 SHA1 5459fd67a6e826cfa2a829b37a18a9bbf4de3e2f MANIFEST.SKIP
-SHA1 cd9f833400535ade82bf2b01fc35c586c305096e META.yml
-SHA1 e7a64b9a4b7bcfb5a48e1e9073f2c6c995191d57 Makefile.PL
+SHA1 936454bdab8c35dc78134a5eaab077cf28d8eb8a META.yml
+SHA1 d132dda7903bc208b480091cef52da02a5f1cc85 Makefile.PL
 SHA1 764ede1da0ae6d16f2bea5729fc9b8dd7e771335 README
 SHA1 fd5f3c4f0418efee3b9b16cf8c3902e8374909df inc/Module/Install.pm
 SHA1 7cd7c349afdf3f012e475507b1017bdfa796bfbd inc/Module/Install/Base.pm
-SHA1 7dc35fbe1e7a4ce02ce00b02470cbf1d4eddce19 inc/Module/Install/Bugtracker.pm
 SHA1 ba186541bbf6439111f01fc70769cf24d22869bf inc/Module/Install/Can.pm
-SHA1 73a28c770d5e9324eaa586f03252c5a8a6f3c941 inc/Module/Install/DOAPChangeSets.pm
+SHA1 de189984fc99741cc060d1964f513e45bf6d5c74 inc/Module/Install/DOAPChangeSets.pm
 SHA1 aaa50eca0d7751db7a4d953fac9bc72c6294e238 inc/Module/Install/Fetch.pm
 SHA1 3e83972921d54198d1246f7278f08664006cd65d inc/Module/Install/Makefile.pm
 SHA1 12bf1867955480d47d5171a9e9c6a96fabe0b58f inc/Module/Install/Metadata.pm
-SHA1 fd81bc0e85a1193f278760edb82928d8b4dff2c1 inc/Module/Install/Repository.pm
 SHA1 3406c9015148c75406903e7382f8182613b5022a inc/Module/Install/Scripts.pm
 SHA1 f7ee667e878bd2faf22ee9358a7b5a2cc8e91ba4 inc/Module/Install/Win32.pm
 SHA1 8ed29d6cf217e0977469575d788599cbfb53a5ca inc/Module/Install/WriteAll.pm
-SHA1 280bca7d1abced18202d6715d9bb921ac2a0429c lib/RDF/LinkedData.pm
+SHA1 fe595953ed3ed1c39f189b82f6ae2c0ac2bc46ca lib/RDF/LinkedData.pm
 SHA1 be2c2a70f2adf0f68d02126f1f5b8612e1d3e88c lib/RDF/LinkedData/Predicates.pm
-SHA1 a3af206bcf339b5bec74e4ac196081b09322987c lib/RDF/LinkedData/ProviderRole.pm
-SHA1 bf6cfe217463920dcfa7b5dda2cec4c1965ce9f1 rdf_linkeddata.json
-SHA1 eb1efbbdc565f6659c8ba15eca979e0281299803 script/linked_data.psgi
+SHA1 7f2fb1537b46e2d7e47a195c277a32ed47279dae lib/RDF/LinkedData/ProviderRole.pm
+SHA1 723de907296747e7de5271b50f5a3960ee5ceaa5 rdf_linkeddata.json
+SHA1 e0f45f11785893872e746268908b75b919c7ad74 script/linked_data.psgi
 SHA1 2ee1c7cdc531b0ca4636df88c4f67df13f87973a script/write_sqlite-db.pl
 SHA1 06ccc450c1a6820c7b09735809bd0740e6c896e8 t/00-load.t
 SHA1 50b8f71adb9537b5ff3f9a25b4151f6a669d7f86 t/10-basic.t
-SHA1 841a89a7dbf6edf9ef8c2b48e489994fc5a1bf6d t/15-process.t
-SHA1 5ce07e8487d50641d9c250e060b85d4fc3135607 t/20-psgi-basic.t
+SHA1 11d1a132bcdf73a2aa1c398418bba35fd19e0540 t/15-process.t
+SHA1 a5ed64f6f90f1150acf2e3f426407a0b51c1a54c t/20-psgi-basic.t
 SHA1 418cee8c0a7fb1538faf837ab76890888dafc503 t/data/basic.db
 SHA1 a7d01314978f5500260f1078e353401d396e5e91 t/data/basic.ttl
 SHA1 e5d02727dedb63edd5ecd0c662ad259dc34041fb t/pod-coverage.t
 SHA1 640935336dc1123c0069bcf5432bcaedc2cf22d3 t/pod.t
 SHA1 6027ca8dcc9ba30201cef5639abdab726a7ff2e5 xt/0-signature.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.9 (GNU/Linux)
+Version: GnuPG v1.4.10 (GNU/Linux)
 
-iD8DBQFMFRxVlE/Gp2pqC7wRAlY2AJ4z8DjKBZudUk1ju5Fo1fHSaKcLwwCcDz7B
-UQ4NMbA9PQ3aVMae8tlQCyc=
-=VfrJ
+iEYEARECAAYFAkxWko8ACgkQ1vWp4xRc4Ug0YQCfV4gFqrUkhSwgbhUdda2N2Ozh
+JOcAoLd13MwbID0YTtvgwaDKrJg11zJo
+=43jC
 -----END PGP SIGNATURE-----

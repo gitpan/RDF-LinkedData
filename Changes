@@ -7,40 +7,50 @@ RDF-LinkedData
 
 Created:      2009-04-23
 Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-LinkedData>
-Maintainer:   Gregory Todd Williams <mailto:gwilliams@cpan.org>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.08 [2010-08-02] # Update to use config hashrefs and various fixes for recent RDF::Trine.
+ - Now use a hashref config for new_with_config instead of config string.
+ - (Update) Explicitly ask for text/html in tests since RDF::Trine 0.124
+   needs it.
+ - (Update) No Accept header will return turtle data.
+ - (Update) Require RDF::Trine 0.125.
+
+0.06 [2010-06-13] # Minor POD syntax documentation bug fix release.
+ - (Addition) Add number of PSGI tests.
+ - (Bugfix) Fix minor POD bugs.
+
 0.05 [2010-06-13] # Major refactor, use Moose and Plack.
- - (Addition) use Moose
+ - Many smaller changes.
+ - (Addition) A response method contains most of the logic.
+ - (Addition) Create RDF::LinkedData::ProviderRole, a Moose::Role with a
+   default implementation.
  - (Addition) Create a Plack PSGI script to run the server. This also
    serves as a basic usage example.
  - (Addition) Create a RDF::LinkedData::Predicates with a title,
    description and page methods.
- - (Addition) Use Config::JFDI for configuration.
- - (Addition) Create RDF::LinkedData::ProviderRole, a Moose::Role with a
-   default implementation.
- - (Removal) Remove Mojolicious::Lite script.
- - Many smaller changes.
  - (Addition) More documentation.
  - (Addition) More tests, also unit testing.
- - (Addition) A response method contains most of the logic.
+ - (Addition) Use Config::JFDI for configuration.
  - (Addition) Use Plack::Response and HTTP::Headers in the role itself.
+ - (Addition) use Moose
+ - (Removal) Remove Mojolicious::Lite script.
 
 0.03 [2010-05-06] # Add page method to use foaf:page for redirects.
  - Minor cleanups.
- - (Bugfix) Really does require RDF::Trine 0.122.
  - (Addition) Add a page method that uses foaf:homepage or foaf:page to
    override the default page for redirect.
+ - (Bugfix) Really does require RDF::Trine 0.122.
  - (Removal) Remove boilerplate tests.
 
 0.02 [2010-05-05] # Use RDF::Trine's conneg and bounded description code.
- - (Removal) Remove the negotiate method.
- - (Addition) Add some log messages.
- - (Addition) Use a HTTP::Headers object for conneg.
- - (Addition) Use RDF::Trine's content negotiation code.
  - Require RDF::Trine 0.121.
- - (Addition) Use RDF::Trine's bounded description code.
  - (Addition) Add and improve a type method that returns page or data.
+ - (Addition) Add some log messages.
+ - (Addition) Use RDF::Trine's bounded description code.
+ - (Addition) Use RDF::Trine's content negotiation code.
+ - (Addition) Use a HTTP::Headers object for conneg.
+ - (Removal) Remove the negotiate method.
 
 0.001_01 # Code on Github by Gregory Todd Williams.
 

@@ -12,11 +12,11 @@ RDF::LinkedData - Linked Data implementation default class
 
 =head1 VERSION
 
-Version 0.06
+Version 0.08
 
 =cut
 
-our $VERSION = '0.06';
+our $VERSION = '0.08';
 
 
 =head1 SYNOPSIS
@@ -57,7 +57,7 @@ L<RDF::LinkedData::ProviderRole>, and does nothing on its own.
 
 This module was started by by Gregory Todd Williams C<<
 <gwilliams@cpan.org> >> for L<RDF::LinkedData::Apache>, but heavily
-refactored and rewritten by by Kjetil Kjernsmo, C<< <kjetilk@cpan.org> >>
+refactored and rewritten by Kjetil Kjernsmo, C<< <kjetilk@cpan.org> >>
 
 =head1 BUGS
 

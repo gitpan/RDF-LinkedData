@@ -26,11 +26,11 @@ RDF::LinkedData::ProviderRole - Role providing important functionality for Linke
 
 =head1 VERSION
 
-Version 0.05
+Version 0.08
 
 =cut
 
-our $VERSION = '0.05';
+our $VERSION = '0.08';
 
 
 =head1 SYNOPSIS
@@ -44,7 +44,7 @@ This module is now a L<Moose::Role>. The intention with this role is threefold:
 
 =over
 
-=item *This module may run standalone, in which case the default
+=item * This module may run standalone, in which case the default
 implementation in this role should be sufficient for a working Linked
 Data server. The empty L<RDF::LinkedData> class should provide such a
 default implementation.
@@ -76,9 +76,10 @@ very much in flux, and may change without warning.
 =item C<< new ( store => $store, model => $model, base => $base, headers_in => $headers_in ) >>
 
 Creates a new handler object based on named parameters, given a store
-config string or model and a base URI. Optionally, you may pass a
-Apache request object, and you will need to pass a L<HTTP::Headers>
-object if you plan to call C<content>.
+config (which is a hashref that can be passed to
+L<RDF::Trine::Store>->new_with_config) or model and a base
+URI. Optionally, you may pass a Apache request object, and you will
+need to pass a L<HTTP::Headers> object if you plan to call C<content>.
 
 =cut
 
@@ -86,7 +87,7 @@ sub BUILD {
 	my $self = shift;
 
         unless($self->model) {
-            my $store	= RDF::Trine::Store->new_with_string( $self->store );
+            my $store	= RDF::Trine::Store->new_with_config( $self->store );
             $self->model(RDF::Trine::Model->new( $store ));
 	}
 
@@ -95,7 +96,7 @@ sub BUILD {
 }
 
 
-has store => (is => 'rw', isa => 'Str' );
+has store => (is => 'rw', isa => 'HashRef' );
 
 
 =item C<< headers_in ( [ $headers ] ) >>

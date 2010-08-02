@@ -34,11 +34,9 @@ requires:
   Moose: 0
   MooseX::Log::Log4perl::Easy: 0
   Plack: 0
-  RDF::Trine: 0.122
+  RDF::Trine: 0.125
   Scalar::Util: 0
   namespace::autoclean: 0
 resources:
-  bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=RDF-LinkedData
   license: http://dev.perl.org/licenses/
-  repository: git://github.com/kjetilk/RDF-LinkedData.git
-version: 0.06
+version: 0.08
