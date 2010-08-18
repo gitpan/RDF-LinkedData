@@ -34,9 +34,10 @@ requires:
   Moose: 0
   MooseX::Log::Log4perl::Easy: 0
   Plack: 0
+  RDF::Helper::Properties: 0.08
   RDF::Trine: 0.125
   Scalar::Util: 0
   namespace::autoclean: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.08
+version: 0.09_1

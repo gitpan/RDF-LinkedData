@@ -9,6 +9,14 @@ Created:      2009-04-23
 Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-LinkedData>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.09_1 [2010-08-18] # Refactor helper modules; .
+ - Move POD-tests to xt.
+ - (Addition) Add namespaces method to set a hashref with RDF namespaces.
+ - (Addition) create a helper_properties method to pass the properties.
+ - (Bugfix) Remove -T switch from load.t, since it borks on some systems.
+ - (Update) Split off RDF::LinkedData::Predicates into distribution of its
+   own.
+
 0.08 [2010-08-02] # Update to use config hashrefs and various fixes for recent RDF::Trine.
  - Now use a hashref config for new_with_config instead of config string.
  - (Update) Explicitly ask for text/html in tests since RDF::Trine 0.124

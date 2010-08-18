@@ -9,7 +9,7 @@ use RDF::Trine::Serializer::NTriples;
 use RDF::Trine::Serializer::RDFXML;
 use Log::Log4perl qw(:easy);
 use Plack::Response;
-use RDF::LinkedData::Predicates;
+use RDF::Helper::Properties;
 
 with 'MooseX::Log::Log4perl::Easy';
 
@@ -26,11 +26,11 @@ RDF::LinkedData::ProviderRole - Role providing important functionality for Linke
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09_1
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09_1';
 
 
 =head1 SYNOPSIS
@@ -111,6 +111,20 @@ sub _build_headers_in {
     return HTTP::Headers->new() ;
 }
 
+=item C<< helper_properties (  ) >>
+
+Returns the L<RDF::Helper::Properties> object if it exists or sets
+it if a L<RDF::Helper::Properties> object is given as parameter.
+
+=cut
+
+has helper_properties => ( is => 'rw', isa => 'RDF::Helper::Properties', lazy => 1, builder => '_build_helper_properties');
+
+sub _build_helper_properties {
+    my $self = shift;
+    return RDF::Helper::Properties->new(model => $self->model);
+}
+
 
 
 =item C<< type >>
@@ -182,13 +196,14 @@ sub content {
     my %output;
     if ($type eq 'data') {
         $self->{_type} = 'data';
-        my ($type, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers_in);
+        my ($type, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers_in, 
+                                                           namespaces => $self->namespaces);
         my $iter = $model->bounded_description($node);
         $output{content_type} = $type;
         $output{body} = $s->serialize_iterator_to_string ( $iter );
     } else {
         $self->{_type} = 'page';
-        my $preds = RDF::LinkedData::Predicates->new($model);
+        my $preds = $self->helper_properties;
         my $title		= $preds->title( $node );
         my $desc		= $preds->description( $node );
         my $description	= sprintf( "<table>%s</table>\n", join("\n\t\t", map { sprintf( '<tr><td>%s</td><td>%s</td></tr>', @$_ ) } @$desc) );
@@ -253,8 +268,7 @@ sub response {
     $self->logger->info("Try rendering '$type' page for subject node: " . $node->as_string);
     if ($self->count($node) > 0) {
         if ($type) {
-            my $preds = RDF::LinkedData::Predicates->new($self->model);
-            
+            my $preds = $self->helper_properties;
             my $page = $preds->page($node);
             if (($type eq 'page') && ($page ne $node->uri_value . '/page')) {
                 # Then, we have a foaf:page set that we should redirect to
@@ -286,7 +300,7 @@ sub response {
             }
             my $newurl = $self->base . $uri . '/data';
             unless ($ct =~ /rdf|turtle/) {
-                my $preds = RDF::LinkedData::Predicates->new($self->model);
+                my $preds = $self->helper_properties;
                 $newurl = $preds->page($node);
             }
             $self->logger->debug('Will do a 303 redirect to ' . $newurl);
@@ -307,6 +321,16 @@ sub response {
     return $response;
 }
 
+
+=item namespaces ( { skos => 'http://www.w3.org/2004/02/skos/core#', dct => 'http://purl.org/dc/terms/' } )
+
+Gets or sets the namespaces that some serializers use for pretty-printing.
+
+=cut
+
+
+
+has 'namespaces' => (is => 'rw', isa => 'HashRef', default => sub { { rdf => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#' } } );
 
 
 =back
