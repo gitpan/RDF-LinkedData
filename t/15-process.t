@@ -4,7 +4,7 @@ use FindBin qw($Bin);
 use HTTP::Headers;
 
 use strict;
-use Test::More tests => 34;
+use Test::More tests => 37;
 use Test::Exception;
 #use Test::NoWarnings;
 
@@ -31,7 +31,7 @@ ok($model, "We have a model");
 my $ld = RDF::LinkedData->new(model => $model, base=>$base_uri);
 
 isa_ok($ld, 'RDF::LinkedData');
-ok($ld->count > 0, "There are triples in the model");
+cmp_ok($ld->count, '>', 0, "There are triples in the model");
 
 
 {
@@ -45,6 +45,16 @@ ok($ld->count > 0, "There are triples in the model");
 {
     diag "Get /foo, ask for text/html";
     $ld->headers_in(HTTP::Headers->new('Accept' => 'text/html'));
+    my $response = $ld->response('/foo');
+    isa_ok($response, 'Plack::Response');
+    is($response->status, 303, "Returns 303");
+    is($response->header('Location'), 'http://en.wikipedia.org/wiki/Foo', "Location is Wikipedia page");
+}
+
+TODO: {
+    local $TODO = 'Should Firefox default Accept header give page?';
+    diag "Get /foo, use Firefox' default Accept header";
+    $ld->headers_in(HTTP::Headers->new('Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'));
     my $response = $ld->response('/foo');
     isa_ok($response, 'Plack::Response');
     is($response->status, 303, "Returns 303");

@@ -14,11 +14,11 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 ea320513c655a3d9c2e1109d367a2e4d49d71430 Changes
-SHA1 1f2ee0b2cf6a69013e22366847a1f364de942608 Changes.ttl
+SHA1 3c14c4d632e420deb53e55dce6306466d1bb4181 Changes
+SHA1 bdd9b09867a2a62d5cddd482e6b0072738053f02 Changes.ttl
 SHA1 51849cc29284118bfdfc8d0a021f11b98209b983 MANIFEST
 SHA1 5459fd67a6e826cfa2a829b37a18a9bbf4de3e2f MANIFEST.SKIP
-SHA1 6551775d3c258e1be937c39e0bad5f818b54fe1e META.yml
+SHA1 a06db1b68bcc9ae1d33866c0847f149534ba10c7 META.yml
 SHA1 23aa191c0bc136cf673dd59d33ea17c2ce96fcbf Makefile.PL
 SHA1 764ede1da0ae6d16f2bea5729fc9b8dd7e771335 README
 SHA1 fd5f3c4f0418efee3b9b16cf8c3902e8374909df inc/Module/Install.pm
@@ -31,14 +31,14 @@ SHA1 12bf1867955480d47d5171a9e9c6a96fabe0b58f inc/Module/Install/Metadata.pm
 SHA1 3406c9015148c75406903e7382f8182613b5022a inc/Module/Install/Scripts.pm
 SHA1 f7ee667e878bd2faf22ee9358a7b5a2cc8e91ba4 inc/Module/Install/Win32.pm
 SHA1 8ed29d6cf217e0977469575d788599cbfb53a5ca inc/Module/Install/WriteAll.pm
-SHA1 191180333f902be5fa6c7c7e10ecaf3a8adad1ef lib/RDF/LinkedData.pm
-SHA1 62fec2868b5d94b6303b12023ff8955c79321ce4 lib/RDF/LinkedData/ProviderRole.pm
+SHA1 c47c7420f54e5287c9f8244fc6dda2b153e4ee24 lib/RDF/LinkedData.pm
+SHA1 41e1f738009b5a27436c0f00d513ceb71fbd3be6 lib/RDF/LinkedData/ProviderRole.pm
 SHA1 723de907296747e7de5271b50f5a3960ee5ceaa5 rdf_linkeddata.json
 SHA1 e0f45f11785893872e746268908b75b919c7ad74 script/linked_data.psgi
 SHA1 2ee1c7cdc531b0ca4636df88c4f67df13f87973a script/write_sqlite-db.pl
 SHA1 af175eb27d75d4dc2890b917d845a2e2b04b5d49 t/00-load.t
 SHA1 26f76ca91d5ea4e5d912176f11952917c1b8e62e t/10-basic.t
-SHA1 3e020cda8b5b888dee384893bc4bbe1e343316b3 t/15-process.t
+SHA1 127e69c7c14bb010f07f1ecaf2a1238b388ea168 t/15-process.t
 SHA1 a5ed64f6f90f1150acf2e3f426407a0b51c1a54c t/20-psgi-basic.t
 SHA1 418cee8c0a7fb1538faf837ab76890888dafc503 t/data/basic.db
 SHA1 a7d01314978f5500260f1078e353401d396e5e91 t/data/basic.ttl
@@ -48,7 +48,7 @@ SHA1 640935336dc1123c0069bcf5432bcaedc2cf22d3 xt/pod.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iEYEARECAAYFAkxr2F4ACgkQ1vWp4xRc4Uhf3ACdG5zIfSSJDUe2uDqeE3NAd1YB
-WXYAoNfhEozydZ4/DcnheubrnJM0kb7i
-=Xax/
+iEYEARECAAYFAkxtNzYACgkQ1vWp4xRc4UjftgCfX0sDLCUydNzGeOES+YWMSDNW
+mB4AoLU/VEAeNAo+5WPYoW61FksTXRY0
+=+VTW
 -----END PGP SIGNATURE-----
