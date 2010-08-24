@@ -1,6 +1,7 @@
 Changes
 Changes.ttl
 inc/Module/Install.pm
+inc/Module/Install/AuthorTests.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
 inc/Module/Install/DOAPChangeSets.pm

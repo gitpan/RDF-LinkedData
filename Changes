@@ -9,6 +9,10 @@ Created:      2009-04-23
 Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-LinkedData>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.12 [2010-08-24] # Support base URI.
+ - (Addition) Support base URI in serializations for RDF::Trine 0.127_02.
+ - (Addition) Use Module::Install::AuthorTests.
+
 0.10 [2010-08-19] # Better tested release.
  - (Addition) Add TODO test to check whether Firefox' default Accept header
    returns data.
