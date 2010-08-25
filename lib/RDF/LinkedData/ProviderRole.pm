@@ -1,6 +1,7 @@
 package RDF::LinkedData::ProviderRole;
 
-use Moose::Role;
+# Next line is a workaround to problem documented in Error.pm#COMPATIBILITY
+BEGIN { require Moose::Role; Moose::Role->import; *with_role = *with; undef *with };
 
 use namespace::autoclean;
 
@@ -9,8 +10,9 @@ use RDF::Trine::Serializer;
 use Log::Log4perl qw(:easy);
 use Plack::Response;
 use RDF::Helper::Properties;
+use URI;
 
-with 'MooseX::Log::Log4perl::Easy';
+with_role 'MooseX::Log::Log4perl::Easy';
 
 BEGIN {
     Log::Log4perl->easy_init();
@@ -25,11 +27,11 @@ RDF::LinkedData::ProviderRole - Role providing important functionality for Linke
 
 =head1 VERSION
 
-Version 0.12
+Version 0.14
 
 =cut
 
-our $VERSION = '0.12';
+our $VERSION = '0.14';
 
 
 =head1 SYNOPSIS
@@ -90,7 +92,7 @@ sub BUILD {
             $self->model(RDF::Trine::Model->new( $store ));
 	}
 
-        throw Error -text => "No valid RDF::Trine::Model, need either a store config string or a model." unless ($self->model);
+        throw Error -text => "No valid RDF::Trine::Model, need either a store config hashref or a model." unless ($self->model);
 
 }
 
@@ -139,16 +141,14 @@ has 'type' => (is => 'rw', isa => 'Str', default => '');
 
 =item C<< my_node >>
 
-A node for the requested B<relative> URI. This node is typically used as
-the subject to find which statements to return as data. Note that the
-base URI, set in the constructor or using the C<base> method, is
-prepended to the argument.
+A node for the requested URI. This node is typically used as the
+subject to find which statements to return as data. This expects to
+get a URI object containing the full URI of the node.
 
 =cut
 
 sub my_node {
-    my ($self, $first) = @_;
-    my $iri	= sprintf( '%s%s', $self->base, $first );
+    my ($self, $iri) = @_;
     
     # not happy with this, but it helps for clients that do content sniffing based on filename
     $iri	=~ s/.(nt|rdf|ttl)$//;
@@ -249,12 +249,13 @@ Returns or sets the base URI for this handler.
 
 =cut
 
-has base => (is => 'rw', isa => 'Str', default => "http://localhost:3000" );
+has base => (is => 'rw', isa => 'Str' );
 
 
 =item C<< response ( $uri ) >>
 
-Will look up what to do with the given URI and populate the response object.
+Will look up what to do with the given URI object and populate the
+response object.
 
 =cut
 
@@ -300,7 +301,7 @@ sub response {
             if ($@) {
                 $ct = 'text/html'; # Set it to HTML for now
             }
-            my $newurl = $self->base . $uri . '/data';
+            my $newurl = $uri . '/data';
             unless ($ct =~ /rdf|turtle/) {
                 my $preds = $self->helper_properties;
                 $newurl = $preds->page($node);

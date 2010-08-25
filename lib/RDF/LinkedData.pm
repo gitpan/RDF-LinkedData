@@ -1,9 +1,9 @@
 package RDF::LinkedData;
 
+# Next line is a workaround to problem documented in Error.pm#COMPATIBILITY
+BEGIN { require Moose; Moose->import; *with_role = *with; undef *with };
 
-use Moose;
-
-with 'RDF::LinkedData::ProviderRole';
+with_role 'RDF::LinkedData::ProviderRole';
 
 
 =head1 NAME
@@ -12,11 +12,11 @@ RDF::LinkedData - Linked Data implementation default class
 
 =head1 VERSION
 
-Version 0.12
+Version 0.14
 
 =cut
 
-our $VERSION = '0.12';
+our $VERSION = '0.14';
 
 
 =head1 SYNOPSIS
@@ -49,9 +49,19 @@ A simple L<Plack> server illustrates the usage nicely:
 =head1 METHODS
 
 This module simply uses the default implementation in
-L<RDF::LinkedData::ProviderRole>, and does nothing on its own.
+L<RDF::LinkedData::ProviderRole>, and does nothing on its
+own. However, there is a quirk which is only relevant to a developer
+of this package.
 
+=over
 
+=item with_role
+
+I had to redefine L<Moose::Role>'s with due to a conflict with
+L<Error> described in the documentation of the latter. Users will
+never see this.
+
+=back
 
 =head1 AUTHOR
 

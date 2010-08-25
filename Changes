@@ -9,64 +9,71 @@ Created:      2009-04-23
 Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-LinkedData>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.14 [2010-08-26] # Use URI object.
+ - (Update) Using URI objects throughout makes more intensive use of
+   absolute URIs.
+ - (Update) Fix the warning described in
+   http://search.cpan.org/~shlomif/Error-0.17016/lib/Error.pm#COMPATIBILITY
+ - Minor documentation fixes.
+
 0.12 [2010-08-24] # Support base URI.
- - (Addition) Support base URI in serializations for RDF::Trine 0.127_02.
  - (Addition) Use Module::Install::AuthorTests.
+ - (Addition) Support base URI in serializations for RDF::Trine 0.127_02.
 
 0.10 [2010-08-19] # Better tested release.
  - (Addition) Add TODO test to check whether Firefox' default Accept header
    returns data.
 
 0.09_1 [2010-08-18] # Refactor helper modules; .
- - Move POD-tests to xt.
  - (Addition) Add namespaces method to set a hashref with RDF namespaces.
  - (Addition) create a helper_properties method to pass the properties.
  - (Bugfix) Remove -T switch from load.t, since it borks on some systems.
  - (Update) Split off RDF::LinkedData::Predicates into distribution of its
    own.
+ - Move POD-tests to xt.
 
 0.08 [2010-08-02] # Update to use config hashrefs and various fixes for recent RDF::Trine.
- - Now use a hashref config for new_with_config instead of config string.
+ - (Update) No Accept header will return turtle data.
  - (Update) Explicitly ask for text/html in tests since RDF::Trine 0.124
    needs it.
- - (Update) No Accept header will return turtle data.
+ - Now use a hashref config for new_with_config instead of config string.
  - (Update) Require RDF::Trine 0.125.
 
 0.06 [2010-06-13] # Minor POD syntax documentation bug fix release.
- - (Addition) Add number of PSGI tests.
  - (Bugfix) Fix minor POD bugs.
+ - (Addition) Add number of PSGI tests.
 
 0.05 [2010-06-13] # Major refactor, use Moose and Plack.
- - Many smaller changes.
  - (Addition) A response method contains most of the logic.
+ - (Removal) Remove Mojolicious::Lite script.
+ - (Addition) More documentation.
  - (Addition) Create RDF::LinkedData::ProviderRole, a Moose::Role with a
    default implementation.
- - (Addition) Create a Plack PSGI script to run the server. This also
-   serves as a basic usage example.
  - (Addition) Create a RDF::LinkedData::Predicates with a title,
    description and page methods.
- - (Addition) More documentation.
+ - (Addition) Create a Plack PSGI script to run the server. This also
+   serves as a basic usage example.
  - (Addition) More tests, also unit testing.
- - (Addition) Use Config::JFDI for configuration.
+ - Many smaller changes.
  - (Addition) Use Plack::Response and HTTP::Headers in the role itself.
+ - (Addition) Use Config::JFDI for configuration.
  - (Addition) use Moose
- - (Removal) Remove Mojolicious::Lite script.
 
 0.03 [2010-05-06] # Add page method to use foaf:page for redirects.
  - Minor cleanups.
- - (Addition) Add a page method that uses foaf:homepage or foaf:page to
-   override the default page for redirect.
  - (Bugfix) Really does require RDF::Trine 0.122.
  - (Removal) Remove boilerplate tests.
+ - (Addition) Add a page method that uses foaf:homepage or foaf:page to
+   override the default page for redirect.
 
 0.02 [2010-05-05] # Use RDF::Trine's conneg and bounded description code.
- - Require RDF::Trine 0.121.
- - (Addition) Add and improve a type method that returns page or data.
  - (Addition) Add some log messages.
- - (Addition) Use RDF::Trine's bounded description code.
  - (Addition) Use RDF::Trine's content negotiation code.
- - (Addition) Use a HTTP::Headers object for conneg.
  - (Removal) Remove the negotiate method.
+ - (Addition) Use a HTTP::Headers object for conneg.
+ - (Addition) Add and improve a type method that returns page or data.
+ - (Addition) Use RDF::Trine's bounded description code.
+ - Require RDF::Trine 0.121.
 
 0.001_01 # Code on Github by Gregory Todd Williams.
 

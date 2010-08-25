@@ -1,11 +1,15 @@
 #line 1
 package Module::Install::DOAPChangeSets;
 
-use 5.008;
-use base qw(Module::Install::Base);
 use strict;
+use 5.008;
+use Module::Install::Base ();
 
-our $VERSION = '0.101';
+use vars qw{$VERSION @ISA};
+BEGIN {
+        $VERSION = '0.03';
+        @ISA     = 'Module::Install::Base';
+}
 
 sub write_doap_changes {
 	my $self = shift;
@@ -20,4 +24,4 @@ sub write_doap_changes_xml {
 1;
 
 __END__
-#line 76
+#line 81
