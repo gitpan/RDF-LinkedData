@@ -3,15 +3,10 @@
 use strict;
 use warnings;
 
-use Test::More tests => 28 ;
+use Test::More tests => 32 ;
 use Test::WWW::Mechanize::PSGI;
 
-#use Plack::Request;
-#use RDF::Trine::Parser;
-#use RDF::LinkedData;
-BEGIN { require 'script/linked_data.psgi'; }
-
-my $tester = $main::linked_data;
+my $tester = do "script/linked_data.psgi";
 
 
 {
@@ -44,6 +39,25 @@ my $tester = $main::linked_data;
     diag "Get /foo, no redirects, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
     $mech->default_header('Accept' => 'application/rdf+xml');
+    my $res = $mech->get("/foo");
+    is($mech->status, 303, "Returns 303");
+    like($res->header('Location'), qr|/foo/data$|, "Location is OK");
+}
+
+TODO:{
+  local $TODO = "Users should see a page, with normal FF";
+    diag "Get /foo, no redirects, use FFs Accept header";
+    my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
+    $mech->default_header('Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
+    my $res = $mech->get("/foo");
+    is($mech->status, 303, "Returns 303");
+    is($res->header('Location'), 'http://en.wikipedia.org/wiki/Foo', "Location is Wikipedia page");
+}
+
+{
+    diag "Get /foo, no redirects, use Tabulators Accept header";
+    my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
+    $mech->default_header('Accept' => 'application/rdf+xml, application/xhtml+xml;q=0.3, text/xml;q=0.2, application/xml;q=0.2, text/html;q=0.3, text/plain;q=0.1, text/n3, text/rdf+n3;q=0.5, application/x-turtle;q=0.2, text/turtle;q=1');
     my $res = $mech->get("/foo");
     is($mech->status, 303, "Returns 303");
     like($res->header('Location'), qr|/foo/data$|, "Location is OK");
