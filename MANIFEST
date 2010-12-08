@@ -29,7 +29,6 @@ t/00-load.t
 t/10-basic.t
 t/15-process.t
 t/20-psgi-basic.t
-t/data/basic.db
 t/data/basic.ttl
 xt/0-signature.t
 xt/pod-coverage.t

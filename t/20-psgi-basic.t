@@ -8,9 +8,14 @@ use Test::WWW::Mechanize::PSGI;
 
 my $tester = do "script/linked_data.psgi";
 
+BAIL_OUT("The application is not running") unless ($tester);
+
+use Log::Log4perl qw(:easy);
+
+Log::Log4perl->easy_init( { level   => $FATAL } ) unless $ENV{TEST_VERBOSE};
 
 {
-    diag "Get /foo, no redirects";
+    note "Get /foo, no redirects";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
     my $res = $mech->get("/foo");
     is($mech->status, 303, "Returns 303");
@@ -18,7 +23,7 @@ my $tester = do "script/linked_data.psgi";
 }
 
 {
-    diag "Get /foo, no redirects, ask for text/html";
+    note "Get /foo, no redirects, ask for text/html";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
     $mech->default_header('Accept' => 'text/html');
     my $res = $mech->get("/foo");
@@ -28,7 +33,7 @@ my $tester = do "script/linked_data.psgi";
 
 
 {
-    diag "Get /foo/page, no redirects";
+    note "Get /foo/page, no redirects";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
     my $res = $mech->get("/foo/page");
     is($mech->status, 301, "Returns 301");
@@ -36,7 +41,7 @@ my $tester = do "script/linked_data.psgi";
 }
 
 {
-    diag "Get /foo, no redirects, ask for RDF/XML";
+    note "Get /foo, no redirects, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
     $mech->default_header('Accept' => 'application/rdf+xml');
     my $res = $mech->get("/foo");
@@ -46,7 +51,7 @@ my $tester = do "script/linked_data.psgi";
 
 TODO:{
   local $TODO = "Users should see a page, with normal FF";
-    diag "Get /foo, no redirects, use FFs Accept header";
+    note "Get /foo, no redirects, use FFs Accept header";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
     $mech->default_header('Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
     my $res = $mech->get("/foo");
@@ -55,7 +60,7 @@ TODO:{
 }
 
 {
-    diag "Get /foo, no redirects, use Tabulators Accept header";
+    note "Get /foo, no redirects, use Tabulators Accept header";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
     $mech->default_header('Accept' => 'application/rdf+xml, application/xhtml+xml;q=0.3, text/xml;q=0.2, application/xml;q=0.2, text/html;q=0.3, text/plain;q=0.1, text/n3, text/rdf+n3;q=0.5, application/x-turtle;q=0.2, text/turtle;q=1');
     my $res = $mech->get("/foo");
@@ -64,7 +69,7 @@ TODO:{
 }
 
 {
-    diag "Get /dahut, no redirects, ask for RDF/XML";
+    note "Get /dahut, no redirects, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
     $mech->default_header('Accept' => 'application/rdf+xml');
     my $res = $mech->get("/dahut");
@@ -72,7 +77,7 @@ TODO:{
 }
 
 {
-    diag "Get /foo, ask for RDF/XML";
+    note "Get /foo, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester);
     $mech->default_header('Accept' => 'application/rdf+xml');
     $mech->get_ok("/foo");
@@ -82,7 +87,7 @@ TODO:{
 }
 
 {
-    diag "Get /foo, ask for Turtle";
+    note "Get /foo, ask for Turtle";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester);
     $mech->default_header('Accept' => 'application/turtle');
     $mech->get_ok("/foo");
@@ -92,7 +97,7 @@ TODO:{
 }
 
 {
-    diag "Get /bar/baz/bing, no redirects, ask for RDF/XML";
+    note "Get /bar/baz/bing, no redirects, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
     $mech->default_header('Accept' => 'application/rdf+xml');
     my $res = $mech->get("/bar/baz/bing");
@@ -102,7 +107,7 @@ TODO:{
 
 
 {
-    diag "Get /bar/baz/bing";
+    note "Get /bar/baz/bing";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester);
     $mech->default_header('Accept' => 'text/html');
     $mech->get_ok("/bar/baz/bing");
@@ -113,7 +118,7 @@ TODO:{
 
 
 {
-    diag "Get /bar/baz/bing, ask for RDF/XML";
+    note "Get /bar/baz/bing, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester);
     $mech->default_header('Accept' => 'application/rdf+xml');
     $mech->get_ok("/bar/baz/bing");

@@ -4,11 +4,15 @@ use FindBin qw($Bin);
 use HTTP::Headers;
 
 use strict;
-use Test::More tests => 24;
+use Test::More tests => 25;
 use Test::Exception;
-#use Test::NoWarnings;
+use Test::NoWarnings;
 
 my $file = $Bin . '/data/basic.ttl';
+
+use Log::Log4perl qw(:easy);
+
+Log::Log4perl->easy_init( { level   => $FATAL } ) unless $ENV{TEST_VERBOSE};
 
 BEGIN {
     use_ok('RDF::LinkedData');
@@ -16,6 +20,8 @@ BEGIN {
     use_ok('RDF::Trine::Parser');
     use_ok('RDF::Trine::Model');
 }
+
+
 
 my $parser     = RDF::Trine::Parser->new( 'turtle' );
 my $model = RDF::Trine::Model->temporary_model;
@@ -78,7 +84,7 @@ is($barnode->uri_value, 'http://localhost/bar/baz/bing', "'Bar' URI is still the
     TODO: {
           local $TODO = "What should really be done with a text/html request for data?";
           my $content;
-          lives_ok{ $content = $ldh->content($barnode, 'data') }, "Should give us a way to give a 406";
+          lives_ok{ $content = $ldh->content($barnode, 'data') } "Should give us a way to give a 406";
           is($content->{content_type}, 'application/rdf+xml', "Data type overrides and gives RDF/XML"); # TODO: is this correct?
     }
     {
