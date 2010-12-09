@@ -9,18 +9,21 @@ Created:      2009-04-23
 Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-LinkedData>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
-0.16 [2010-08-26] # Instantiate on startup; Many small fixes.
- - Use a memory model for testing that loads the file directly
- - (Addition) Use the base if the source has not set its own.
- - (Addition) Add basic support for Access-Control-Allow-Origin.
- - (Addition) Support setting namespace in config.
- - (Addition) Add tests for more Accept headers (TODO stuff).
- - Many minor test and code fixes.
- - No main-namespaced variable needed for tests.
- - Many minor documentation fixes.
+0.18 [2010-12-09] # Minor JSON syntax documentation bug fix release.
+ - (Bugfix) Found out the hard way that JSON doesn't allow single quotes.
+
+0.16 [2010-12-09] # Instantiate on startup; Many small fixes.
  - (Bugfix) Move ld instantiation to outside of the coderef for big
    performance gain.
+ - Use a memory model for testing that loads the file directly
+ - (Addition) Add tests for more Accept headers (TODO stuff).
  - Remove logging unless in verbose mode.
+ - No main-namespaced variable needed for tests.
+ - (Addition) Use the base if the source has not set its own.
+ - Many minor documentation fixes.
+ - (Addition) Add basic support for Access-Control-Allow-Origin.
+ - Many minor test and code fixes.
+ - (Addition) Support setting namespace in config.
 
 0.14 [2010-08-26] # Use URI object.
  - Minor documentation fixes.
@@ -30,63 +33,63 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
    absolute URIs.
 
 0.12 [2010-08-24] # Support base URI.
- - (Addition) Use Module::Install::AuthorTests.
  - (Addition) Support base URI in serializations for RDF::Trine 0.127_02.
+ - (Addition) Use Module::Install::AuthorTests.
 
 0.10 [2010-08-19] # Better tested release.
  - (Addition) Add TODO test to check whether Firefox' default Accept header
    returns data.
 
 0.09_1 [2010-08-18] # Refactor helper modules; .
- - Move POD-tests to xt.
  - (Addition) create a helper_properties method to pass the properties.
+ - Move POD-tests to xt.
+ - (Addition) Add namespaces method to set a hashref with RDF namespaces.
  - (Update) Split off RDF::LinkedData::Predicates into distribution of its
    own.
  - (Bugfix) Remove -T switch from load.t, since it borks on some systems.
- - (Addition) Add namespaces method to set a hashref with RDF namespaces.
 
 0.08 [2010-08-02] # Update to use config hashrefs and various fixes for recent RDF::Trine.
- - (Update) Require RDF::Trine 0.125.
- - Now use a hashref config for new_with_config instead of config string.
  - (Update) Explicitly ask for text/html in tests since RDF::Trine 0.124
    needs it.
+ - (Update) Require RDF::Trine 0.125.
  - (Update) No Accept header will return turtle data.
+ - Now use a hashref config for new_with_config instead of config string.
 
 0.06 [2010-06-13] # Minor POD syntax documentation bug fix release.
- - (Bugfix) Fix minor POD bugs.
  - (Addition) Add number of PSGI tests.
+ - (Bugfix) Fix minor POD bugs.
 
 0.05 [2010-06-13] # Major refactor, use Moose and Plack.
- - (Addition) A response method contains most of the logic.
- - (Addition) Use Config::JFDI for configuration.
+ - (Removal) Remove Mojolicious::Lite script.
  - (Addition) Use Plack::Response and HTTP::Headers in the role itself.
- - (Addition) Create a RDF::LinkedData::Predicates with a title,
-   description and page methods.
- - (Addition) use Moose
- - (Addition) More documentation.
  - Many smaller changes.
  - (Addition) Create a Plack PSGI script to run the server. This also
    serves as a basic usage example.
- - (Addition) More tests, also unit testing.
- - (Removal) Remove Mojolicious::Lite script.
  - (Addition) Create RDF::LinkedData::ProviderRole, a Moose::Role with a
    default implementation.
+ - (Addition) More tests, also unit testing.
+ - (Addition) Use Config::JFDI for configuration.
+ - (Addition) use Moose
+ - (Addition) A response method contains most of the logic.
+ - (Addition) Create a RDF::LinkedData::Predicates with a title,
+   description and page methods.
+ - (Addition) More documentation.
 
 0.03 [2010-05-06] # Add page method to use foaf:page for redirects.
- - Minor cleanups.
- - (Removal) Remove boilerplate tests.
  - (Bugfix) Really does require RDF::Trine 0.122.
+ - (Removal) Remove boilerplate tests.
  - (Addition) Add a page method that uses foaf:homepage or foaf:page to
    override the default page for redirect.
+ - Minor cleanups.
 
 0.02 [2010-05-05] # Use RDF::Trine's conneg and bounded description code.
+ - Require RDF::Trine 0.121.
+ - (Removal) Remove the negotiate method.
+ - (Addition) Use a HTTP::Headers object for conneg.
+ - (Addition) Add some log messages.
+ - (Addition) Use RDF::Trine's content negotiation code.
  - (Addition) Use RDF::Trine's bounded description code.
  - (Addition) Add and improve a type method that returns page or data.
- - (Removal) Remove the negotiate method.
- - (Addition) Use RDF::Trine's content negotiation code.
- - (Addition) Add some log messages.
- - (Addition) Use a HTTP::Headers object for conneg.
- - Require RDF::Trine 0.121.
 
 0.001_01 # Code on Github by Gregory Todd Williams.
 

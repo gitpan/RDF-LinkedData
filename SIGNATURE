@@ -14,11 +14,11 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA1
 
-SHA1 7f1699c9ec849fbb532f9728265b67d765ddedd4 Changes
-SHA1 1cce92cff12c94c96d153f55a3f16bd0131ba998 Changes.ttl
+SHA1 d4272968ab415b8840886c86990188f38c9234c1 Changes
+SHA1 4b4cf46352cef794373922ed64a178b2f1a82610 Changes.ttl
 SHA1 0f5d29250fb97d1b5f12ad1764306d6179025c1f MANIFEST
 SHA1 5459fd67a6e826cfa2a829b37a18a9bbf4de3e2f MANIFEST.SKIP
-SHA1 186378e95f7e7cb2b9962ff570b49d3e078e045b META.yml
+SHA1 8319d2c8aa4c630c840ab3172d2bac3146344de0 META.yml
 SHA1 1d26662b35e2744c1700a1fda76f1476ef36a7ad Makefile.PL
 SHA1 85737cf1613decb779fd21d4ff8caca1cddaa9b7 Makefile.old
 SHA1 171bbaad583b95fa756c7ff9b430fb7805b282db README
@@ -35,9 +35,9 @@ SHA1 fd81bc0e85a1193f278760edb82928d8b4dff2c1 inc/Module/Install/Repository.pm
 SHA1 3406c9015148c75406903e7382f8182613b5022a inc/Module/Install/Scripts.pm
 SHA1 f7ee667e878bd2faf22ee9358a7b5a2cc8e91ba4 inc/Module/Install/Win32.pm
 SHA1 8ed29d6cf217e0977469575d788599cbfb53a5ca inc/Module/Install/WriteAll.pm
-SHA1 97b5c2753c8fbf8fba7f97be04fe7bb43e580dc3 lib/RDF/LinkedData.pm
+SHA1 b542305572044fe2d10e7a14b9127a2f2835cb7e lib/RDF/LinkedData.pm
 SHA1 1608ed154eb6114d82efbd058aeb04e0622c6dfb lib/RDF/LinkedData/ProviderRole.pm
-SHA1 7c142eb39db7f594d1c865e98574209129b4b76d rdf_linkeddata.json
+SHA1 7cd9c45df78d9391b9bdd280778d16b964470bd5 rdf_linkeddata.json
 SHA1 0d27362701aca95186d36ef249cb453ada7721fe script/linked_data.psgi
 SHA1 0298f0dbe8f98912dcaecf0aa31a42f72fa79ba6 script/write_sqlite-db.pl
 SHA1 af175eb27d75d4dc2890b917d845a2e2b04b5d49 t/00-load.t
@@ -51,7 +51,7 @@ SHA1 640935336dc1123c0069bcf5432bcaedc2cf22d3 xt/pod.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.9 (GNU/Linux)
 
-iD8DBQFNAMTdlE/Gp2pqC7wRAnPvAKCR5qL4BpgJR4qk2SJI/KHBEMFBdgCfeUsJ
-Z6qHHU5Xpzm/8KNXqrn9f2E=
-=pxDO
+iD8DBQFNAOURlE/Gp2pqC7wRAq+/AJ4tGQttTljHhImFu6dvJkg+p7OG4wCeOfxH
+OoYmDLyq2kKpC5O9Dx/OItA=
+=BV/a
 -----END PGP SIGNATURE-----
