@@ -27,11 +27,11 @@ RDF::LinkedData::ProviderRole - Role providing important functionality for Linke
 
 =head1 VERSION
 
-Version 0.15_2
+Version 0.16
 
 =cut
 
-our $VERSION = '0.15_2';
+our $VERSION = '0.16';
 
 
 =head1 SYNOPSIS
@@ -378,7 +378,7 @@ L<http://lists.perlrdf.org/listinfo/dev>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2010 Gregory Todd Williams and ABC Startsiden AS.
+Copyright 2010 Kjetil Kjernsmo, Gregory Todd Williams and ABC Startsiden AS.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

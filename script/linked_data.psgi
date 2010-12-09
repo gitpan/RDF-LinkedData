@@ -18,17 +18,11 @@ linked_data.psgi - A simple Plack server for RDF as linked data
 
 =head1 DESCRIPTION
 
-To use a server based on L<RDF::LinkedData>, create a database with
-triples, using L<RDF::Trine>. There is an example in
-C<write_sqlite-db.pl> in the distribution that converts a Turtle file
-to a suitable SQLite database, other databases can be handled in a
-similar manner.
-
-Then, you need a config file. There's a companion
+To run this server you need a config file. There's a companion
 C<rdf_linkeddata.json> that contains a JSON file that configures this
 script to use a minimal example database with just three triples. This
 is also useful as an example for your own config. In this file, there
-is a L<store> parameter, which must contain the L<RDF::Trine::Store>
+is a C<store> parameter, which must contain the L<RDF::Trine::Store>
 config hashref. It may also have a C<base> URI.
 
 The configuration is done using L<Config::JFDI> and all its features
@@ -96,7 +90,9 @@ predicate URI.
 =cut
 my $config = Config::JFDI->open( name => "RDF::LinkedData") or confess "Couldn't find config";
 
-my $ld = RDF::LinkedData->new(store => $config->{store}, base => $config->{base});
+my $ld = RDF::LinkedData->new(store => $config->{store}, 
+			      base => $config->{base},
+			      namespaces => $config->{namespaces});
 
 my $linked_data = sub {
     my $env = shift;
@@ -130,8 +126,8 @@ Kjetil Kjernsmo C<< <kjetilk@cpan.org> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2010 ABC Startsiden AS. This program is free software;
-you can redistribute it and/or modify it under the same terms as Perl
-itself.
+Copyright (c) 2010 ABC Startsiden AS and Kjetil Kjernsmo. This program
+is free software; you can redistribute it and/or modify it under the
+same terms as Perl itself.
 
 =cut

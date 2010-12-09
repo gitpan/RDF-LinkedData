@@ -9,10 +9,23 @@ Created:      2009-04-23
 Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-LinkedData>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.16 [2010-08-26] # Instantiate on startup; Many small fixes.
+ - Use a memory model for testing that loads the file directly
+ - (Addition) Use the base if the source has not set its own.
+ - (Addition) Add basic support for Access-Control-Allow-Origin.
+ - (Addition) Support setting namespace in config.
+ - (Addition) Add tests for more Accept headers (TODO stuff).
+ - Many minor test and code fixes.
+ - No main-namespaced variable needed for tests.
+ - Many minor documentation fixes.
+ - (Bugfix) Move ld instantiation to outside of the coderef for big
+   performance gain.
+ - Remove logging unless in verbose mode.
+
 0.14 [2010-08-26] # Use URI object.
+ - Minor documentation fixes.
  - (Update) Fix the warning described in
    http://search.cpan.org/~shlomif/Error-0.17016/lib/Error.pm#COMPATIBILITY
- - Minor documentation fixes.
  - (Update) Using URI objects throughout makes more intensive use of
    absolute URIs.
 
@@ -25,12 +38,12 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
    returns data.
 
 0.09_1 [2010-08-18] # Refactor helper modules; .
- - (Bugfix) Remove -T switch from load.t, since it borks on some systems.
- - (Update) Split off RDF::LinkedData::Predicates into distribution of its
-   own.
- - (Addition) Add namespaces method to set a hashref with RDF namespaces.
  - Move POD-tests to xt.
  - (Addition) create a helper_properties method to pass the properties.
+ - (Update) Split off RDF::LinkedData::Predicates into distribution of its
+   own.
+ - (Bugfix) Remove -T switch from load.t, since it borks on some systems.
+ - (Addition) Add namespaces method to set a hashref with RDF namespaces.
 
 0.08 [2010-08-02] # Update to use config hashrefs and various fixes for recent RDF::Trine.
  - (Update) Require RDF::Trine 0.125.
@@ -44,20 +57,20 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
  - (Addition) Add number of PSGI tests.
 
 0.05 [2010-06-13] # Major refactor, use Moose and Plack.
- - (Addition) Create RDF::LinkedData::ProviderRole, a Moose::Role with a
-   default implementation.
- - (Addition) use Moose
- - (Addition) Create a Plack PSGI script to run the server. This also
-   serves as a basic usage example.
- - (Removal) Remove Mojolicious::Lite script.
- - (Addition) Use Plack::Response and HTTP::Headers in the role itself.
- - Many smaller changes.
- - (Addition) Create a RDF::LinkedData::Predicates with a title,
-   description and page methods.
- - (Addition) More documentation.
  - (Addition) A response method contains most of the logic.
  - (Addition) Use Config::JFDI for configuration.
+ - (Addition) Use Plack::Response and HTTP::Headers in the role itself.
+ - (Addition) Create a RDF::LinkedData::Predicates with a title,
+   description and page methods.
+ - (Addition) use Moose
+ - (Addition) More documentation.
+ - Many smaller changes.
+ - (Addition) Create a Plack PSGI script to run the server. This also
+   serves as a basic usage example.
  - (Addition) More tests, also unit testing.
+ - (Removal) Remove Mojolicious::Lite script.
+ - (Addition) Create RDF::LinkedData::ProviderRole, a Moose::Role with a
+   default implementation.
 
 0.03 [2010-05-06] # Add page method to use foaf:page for redirects.
  - Minor cleanups.
@@ -67,13 +80,13 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
    override the default page for redirect.
 
 0.02 [2010-05-05] # Use RDF::Trine's conneg and bounded description code.
- - (Addition) Add and improve a type method that returns page or data.
  - (Addition) Use RDF::Trine's bounded description code.
- - Require RDF::Trine 0.121.
- - (Addition) Use a HTTP::Headers object for conneg.
- - (Addition) Add some log messages.
- - (Addition) Use RDF::Trine's content negotiation code.
+ - (Addition) Add and improve a type method that returns page or data.
  - (Removal) Remove the negotiate method.
+ - (Addition) Use RDF::Trine's content negotiation code.
+ - (Addition) Add some log messages.
+ - (Addition) Use a HTTP::Headers object for conneg.
+ - Require RDF::Trine 0.121.
 
 0.001_01 # Code on Github by Gregory Todd Williams.
 
