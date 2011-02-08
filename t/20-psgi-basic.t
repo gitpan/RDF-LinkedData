@@ -3,7 +3,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 32 ;
+use Test::More tests => 42 ;
+use Test::RDF;
 use Test::WWW::Mechanize::PSGI;
 
 my $tester = do "script/linked_data.psgi";
@@ -22,10 +23,14 @@ Log::Log4perl->easy_init( { level   => $FATAL } ) unless $ENV{TEST_VERBOSE};
     like($res->header('Location'), qr|/foo/data$|, "Location is OK");
 }
 
-{
-    note "Get /foo, no redirects, ask for text/html";
+
+foreach my $accept_header (('text/html',
+			    'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+			    'text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1',
+			    'application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5')) {
+    note "Get /foo, no redirects, ask for $accept_header";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
-    $mech->default_header('Accept' => 'text/html');
+    $mech->default_header('Accept' => $accept_header);
     my $res = $mech->get("/foo");
     is($mech->status, 303, "Returns 303");
     is($res->header('Location'), 'http://en.wikipedia.org/wiki/Foo', "Location is Wikipedia page");
@@ -49,16 +54,6 @@ Log::Log4perl->easy_init( { level   => $FATAL } ) unless $ENV{TEST_VERBOSE};
     like($res->header('Location'), qr|/foo/data$|, "Location is OK");
 }
 
-TODO:{
-  local $TODO = "Users should see a page, with normal FF";
-    note "Get /foo, no redirects, use FFs Accept header";
-    my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
-    $mech->default_header('Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
-    my $res = $mech->get("/foo");
-    is($mech->status, 303, "Returns 303");
-    is($res->header('Location'), 'http://en.wikipedia.org/wiki/Foo', "Location is Wikipedia page");
-}
-
 {
     note "Get /foo, no redirects, use Tabulators Accept header";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
@@ -76,6 +71,10 @@ TODO:{
     is($mech->status, 404, "Returns 404");
 }
 
+
+my $rxparser = RDF::Trine::Parser->new( 'rdfxml' );
+my $base_uri = 'http://localhost/';
+
 {
     note "Get /foo, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester);
@@ -83,7 +82,11 @@ TODO:{
     $mech->get_ok("/foo");
     is($mech->ct, 'application/rdf+xml', "Correct content-type");
     like($mech->uri, qr|/foo/data$|, "Location is OK");
-    $mech->content_contains('This is a test', "Test phrase in content");
+    my $model = RDF::Trine::Model->temporary_model;
+    is_valid_rdf($mech->content, 'rdfxml', 'Returns valid RDF/XML');
+    $rxparser->parse_into_model( $base_uri, $mech->content, $model );
+    has_subject($base_uri . 'foo', $model, "Subject URI in content");
+    has_literal('This is a test', 'en', undef, $model, "Test phrase in content");
 }
 
 {
@@ -93,7 +96,12 @@ TODO:{
     $mech->get_ok("/foo");
     is($mech->ct, 'application/turtle', "Correct content-type");
     like($mech->uri, qr|/foo/data$|, "Location is OK");
-    $mech->content_contains('This is a test', "Test phrase in content");
+    my $model = RDF::Trine::Model->temporary_model;
+    is_valid_rdf($mech->content, 'turtle', 'Returns valid Turtle');
+    my $parser = RDF::Trine::Parser->new( 'turtle' );
+    $parser->parse_into_model( $base_uri, $mech->content, $model );
+    has_subject($base_uri . 'foo', $model, "Subject URI in content");
+    has_literal('This is a test', 'en', undef, $model, "Test phrase in content");
 }
 
 {
@@ -124,7 +132,11 @@ TODO:{
     $mech->get_ok("/bar/baz/bing");
     is($mech->ct, 'application/rdf+xml', "Correct content-type");
     like($mech->uri, qr|/bar/baz/bing/data$|, "Location is OK");
-    $mech->content_contains('Testing with longer URI.', "Test phrase in content");
+    my $model = RDF::Trine::Model->temporary_model;
+    is_valid_rdf($mech->content, 'rdfxml', 'Returns valid RDF/XML');
+    $rxparser->parse_into_model( $base_uri, $mech->content, $model );
+    has_subject($base_uri . 'bar/baz/bing', $model, "Subject URI in content");
+    has_literal('Testing with longer URI.', 'en', undef, $model, "Test phrase in content");
 }
 
 

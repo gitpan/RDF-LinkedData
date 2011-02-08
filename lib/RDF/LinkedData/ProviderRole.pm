@@ -27,11 +27,11 @@ RDF::LinkedData::ProviderRole - Role providing important functionality for Linke
 
 =head1 VERSION
 
-Version 0.16
+Version 0.20
 
 =cut
 
-our $VERSION = '0.16';
+our $VERSION = '0.20';
 
 
 =head1 SYNOPSIS
@@ -74,13 +74,14 @@ very much in flux, and may change without warning.
 
 =over
 
-=item C<< new ( store => $store, model => $model, base => $base, headers_in => $headers_in ) >>
+=item C<< new ( store => $store, model => $model, base_uri => $base_uri, headers_in => $headers_in ) >>
 
 Creates a new handler object based on named parameters, given a store
-config (which is a hashref that can be passed to
-L<RDF::Trine::Store>->new_with_config) or model and a base
-URI. Optionally, you may pass a Apache request object, and you will
-need to pass a L<HTTP::Headers> object if you plan to call C<content>.
+config (recommended usage is to pass a hashref of the type that can be
+passed to L<RDF::Trine::Store>->new_with_config, but a simple string
+can also be used) or model and a base URI. Optionally, you may pass a
+Apache request object, and you will need to pass a L<HTTP::Headers>
+object if you plan to call C<content>.
 
 =cut
 
@@ -92,11 +93,11 @@ sub BUILD {
 	  my $i = 0;
 	  foreach my $source (@{$self->store->{sources}}) {
 	    unless ($source->{base_uri}) {
-	      ${$self->store->{sources}}[$i]->{base_uri} = $self->base;
+	      ${$self->store->{sources}}[$i]->{base_uri} = $self->base_uri;
 	    }
 	    $i++;
 	  }
-	  my $store	= RDF::Trine::Store->new_with_config( $self->store );
+	  my $store	= RDF::Trine::Store->new( $self->store );
 	  $self->model(RDF::Trine::Model->new( $store ));
 	}
 
@@ -204,7 +205,7 @@ sub content {
     if ($type eq 'data') {
         $self->{_type} = 'data';
         my ($type, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers_in,
-                                                           base => $self->base,
+                                                           base => $self->base_uri,
                                                            namespaces => $self->namespaces);
         my $iter = $model->bounded_description($node);
         $output{content_type} = $type;
@@ -251,13 +252,13 @@ Returns or sets the RDF::Trine::Model object.
 
 has model => (is => 'rw', isa => 'RDF::Trine::Model');
 
-=item C<< base >>
+=item C<< base_uri >>
 
 Returns or sets the base URI for this handler.
 
 =cut
 
-has base => (is => 'rw', isa => 'Str' );
+has base_uri => (is => 'rw', isa => 'Str' );
 
 
 =item C<< response ( $uri ) >>
@@ -301,17 +302,26 @@ sub response {
             $response->content($content->{body});
         } else {
             $response->status(303);
-            my $ct;
+            my ($ct, $s);
             eval {
-                ($ct) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers_in,
-                                                          base => $self->base,
-                                                          namespaces => $self->namespaces);
-            };
+                ($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers_in,
+                                                          base => $self->base_uri,
+                                                          namespaces => $self->namespaces,
+							  extend => {
+								     'text/html'	=> 'html',
+								     'application/xhtml+xml' => 'html'
+								    }
+							  )
+	      };
+            $self->logger->debug("Got $ct content type");
             if ($@) {
-                $ct = 'text/html'; # Set it to HTML for now
+	      $response->status(406);
+	      $response->headers->content_type('text/plain');
+	      $response->body('HTTP 406: No serialization available any specified content type');
+	      return $response;
             }
             my $newurl = $uri . '/data';
-            unless ($ct =~ /rdf|turtle/) {
+            unless ($s->isa('RDF::Trine::Serializer')) {
                 my $preds = $self->helper_properties;
                 $newurl = $preds->page($node);
             }
@@ -326,7 +336,7 @@ sub response {
         $response->headers->content_type('text/plain');
         $response->body('HTTP 404: Unknown resource');
         return $response;
-    }
+      }
     # We should never get here.
     $response->status(500);
     $response->headers->content_type('text/plain');

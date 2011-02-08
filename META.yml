@@ -1,6 +1,7 @@
 ---
-abstract: 'Linked Data implementation default class'
+abstract: 'A Linked Data server implementation'
 author:
+  - 'This module was started by by Gregory Todd Williams C<<'
   - 'Kjetil Kjernsmo <kjetilk@cpan.org>'
 build_requires:
   Config::JFDI: 0
@@ -10,11 +11,12 @@ build_requires:
   Test::Exception: 0
   Test::More: 0.88
   Test::NoWarnings: 0
+  Test::RDF: 0.2
   Test::WWW::Mechanize::PSGI: 0
 configure_requires:
   ExtUtils::MakeMaker: 6.42
 distribution_type: module
-generated_by: 'Module::Install version 0.91'
+generated_by: 'Module::Install version 1.00'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -35,7 +37,7 @@ requires:
   MooseX::Log::Log4perl::Easy: 0
   Plack: 0.9939
   RDF::Helper::Properties: 0.1
-  RDF::Trine: 0.128
+  RDF::Trine: 0.133
   Scalar::Util: 0
   URI: 1.52
   namespace::autoclean: 0
@@ -43,4 +45,4 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=RDF-LinkedData
   license: http://dev.perl.org/licenses/
   repository: git://github.com/kjetilk/RDF-LinkedData.git
-version: 0.18
+version: 0.20

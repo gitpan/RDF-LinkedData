@@ -7,7 +7,7 @@ use strict;
 use Test::More tests => 38;
 use Test::Exception;
 use Test::NoWarnings;
-
+use Test::RDF;
 use Log::Log4perl qw(:easy);
 
 Log::Log4perl->easy_init( { level   => $FATAL } ) unless $ENV{TEST_VERBOSE};
@@ -53,8 +53,7 @@ cmp_ok($ld->count, '>', 0, "There are triples in the model");
     is($response->header('Location'), 'http://en.wikipedia.org/wiki/Foo', "Location is Wikipedia page");
 }
 
-TODO: {
-    local $TODO = 'Should Firefox default Accept header give page?';
+{
     note "Get /foo, use Firefox' default Accept header";
     $ld->headers_in(HTTP::Headers->new('Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'));
     my $response = $ld->response($base_uri . '/foo');
@@ -136,7 +135,9 @@ TODO: {
     my $response = $ld->response($base_uri . '/foo');
     isa_ok($response, 'Plack::Response');
     is($response->status, 200, "Returns 200");
-    like($response->body, qr|This is a test|, "Test phrase in content");
-
+    my $model = RDF::Trine::Model->temporary_model;
+    my $parser = RDF::Trine::Parser->new( 'rdfxml' );
+    $parser->parse_into_model( $base_uri, $response->body, $model );
+    has_literal('This is a test', 'en', undef, $model, "Test phrase in content");
 }
 
