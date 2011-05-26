@@ -1,12 +1,10 @@
 #!/usr/bin/perl
 
 use FindBin qw($Bin);
-use HTTP::Headers;
+use Plack::Request;
 
 use strict;
 use Test::More tests => 38;
-use Test::Exception;
-use Test::NoWarnings;
 use Test::RDF;
 use Log::Log4perl qw(:easy);
 
@@ -30,7 +28,8 @@ $parser->parse_file_into_model( $base_uri, $file, $model );
 
 ok($model, "We have a model");
 
-my $ld = RDF::LinkedData->new(model => $model, base=>$base_uri);
+my $ld = RDF::LinkedData->new(model => $model, base=>$base_uri,
+			      endpoint_config => {endpoint_path => '/sparql'});
 
 isa_ok($ld, 'RDF::LinkedData');
 cmp_ok($ld->count, '>', 0, "There are triples in the model");
@@ -38,6 +37,7 @@ cmp_ok($ld->count, '>', 0, "There are triples in the model");
 
 {
     note "Get /foo";
+    $ld->request(Plack::Request->new({}));
     my $response = $ld->response($base_uri . '/foo');
     isa_ok($response, 'Plack::Response');
     is($response->status, 303, "Returns 303");
@@ -46,7 +46,7 @@ cmp_ok($ld->count, '>', 0, "There are triples in the model");
 
 {
     note "Get /foo, ask for text/html";
-    $ld->headers_in(HTTP::Headers->new('Accept' => 'text/html'));
+    $ld->request(Plack::Request->new({ HTTP_ACCEPT => 'text/html' }));
     my $response = $ld->response($base_uri . '/foo');
     isa_ok($response, 'Plack::Response');
     is($response->status, 303, "Returns 303");
@@ -55,7 +55,7 @@ cmp_ok($ld->count, '>', 0, "There are triples in the model");
 
 {
     note "Get /foo, use Firefox' default Accept header";
-    $ld->headers_in(HTTP::Headers->new('Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'));
+    $ld->request(Plack::Request->new({ HTTP_ACCEPT => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'}));
     my $response = $ld->response($base_uri . '/foo');
     isa_ok($response, 'Plack::Response');
     is($response->status, 303, "Returns 303");
@@ -64,7 +64,7 @@ cmp_ok($ld->count, '>', 0, "There are triples in the model");
 
 {
     note "Get /foo, ask for RDF/XML";
-    $ld->headers_in(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
+    $ld->request(Plack::Request->new({ HTTP_ACCEPT => 'application/rdf+xml'}));
     my $response = $ld->response($base_uri . '/foo');
     isa_ok($response, 'Plack::Response');
     is($response->status, 303, "Returns 303");
@@ -74,7 +74,7 @@ cmp_ok($ld->count, '>', 0, "There are triples in the model");
 
 {
     note "Get /foo, ask for Turtle";
-    $ld->headers_in(HTTP::Headers->new('Accept' => 'application/turtle'));
+    $ld->request(Plack::Request->new({ HTTP_ACCEPT => 'application/turtle'}));
     my $response = $ld->response($base_uri . "/foo");
     like($response->header('Location'), qr|/foo/data$|, "Location is OK");
 }
@@ -82,7 +82,7 @@ cmp_ok($ld->count, '>', 0, "There are triples in the model");
 
 {
     note "Get /dahut, ask for RDF/XML";
-    $ld->headers_in(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
+    $ld->request(Plack::Request->new({ HTTP_ACCEPT => 'application/rdf+xml'}));
     my $response = $ld->response($base_uri . '/dahut');
     isa_ok($response, 'Plack::Response');
     is($response->status, 404, "Returns 404");
@@ -100,7 +100,7 @@ cmp_ok($ld->count, '>', 0, "There are triples in the model");
 
 {
     note "Get /bar/baz/bing";
-    $ld->headers_in(HTTP::Headers->new('Accept' => 'text/html'));
+    $ld->request(Plack::Request->new({ HTTP_ACCEPT => 'text/html'}));
     my $response = $ld->response($base_uri . "/bar/baz/bing");
     isa_ok($response, 'Plack::Response');
     is($response->status, 303, "Returns 303");
@@ -115,12 +115,14 @@ cmp_ok($ld->count, '>', 0, "There are triples in the model");
     is($response->status, 200, "Returns 200");
     is($response->content_type, 'text/html', 'Returns HTML');
     like($response->body, qr|Testing with longer URI\.|, "Test phrase in content");
+    my $test = 'about="' . $base_uri . '/bar/baz/bing"';
+    like($response->body, qr|$test|, "Subject URI OK");
 }
 
 
 {
     note "Get /bar/baz/bing, ask for RDF/XML";
-    $ld->headers_in(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
+    $ld->request(Plack::Request->new({ HTTP_ACCEPT => 'application/rdf+xml'}));
     my $response = $ld->response($base_uri . "/bar/baz/bing");
     is($response->status, 303, "Returns 303");
     like($response->header('Location'), qr|/bar/baz/bing/data$|, "Location is OK");

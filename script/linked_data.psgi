@@ -27,7 +27,12 @@ Create a configuration file C<rdf_linkeddata.json> that looks something like:
                                 "syntax" : "turtle"
                                } ]
 
-                   }
+                   },
+        "endpoint": {
+        	"html": {
+	                 "resource_links": true
+	                }
+                    }
   }
 
 In your shell set
@@ -39,6 +44,11 @@ Then, figure out where your install method installed the
 in C</usr/local/bin>, go:
 
   plackup /usr/local/bin/linked_data.psgi --host localhost --port 3000
+
+The last part of the config sets up a SPARQL Endpoint. This requires
+the L<RDF::Endpoint> module, which is recommended by this module. To
+use it, it needs to have some config, but will use defaults.
+
 
 =head1 DESCRIPTION
 
@@ -121,29 +131,63 @@ predicate URI.
 =cut
 my $config = Config::JFDI->open( name => "RDF::LinkedData") or confess "Couldn't find config";
 
-my $ld = RDF::LinkedData->new(store => $config->{store}, 
-			      base_uri => $config->{base_uri},
-			      namespaces => $config->{namespaces});
+my $ld = RDF::LinkedData->new(store => $config->{store},
+			      endpoint_config => $config->{endpoint},
+			      base_uri => $config->{base_uri}
+			     );
+
+$ld->namespaces($config->{namespaces}) if ($config->{namespaces});
 
 my $linked_data = sub {
     my $env = shift;
     my $req = Plack::Request->new($env);
+    my $uri = $req->uri;
 
     unless ($req->method eq 'GET') {
         return [ 405, [ 'Content-type', 'text/plain' ], [ 'Method not allowed' ] ];
     }
 
-    my $uri = $req->uri;
-
     if ($uri->as_iri =~ m!^(.+?)/?(page|data)$!) {
         $uri = URI->new($1);
         $ld->type($2);
     }
-    $ld->headers_in($req->headers);
+    $ld->request($req);
     return $ld->response($uri)->finalize;
 }
 
 __END__
+
+=head1 ENDPOINT USAGE
+
+As stated earlier, this module can set up a SPARQL Endpoint for the
+data using L<RDF::Endpoint>. Often, that's what you want, but if you
+don't want your users to have that kind of power, or you're worried it
+may overload your system, you may turn it off by simply having now
+C<endpoint> section in your config. To use it, you just need to have
+an C<endpoint> section with something in it, it doesn't really matter
+what, as it will use defaults for everything that isn't set.
+
+L<RDF::Endpoint> is recommended by this module, but as it is optional,
+you may have to install it separately. It has many configuration
+options, please see its documentation for details.
+
+You may also need to set the C<RDF_ENDPOINT_SHAREDIR> variable to
+whereever the endpoint shared files are installed to. These are some
+CSS and Javascript files that enhance the user experience. They are
+not strictly necessary, but it sure makes it pretty! L<RDF::Endpoint>
+should do the right thing, though, so it shouldn't be necessary.
+
+Finally, note that while L<RDF::Endpoint> can serve these files for
+you, this module doesn't help you do that. That's mostly because this
+author thinks you should serve them using some other parts of the
+deployment stack. For example, to use Apache, put this in your Apache
+config in the appropriate C<VirtualHost> section:
+
+
+  Alias /js/ /path/to/share/www/js/
+  Alias /favicon.ico /path/to/share/www/favicon.ico
+  Alias /css/ /path/to/share/www/css/
+
 
 =head1 FEEDBACK WANTED
 
@@ -157,8 +201,8 @@ Kjetil Kjernsmo C<< <kjetilk@cpan.org> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2010 ABC Startsiden AS and Kjetil Kjernsmo. This program
-is free software; you can redistribute it and/or modify it under the
-same terms as Perl itself.
+Copyright (c) 2010 ABC Startsiden AS and 2010-2011 Kjetil
+Kjernsmo. This program is free software; you can redistribute it
+and/or modify it under the same terms as Perl itself.
 
 =cut

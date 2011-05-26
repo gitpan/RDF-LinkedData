@@ -74,7 +74,7 @@ very much in flux, and may change without warning.
 
 =over
 
-=item C<< new ( store => $store, model => $model, base_uri => $base_uri, headers_in => $headers_in ) >>
+=item C<< new ( store => $store, model => $model, base_uri => $base_uri, request => $request ) >>
 
 Creates a new handler object based on named parameters, given a store
 config (recommended usage is to pass a hashref of the type that can be
@@ -103,23 +103,31 @@ sub BUILD {
 
         throw Error -text => "No valid RDF::Trine::Model, need either a store config hashref or a model." unless ($self->model);
 
+ 	if ($self->endpoint_config) {
+ 	  eval { require RDF::Endpoint; };
+ 	  if ($@) {
+ 	    throw Error -text => "RDF::Endpoint not installed. Please install or remove its configuration.";
+ 	  }
+ 	  $self->endpoint(RDF::Endpoint->new($self->model, $self->endpoint_config));
+ 	}
 }
 
+has endpoint_config => (is => 'ro', isa => 'HashRef' );
+
+has endpoint => (is => 'rw', isa => 'RDF::Endpoint', default => undef );
 
 has store => (is => 'rw', isa => 'HashRef' );
 
 
-=item C<< headers_in ( [ $headers ] ) >>
+=item C<< request ( [ $headers ] ) >>
 
 Returns the L<HTTP::Headers> object if it exists or sets it if a L<HTTP::Headers> object is given as parameter.
 
 =cut
 
-has headers_in => ( is => 'rw', isa => 'HTTP::Headers', builder => '_build_headers_in');
+has request => ( is => 'rw', isa => 'Plack::Request');
 
-sub _build_headers_in {
-    return HTTP::Headers->new() ;
-}
+
 
 =item C<< helper_properties (  ) >>
 
@@ -204,7 +212,7 @@ sub content {
     my %output;
     if ($type eq 'data') {
         $self->{_type} = 'data';
-        my ($type, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers_in,
+        my ($type, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->request->headers,
                                                            base => $self->base_uri,
                                                            namespaces => $self->namespaces);
         my $iter = $model->bounded_description($node);
@@ -215,7 +223,8 @@ sub content {
         my $preds = $self->helper_properties;
         my $title		= $preds->title( $node );
         my $desc		= $preds->description( $node );
-        my $description	= sprintf( "<table>%s</table>\n", join("\n\t\t", map { sprintf( '<tr><td>%s</td><td>%s</td></tr>', @$_ ) } @$desc) );
+        my $description	= sprintf('<table about="'. $node->uri_value  .'"' .">%s</table>\n", 
+				  join("\n\t\t", map { sprintf( '<tr><td>%s</td><td>%s</td></tr>', @$_ ) } @$desc) );
         $output{content_type} = 'text/html';
         $output{body} =<<"END";
 <?xml version="1.0"?>
@@ -269,8 +278,16 @@ response object.
 =cut
 
 sub response {
-    my ($self, $uri) = @_;
+    my $self = shift;
+    my $uri = URI->new(shift);
     my $response = Plack::Response->new;
+
+    my $headers_in = $self->request->headers;
+    my $endpoint_path = $self->endpoint_config->{endpoint_path} || '/sparql';
+
+    if(defined($self->endpoint) && ($uri->path eq $endpoint_path)) {
+      return $self->endpoint->run( $self->request );
+    }
 
     my $type = $self->type;
     $self->type('');
@@ -289,11 +306,11 @@ sub response {
             }
 
             $self->logger->debug("Will render '$type' page ");
-            if ($self->headers_in->can('header') && $self->headers_in->header('Accept')) {
-                $self->logger->debug('Found Accept header: ' . $self->headers_in->header('Accept'));
+            if ($headers_in->can('header') && $headers_in->header('Accept')) {
+                $self->logger->debug('Found Accept header: ' . $headers_in->header('Accept'));
             } else {
-                $self->headers_in(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
-                $self->logger->warn('Setting Accept header: ' . $self->headers_in->header('Accept'));
+                $headers_in->header(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
+                $self->logger->warn('Setting Accept header: ' . $headers_in->header('Accept'));
             }
             $response->status(200);
             my $content = $self->content($node, $type);
@@ -304,7 +321,7 @@ sub response {
             $response->status(303);
             my ($ct, $s);
             eval {
-                ($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->headers_in,
+                ($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $headers_in,
                                                           base => $self->base_uri,
                                                           namespaces => $self->namespaces,
 							  extend => {
@@ -388,7 +405,7 @@ L<http://lists.perlrdf.org/listinfo/dev>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2010 Kjetil Kjernsmo, Gregory Todd Williams and ABC Startsiden AS.
+Copyright 2010-2011 Kjetil Kjernsmo, Gregory Todd Williams and ABC Startsiden AS.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

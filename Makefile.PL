@@ -10,9 +10,8 @@ test_requires 'Test::WWW::Mechanize::PSGI';
 test_requires 'Test::More' => 0.88;
 test_requires 'Test::RDF' => 0.20;
 test_requires 'Test::Exception';
-test_requires 'Test::NoWarnings';
 test_requires 'Config::JFDI';
-test_requires 'JSON';
+test_requires 'Test::JSON';
 
 requires 'Moose'			=> 0;
 requires 'MooseX::Log::Log4perl::Easy'  => 0;
@@ -27,6 +26,7 @@ requires 'URI'                          => 1.52;
 
 recommends 'Config::JFDI'               => 0; # If you plan to use the Plack script
 recommends 'JSON'                       => 0; # If you plan to use the Plack script
+recommends 'RDF::Endpoint'              => 0; # If you plan to use the Plack script with a SPARQL Endpoint
 
 install_script glob('script/*');
 

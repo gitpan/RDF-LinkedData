@@ -12,11 +12,11 @@ RDF::LinkedData - A Linked Data server implementation
 
 =head1 VERSION
 
-Version 0.20
+Version 0.21_1
 
 =cut
 
-our $VERSION = '0.20';
+our $VERSION = '0.21_1';
 
 
 =head1 SYNOPSIS
@@ -150,7 +150,7 @@ L<http://search.cpan.org/dist/RDF-LinkedData>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2010 Kjetil Kjernsmo, Gregory Todd Williams and ABC Startsiden AS.
+Copyright 2010-2011 Kjetil Kjernsmo, Gregory Todd Williams and ABC Startsiden AS.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
