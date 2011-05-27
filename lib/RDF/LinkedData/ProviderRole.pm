@@ -15,7 +15,11 @@ use URI;
 with_role 'MooseX::Log::Log4perl::Easy';
 
 BEGIN {
-    Log::Log4perl->easy_init();
+  if ($ENV{TEST_VERBOSE}) {
+    Log::Log4perl->easy_init( { level   => $TRACE } );
+  } else {
+    Log::Log4perl->easy_init( { level   => $FATAL } );
+  }
 }
 
 
@@ -103,16 +107,21 @@ sub BUILD {
 
         throw Error -text => "No valid RDF::Trine::Model, need either a store config hashref or a model." unless ($self->model);
 
- 	if ($self->endpoint_config) {
+ 	if (defined($self->endpoint_config)) {
+	  use Data::Dumper;
+	  $self->logger->debug('Endpoint config found with parameters: ' . Dumper($self->endpoint_config) );
+
  	  eval { require RDF::Endpoint; };
  	  if ($@) {
  	    throw Error -text => "RDF::Endpoint not installed. Please install or remove its configuration.";
  	  }
  	  $self->endpoint(RDF::Endpoint->new($self->model, $self->endpoint_config));
- 	}
+ 	} else {
+	  $self->logger->info('No endpoint config found');
+	}
 }
 
-has endpoint_config => (is => 'ro', isa => 'HashRef' );
+has endpoint_config => (is => 'ro');
 
 has endpoint => (is => 'rw', isa => 'RDF::Endpoint', default => undef );
 
@@ -283,7 +292,10 @@ sub response {
     my $response = Plack::Response->new;
 
     my $headers_in = $self->request->headers;
-    my $endpoint_path = $self->endpoint_config->{endpoint_path} || '/sparql';
+    my $endpoint_path = '/sparql';
+    if (defined($self->endpoint_config) && defined($self->endpoint_config->{endpoint_path})) {
+      my $endpoint_path = $self->endpoint_config->{endpoint_path};
+    }
 
     if(defined($self->endpoint) && ($uri->path eq $endpoint_path)) {
       return $self->endpoint->run( $self->request );

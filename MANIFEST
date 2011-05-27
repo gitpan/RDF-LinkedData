@@ -20,6 +20,7 @@ MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
 rdf_linkeddata.json
+rdf_linkeddata_end.json
 README
 script/linked_data.psgi
 script/write_sqlite-db.pl
@@ -29,6 +30,7 @@ t/10-basic.t
 t/15-process.t
 t/19_config_file.t
 t/20-psgi-basic.t
+t/25-psgi-endpoint.t
 t/data/basic.ttl
 xt/0-signature.t
 xt/pod-coverage.t
