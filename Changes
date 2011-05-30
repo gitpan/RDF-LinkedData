@@ -17,11 +17,11 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
  - Now use the RDF::Trine::Store->new method, since it now supports
    checking the type itself.
  - Use the new Test::RDF module for testing.
+ - (Update) Now requires RDF::Trine 0.133.
+ - (Bugfix) Gives HTML page for default Firefox Accept header.
  - (Addition) Add tests for more browser Accept headers.
  - (Addition) Improve documentation of configuration (thanks to Thomas
    Kappler for input).
- - (Bugfix) Gives HTML page for default Firefox Accept header.
- - (Update) Now requires RDF::Trine 0.133.
 
 0.18 [2010-12-09] # Minor JSON syntax documentation bug fix release.
  - (Bugfix) Found out the hard way that JSON doesn't allow single quotes.
@@ -34,10 +34,10 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
  - Use a memory model for testing that loads the file directly
  - (Addition) Add basic support for Access-Control-Allow-Origin.
  - (Addition) Add tests for more Accept headers (TODO stuff).
- - (Addition) Support setting namespace in config.
- - (Addition) Use the base if the source has not set its own.
  - (Bugfix) Move ld instantiation to outside of the coderef for big
    performance gain.
+ - (Addition) Use the base if the source has not set its own.
+ - (Addition) Support setting namespace in config.
 
 0.14 [2010-08-26] # Use URI object.
  - Minor documentation fixes.
@@ -56,18 +56,18 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
 0.09_1 [2010-08-18] # Refactor helper modules; .
  - Move POD-tests to xt.
+ - (Bugfix) Remove -T switch from load.t, since it borks on some systems.
  - (Addition) Add namespaces method to set a hashref with RDF namespaces.
  - (Addition) create a helper_properties method to pass the properties.
- - (Bugfix) Remove -T switch from load.t, since it borks on some systems.
  - (Update) Split off RDF::LinkedData::Predicates into distribution of its
    own.
 
 0.08 [2010-08-02] # Update to use config hashrefs and various fixes for recent RDF::Trine.
  - Now use a hashref config for new_with_config instead of config string.
+ - (Update) Require RDF::Trine 0.125.
  - (Update) Explicitly ask for text/html in tests since RDF::Trine 0.124
    needs it.
  - (Update) No Accept header will return turtle data.
- - (Update) Require RDF::Trine 0.125.
 
 0.06 [2010-06-13] # Minor POD syntax documentation bug fix release.
  - (Addition) Add number of PSGI tests.
@@ -75,19 +75,19 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
 0.05 [2010-06-13] # Major refactor, use Moose and Plack.
  - Many smaller changes.
+ - (Addition) Use Plack::Response and HTTP::Headers in the role itself.
+ - (Addition) More tests, also unit testing.
+ - (Removal) Remove Mojolicious::Lite script.
+ - (Addition) Use Config::JFDI for configuration.
+ - (Addition) Create a RDF::LinkedData::Predicates with a title,
+   description and page methods.
  - (Addition) A response method contains most of the logic.
  - (Addition) Create RDF::LinkedData::ProviderRole, a Moose::Role with a
    default implementation.
+ - (Addition) use Moose
+ - (Addition) More documentation.
  - (Addition) Create a Plack PSGI script to run the server. This also
    serves as a basic usage example.
- - (Addition) Create a RDF::LinkedData::Predicates with a title,
-   description and page methods.
- - (Addition) More documentation.
- - (Addition) More tests, also unit testing.
- - (Addition) Use Config::JFDI for configuration.
- - (Addition) Use Plack::Response and HTTP::Headers in the role itself.
- - (Addition) use Moose
- - (Removal) Remove Mojolicious::Lite script.
 
 0.03 [2010-05-06] # Add page method to use foaf:page for redirects.
  - Minor cleanups.
@@ -98,12 +98,12 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
 0.02 [2010-05-05] # Use RDF::Trine's conneg and bounded description code.
  - Require RDF::Trine 0.121.
- - (Addition) Add and improve a type method that returns page or data.
- - (Addition) Add some log messages.
- - (Addition) Use RDF::Trine's bounded description code.
  - (Addition) Use RDF::Trine's content negotiation code.
- - (Addition) Use a HTTP::Headers object for conneg.
+ - (Addition) Use RDF::Trine's bounded description code.
+ - (Addition) Add and improve a type method that returns page or data.
  - (Removal) Remove the negotiate method.
+ - (Addition) Add some log messages.
+ - (Addition) Use a HTTP::Headers object for conneg.
 
 0.001_01 # Code on Github by Gregory Todd Williams.
 
