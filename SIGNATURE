@@ -14,12 +14,12 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA256
 
-SHA1 11ec822e85b1dd678b84e89acfa02cdf086b80ea Changes
+SHA1 6f82606525636e32d6b0d42ef6c8ebc9d1c550f8 Changes
 SHA1 016a6e27054ef8fbb2012c637f69434cb3770aeb Changes.ttl
 SHA1 ece8cb3bcbc32bdb42220d90bc246ac5b61a29be MANIFEST
 SHA1 958ca07de16ee8df0210d1771b41b3382bff48bf MANIFEST.SKIP
-SHA1 7f5d4fd4a959a9d069f194c9f1c734c1ad7ef3f5 META.yml
-SHA1 71aab21339baccd7c23e4a402c049814296e53cc Makefile.PL
+SHA1 9d79017f7c5e52e7e9834c9c5e99d7bee0bd3305 META.yml
+SHA1 c3bf10f6d9e321e2fd1f32b356240394bf167056 Makefile.PL
 SHA1 27df0b889615c4a65a82423312ae3cdd40d30431 README
 SHA1 7305dbe2904416e28decb05396988a5d51d578be inc/Module/Install.pm
 SHA1 d001b4b9a48395a8c4134b234a0e1789138427c5 inc/Module/Install/AuthorTests.pm
@@ -34,18 +34,18 @@ SHA1 fd81bc0e85a1193f278760edb82928d8b4dff2c1 inc/Module/Install/Repository.pm
 SHA1 d3a4c720c6ec7f8fce7df37002fbc9177fb77050 inc/Module/Install/Scripts.pm
 SHA1 5457015ea5a50e93465bf2dafa29feebd547f85b inc/Module/Install/Win32.pm
 SHA1 051e7fa8063908befa3440508d0584a2497b97db inc/Module/Install/WriteAll.pm
-SHA1 3cf2a44e924ef9fb29c3a861d3fbf411fa760cce lib/RDF/LinkedData.pm
-SHA1 a7e1d04919aafe7a5600c9327ce1b12bb3f7e479 lib/RDF/LinkedData/ProviderRole.pm
+SHA1 3c33682fb48876e618ed19ee4be6d20c982c352e lib/RDF/LinkedData.pm
+SHA1 1218f68f9170b9f940ee5d6b83b46ce41ce5ed35 lib/RDF/LinkedData/ProviderRole.pm
 SHA1 5cbd365db8de6aec0ad4e17849bfbf86c06e7958 rdf_linkeddata.json
 SHA1 7615d2557aa4bfec8779dcfb077144fd19419123 rdf_linkeddata_end.json
 SHA1 ae862b4e875d71c961dc92c3dcfb81c4282f25c8 script/linked_data.psgi
 SHA1 0298f0dbe8f98912dcaecf0aa31a42f72fa79ba6 script/write_sqlite-db.pl
 SHA1 af175eb27d75d4dc2890b917d845a2e2b04b5d49 t/00-load.t
 SHA1 1cae71ad24757d2d1b31dc634b21b78e56ba15f3 t/10-basic.t
-SHA1 a8e02577b03d780eb24b4718a470fbc052af9be8 t/15-process.t
+SHA1 da3c0600c0e2913529d38201baae80c5c6e07724 t/15-process.t
 SHA1 4594076056e4bbf53992ba0858b739c8560ada6f t/19_config_file.t
 SHA1 7c00b1a007c50d20a075dc2fe4fd632b79d55f24 t/20-psgi-basic.t
-SHA1 5e49c782ad984b87819b3e185bfc7c5c2e44528c t/25-psgi-endpoint.t
+SHA1 ba10fa3d0245630ea2e1a117562c6fc9343a4dcb t/25-psgi-endpoint.t
 SHA1 a0946a1631578df073be5dbef1e81694bcd83fd2 t/data/basic.ttl
 SHA1 6027ca8dcc9ba30201cef5639abdab726a7ff2e5 xt/0-signature.t
 SHA1 e5d02727dedb63edd5ecd0c662ad259dc34041fb xt/pod-coverage.t
@@ -53,17 +53,17 @@ SHA1 640935336dc1123c0069bcf5432bcaedc2cf22d3 xt/pod.t
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
-iQIVAwUBTe0XpX++6N86nkqlAQhapg//QTqRrhuvc4+4oP5DXcsivHUUoD2azoCz
-GZyVRk1kw29+IfOr5MALVJ0tGduX55LN4268s/1rTpR5E0GIIKBrt6sIDuNpesxr
-4r9wwisYI46dhXzYBVJSmOA1NTvhGenpDgUxhPpx9INxwz9YYyVkij98skXOTX9N
-xzgwxl2oe9cuplnh2Q2OrL+fg2wpTt8/HFx1a/2OsMeb+7B37uJB76MmO1aNiQzV
-6J0dSrOBzg8FfBWBezJeq+p3W+1xxV6whC3+/pOzw851kmEGt7PBTImoNqmk010p
-ZSIVirXcMHbkBfZqrjMYu6YZBLR9Pc6ySE9/bk6S+zrC6jJ4xnSkm8u69uMF10El
-Elop6aMO/ke0rIB5CB6XJ6OBZtdR0tKUx3i8CBWLq4e6NjGZxwa2wHln/x7aRUnr
-2/XnU1XQaLplcZTBs47lANU6tCVJ9L121kwzO1UOQslesHsLykiAl0Bplq1jDfz0
-JizAsZMSM6HNkWlV99BxOCij7Z/qbeASxa5wJOOkg+MofYIEs/QbuAwjkM5l0o2D
-lTypNPCLJLO/3H8vIP58ikTG6lhgGwOdA9EgKlCnbqfRhiNS4QdGrP7Y8J1Jdx+A
-OAQQ+GcREu2Yx3mMrN4CvISJr/eOtKUvF+IGJZUt90kF7eUh1SsLtuyl3ifB+/co
-xEB1pGbLCR0=
-=OW/X
+iQIVAwUBTe6bEH++6N86nkqlAQgpKBAAjawtNRgZSnFWBYdnNZwh/1uRHwqOgeJe
+sOVms9/7zPmsiuG3cxlxjTroc5fBdu/CyTHtUtVOM/NeHMbxo4m6u+t6qhxj/uYo
+/UPv/k2ILOxc6dEnRDWSTODQkvVde1dB8eWWZZjzJgTY93jNSCTXdVDDKH5TMpnK
+RVd2u41b/sGhHP0RniR2gZPzEMCzDVfYDTsjznnSqz0Yz3K73fPDBJLtH0Jnj6We
+Af4lAAToD+MoJThcPKXkIFY3JUA7gTqyHsFYbN2hhMyrxr4dzjLNtWeY3xzH3JA0
+fqLFXE9PjkAN9S33cLUHSo/cJRpKYIl8Agq9BsWzgXywZUvH+PEFlSahCVLCl0aq
+6AB/zxezq28ByBblQzDoJVCm5Y7QB4C/ghKpiRCqRAadkoraW3b+IOa9ql4ftjEb
+Yc8TLpcJh2gOjm9LR6P8OF9c4YWiQwgvVQVKvP6YCODKJ/xd0TkNEayiM5jB6IKY
+kaTeqQoxNu7vsvCw1iIcJwY5YR5e5p0jTxC+LFSaw4IfKd2iajiJ6tJqlGCwHsUG
+0r9uiq6fAaL1z5RFNVWq0cnPtI2ybU4kH+8z86rbJVxXyjHZJSYWnKQaXYW6wsDG
+pPvQHWGnL7vO5ppZR5jadGW9/iJY37xXNPvdPAuUAj6V2oW+hmsWMqDceJL0FLS5
+wYNy5jZJFC4=
+=ZWVN
 -----END PGP SIGNATURE-----

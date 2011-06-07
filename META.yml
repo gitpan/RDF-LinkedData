@@ -29,10 +29,11 @@ no_index:
 recommends:
   Config::JFDI: 0
   JSON: 0
-  RDF::Endpoint: 0.02_01
+  RDF::Endpoint: 0.03
 requires:
   HTTP::Headers: 0
   Log::Log4perl: 0
+  Module::Load::Conditional: 0
   Moose: 0
   MooseX::Log::Log4perl::Easy: 0
   Plack: 0.9939
@@ -45,4 +46,4 @@ resources:
   bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=RDF-LinkedData
   license: http://dev.perl.org/licenses/
   repository: git://github.com/kjetilk/RDF-LinkedData.git
-version: 0.21_4
+version: 0.21_5
