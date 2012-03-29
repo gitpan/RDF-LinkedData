@@ -2,12 +2,13 @@
 
 use strict;
 use warnings;
+use Plack::App::RDF::LinkedData;
 use RDF::LinkedData;
 use Plack::Request;
-use RDF::Trine;
+use Plack::Builder;
 use Config::JFDI;
 use Carp qw(confess);
-use URI 1.52;
+use Module::Load::Conditional qw[can_load];
 
 =head1 NAME
 
@@ -32,7 +33,10 @@ Create a configuration file C<rdf_linkeddata.json> that looks something like:
         	"html": {
 	                 "resource_links": true
 	                }
-                    }
+                    },
+        "cors": {
+                  "origins": "*"
+                }
   }
 
 In your shell set
@@ -45,10 +49,15 @@ in C</usr/local/bin>, go:
 
   plackup /usr/local/bin/linked_data.psgi --host localhost --port 3000
 
-The last part of the config sets up a SPARQL Endpoint. This requires
+The C<endpoint>-part of the config sets up a SPARQL Endpoint. This requires
 the L<RDF::Endpoint> module, which is recommended by this module. To
 use it, it needs to have some config, but will use defaults.
 
+The last, C<cors>-part of the config enables Cross-Origin Resource
+Sharing, which is a W3C draft for relaxing security constraints to
+allow data to be shared across domains. In most cases, this is what
+you want when you are serving open data, but in some cases, notably
+intranets, this should be turned off by removing this part.
 
 =head1 DESCRIPTION
 
@@ -105,60 +114,33 @@ If the RDF resource for which data is requested is not the subject of any RDF
 triples in the underlying triplestore, the /page and /data redirects will not take
 place, and a HTTP 404 (Not Found) will be returned.
 
-The HTML description of resources will be enhanced by having metadata about the
-predicate of RDF triples loaded into the same triplestore. Currently, the
-relevant metadata includes rdfs:label and dc:description statements about
-predicates. For example, if the triplestore contains the statement
-
-<http://host.name/rdf/example> <http://example/date> "2010" .
-
-then also including the triple
-
-<http://example/date> <http://www.w3.org/2000/01/rdf-schema#label> "Creation Date" .
-
-Would allow the HTML description of L<http://host.name/rdf/example> to include
-a description including:
-
-Creation Date: 2010
-
-instead of the less specific:
-
-date: 2010
-
-which is simply based on attempting to extract a useful suffix from the
-predicate URI.
+The HTML description of resources will be enhanced by having metadata
+about the predicate of RDF triples loaded into the same
+triplestore. Currently, only a C<rdfs:label>-predicate will be used
+for a title, as in this version, generation of HTML is done by
+L<RDF::RDFa::Generator>.
 
 =cut
-my $config = Config::JFDI->open( name => "RDF::LinkedData") or confess "Couldn't find config";
 
-my $ld = ($config->{endpoint})
-  ? RDF::LinkedData->new(store => $config->{store},
-			     endpoint_config => $config->{endpoint},
-			     base_uri => $config->{base_uri}
-			    )
-  : RDF::LinkedData->new(store => $config->{store},
-			     base_uri => $config->{base_uri}
-			    );
-
-
-$ld->namespaces($config->{namespaces}) if ($config->{namespaces});
-
-my $linked_data = sub {
-    my $env = shift;
-    my $req = Plack::Request->new($env);
-    my $uri = $req->uri;
-
-    unless ($req->method eq 'GET') {
-        return [ 405, [ 'Content-type', 'text/plain' ], [ 'Method not allowed' ] ];
-    }
-
-    if ($uri->as_iri =~ m!^(.+?)/?(page|data)$!) {
-        $uri = URI->new($1);
-        $ld->type($2);
-    }
-    $ld->request($req);
-    return $ld->response($uri)->finalize;
+my $config;
+BEGIN {
+	$config = Config::JFDI->open( name => "RDF::LinkedData") or confess "Couldn't find config";
 }
+
+my $linkeddata = Plack::App::RDF::LinkedData->new();
+
+$linkeddata->configure($config);
+
+my $rdf_linkeddata = $linkeddata->to_app;
+
+builder {
+	enable "Head";
+	enable "ContentLength";
+	enable "ConditionalGET";
+	if (can_load( modules => { 'Plack::Middleware::CrossOrigin' => 0 })) { enable 'CrossOrigin' => %{$config->{cors}}};
+	$rdf_linkeddata;
+};
+
 
 __END__
 
@@ -206,8 +188,8 @@ Kjetil Kjernsmo C<< <kjetilk@cpan.org> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2010 ABC Startsiden AS and 2010-2011 Kjetil
-Kjernsmo. This program is free software; you can redistribute it
-and/or modify it under the same terms as Perl itself.
+Copyright (c) 2010 ABC Startsiden AS and Gregory Todd Williams and
+2010-2012 Kjetil Kjernsmo. This program is free software; you can
+redistribute it and/or modify it under the same terms as Perl itself.
 
 =cut

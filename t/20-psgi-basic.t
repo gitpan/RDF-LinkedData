@@ -3,9 +3,10 @@
 use strict;
 use warnings;
 
-use Test::More tests => 44 ;
+use Test::More tests => 52 ;
 use Test::RDF;
 use Test::WWW::Mechanize::PSGI;
+use Module::Load::Conditional qw[can_load];
 
 my $tester = do "script/linked_data.psgi";
 
@@ -105,12 +106,28 @@ my $base_uri = 'http://localhost/';
 }
 
 {
+    note "Get /foo/data, ask for XHTML";
+    my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester);
+    $mech->default_header('Accept' => 'application/xhtml+xml');
+    $mech->get_ok("/foo/data");
+    is($mech->ct, 'application/xhtml+xml', "Correct content-type");
+    like($mech->uri, qr|/foo/data$|, "Location is OK");
+	 $mech->content_like(qr|about=\"http://\S+?/foo\"|, 'Subject URI is OK in RDFa' );
+	 $mech->content_contains('rel="foaf:page"', 'foaf:page is in RDFa' );
+}
+
+{
     note "Get /bar/baz/bing, no redirects, ask for RDF/XML";
     my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester, requests_redirectable => []);
-    $mech->default_header('Accept' => 'application/rdf+xml');
+    $mech->default_header('Accept' => 'application/rdf+xml'); 
+	 $mech->add_header('Origin' => 'http://example.org');
     my $res = $mech->get("/bar/baz/bing");
     is($mech->status, 303, "Returns 303");
     like($res->header('Location'), qr|/bar/baz/bing/data$|, "Location is OK");
+	 SKIP: {
+			skip 'CrossOrigin not installed', 1 unless can_load( modules => { 'Plack::Middleware::CrossOrigin' => 0 });
+			is($res->header('Access-Control-Allow-Origin'), '*', 'CORS header OK');
+		}
 }
 
 
@@ -122,6 +139,8 @@ my $base_uri = 'http://localhost/';
     is($mech->ct, 'text/html', "Correct content-type");
     like($mech->uri, qr|/bar/baz/bing/page$|, "Location is OK");
     $mech->title_is('Testing with longer URI.', "Title is correct");
+    $mech->has_tag('h1', 'Testing with longer URI.', "Title in body is correct");
+	 $mech->content_like(qr|about=\"http://\S+?/bar/baz/bing\"|, 'Subject URI is OK in RDFa' );
 }
 
 

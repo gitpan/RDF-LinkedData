@@ -14,26 +14,33 @@ test_requires 'Config::JFDI';
 test_requires 'Test::JSON';
 
 requires 'Moose'			=> 0;
+requires 'MooseX::UndefTolerant'			=> 0;
 requires 'MooseX::Log::Log4perl::Easy'  => 0;
 requires 'Log::Log4perl'		=> 0;
 requires 'RDF::Trine'			=> 0.133;
 requires 'Scalar::Util'			=> 0;
 requires 'Plack'                        => 0.9939;
-requires 'namespace::autoclean'         => 0;
+requires 'namespace::autoclean'         => 0.12;
 requires 'HTTP::Headers'                => 0;
 requires 'RDF::Helper::Properties'      => 0.10;
 requires 'URI'                          => 1.52;
 requires 'Module::Load::Conditional'    => 0;
+requires 'Encode'                       => 0;
+requires 'RDF::RDFa::Generator'         => 0.102;
+requires 'HTML::HTML5::Writer'          => 0;
 
 recommends 'Config::JFDI'               => 0; # If you plan to use the Plack script
 recommends 'JSON'                       => 0; # If you plan to use the Plack script
 recommends 'RDF::Endpoint'              => 0.03; # If you plan to use the Plack script with a SPARQL Endpoint
+recommends 'Plack::Middleware::CrossOrigin' => 0; # If you'd like to add CORS headers
 
 install_script glob('script/*');
 
 author_tests('xt');
 
 auto_set_repository;
+
+build_requires 'URI::Escape'; # Seems to be required by the next bugtracker below
 auto_set_bugtracker;
 
 write_doap_changes;
