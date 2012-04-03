@@ -8,12 +8,14 @@ use Log::Log4perl qw(:easy);
 use Plack::Response;
 use RDF::Helper::Properties;
 use URI;
+use HTTP::Headers;
 use Module::Load::Conditional qw[can_load];
 use Moose;
 use MooseX::UndefTolerant::Attribute;
 use Encode;
 use RDF::RDFa::Generator 0.102;
 use HTML::HTML5::Writer qw(DOCTYPE_XHTML_RDFA);
+use Data::Dumper;
 
 with 'MooseX::Log::Log4perl::Easy';
 
@@ -34,11 +36,11 @@ RDF::LinkedData - A simple Linked Data implementation
 
 =head1 VERSION
 
-Version 0.39_1
+Version 0.39_2
 
 =cut
 
-our $VERSION = '0.39_1';
+our $VERSION = '0.39_2';
 
 
 =head1 SYNOPSIS
@@ -83,25 +85,12 @@ Called by Moose to initialize an object.
 sub BUILD {
 	my $self = shift;
 
-	unless($self->model) {
-		# First, set the base if none is configured
-		my $i = 0;
-		foreach my $source (@{$self->store->{sources}}) {
-			unless ($source->{base_uri}) {
-				${$self->store->{sources}}[$i]->{base_uri} = $self->base_uri;
-			}
-			$i++;
-		}
-		my $store	= RDF::Trine::Store->new( $self->store );
-		$self->model(RDF::Trine::Model->new( $store ));
-	}
-
-	unless ($self->model) {
+	# A model will be passed or built by the _build_model, so we can check directly if we have one
+	unless ($self->model->isa('RDF::Trine::Model')) {
 		throw Error -text => "No valid RDF::Trine::Model, need either a store config hashref or a model.";
 	}
 
  	if ($self->has_endpoint_config) {
-		use Data::Dumper;
 		$self->logger->debug('Endpoint config found with parameters: ' . Dumper($self->endpoint_config) );
 
 		unless (can_load( modules => { 'RDF::Endpoint' => 0.03 })) {
@@ -114,6 +103,39 @@ sub BUILD {
 }
 
 has store => (is => 'rw', isa => 'HashRef' );
+
+
+=item C<< model >>
+
+Returns the RDF::Trine::Model object.
+
+=cut
+
+has model => (is => 'ro', isa => 'RDF::Trine::Model', lazy => 1, builder => '_build_model');
+
+sub _build_model {
+	my $self = shift;
+	# First, set the base if none is configured
+	my $i = 0;
+	foreach my $source (@{$self->store->{sources}}) {
+		unless ($source->{base_uri}) {
+			${$self->store->{sources}}[$i]->{base_uri} = $self->base_uri;
+		}
+		$i++;
+	}
+	my $store	= RDF::Trine::Store->new( $self->store );
+	return RDF::Trine::Model->new( $store );
+}
+
+
+=item C<< base_uri >>
+
+Returns or sets the base URI for this handler.
+
+=cut
+
+has base_uri => (is => 'rw', isa => 'Str' );
+
 
 has endpoint_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
 								isa=>'HashRef', predicate => 'has_endpoint_config');
@@ -261,24 +283,6 @@ sub content {
 }
 
 
-
-
-=item C<< model >>
-
-Returns or sets the RDF::Trine::Model object.
-
-=cut
-
-has model => (is => 'rw', isa => 'RDF::Trine::Model');
-
-
-=item C<< base_uri >>
-
-Returns or sets the base URI for this handler.
-
-=cut
-
-has base_uri => (is => 'rw', isa => 'Str' );
 
 
 =item C<< response ( $uri ) >>
