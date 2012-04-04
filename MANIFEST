@@ -1,5 +1,4 @@
 Changes
-Changes.ttl
 inc/Module/Install.pm
 inc/Module/Install/AuthorTests.pm
 inc/Module/Install/Base.pm
@@ -9,6 +8,7 @@ inc/Module/Install/DOAPChangeSets.pm
 inc/Module/Install/Fetch.pm
 inc/Module/Install/Makefile.pm
 inc/Module/Install/Metadata.pm
+inc/Module/Install/RDF.pm
 inc/Module/Install/Repository.pm
 inc/Module/Install/Scripts.pm
 inc/Module/Install/Win32.pm
@@ -19,6 +19,9 @@ Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml
+meta/changes.ttl
+meta/people.ttl
+meta/project.ttl
 MYMETA.json
 MYMETA.yml
 rdf_linkeddata.json
@@ -36,5 +39,6 @@ t/20-psgi-basic.t
 t/25-psgi-endpoint.t
 t/data/basic.ttl
 xt/0-signature.t
+xt/critic.t
 xt/pod-coverage.t
 xt/pod.t

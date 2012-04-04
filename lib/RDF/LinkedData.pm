@@ -36,24 +36,24 @@ RDF::LinkedData - A simple Linked Data implementation
 
 =head1 VERSION
 
-Version 0.39_2
+Version 0.40
 
 =cut
 
-our $VERSION = '0.39_2';
+our $VERSION = '0.40';
 
 
 =head1 SYNOPSIS
 
 For just setting this up and get it to run, you would just use the
-L<linked_data.psgi> script in this distribution, which again use
+C<linked_data.psgi> script in this distribution. The usage of that is documented in
 L<Plack::App::RDF::LinkedData>. If you want to try and use this
 directly, you'd do stuff like:
 
 	my $ld = RDF::LinkedData->new(store => $config->{store},
-		  								   endpoint_config => $config->{endpoint},
-											base_uri => $config->{base_uri}
-										  );
+                                 endpoint_config => $config->{endpoint},
+                                 base_uri => $config->{base_uri}
+                                );
 	$ld->namespaces($config->{namespaces}) if ($config->{namespaces});
 	$ld->request($req);
 	return $ld->response($uri)->finalize;
@@ -123,7 +123,7 @@ sub _build_model {
 		}
 		$i++;
 	}
-	my $store	= RDF::Trine::Store->new( $self->store );
+	my $store = RDF::Trine::Store->new( $self->store );
 	return RDF::Trine::Model->new( $store );
 }
 
@@ -140,18 +140,6 @@ has base_uri => (is => 'rw', isa => 'Str' );
 has endpoint_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
 								isa=>'HashRef', predicate => 'has_endpoint_config');
 
-=item C<< endpoint ( [ $endpoint ] ) >>
-
-Returns the L<RDF::Endpoint> object if it exists or sets it if a
-L<RDF::Endpoint> object is given as parameter. In most cases, it will
-be created for you if you pass a C<endpoint_config> hashref to the
-constructor, so you would most likely not use this method.
-
-=cut
-
-
-has endpoint => (is => 'rw', isa => 'RDF::Endpoint', predicate => 'has_endpoint');
-
 
 =item C<< request ( [ $request ] ) >>
 
@@ -162,7 +150,7 @@ Returns the L<Plack::Request> object if it exists or sets it if a L<Plack::Reque
 has request => ( is => 'rw', isa => 'Plack::Request');
 
 
-=item C<< etag ( [ $etag ] ) >>
+=item C<< etag >>
 
 Returns an Etag suitable for use in a HTTP header
 
@@ -175,6 +163,109 @@ sub _build_etag {
 }
 
 
+
+=item namespaces ( { skos => 'http://www.w3.org/2004/02/skos/core#', dct => 'http://purl.org/dc/terms/' } )
+
+Gets or sets the namespaces that some serializers use for pretty-printing.
+
+=cut
+
+has 'namespaces' => (is => 'rw', isa => 'HashRef', default => sub { { rdf => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#' } } );
+
+
+
+=item C<< response ( $uri ) >>
+
+Will look up what to do with the given URI object and populate the
+response object.
+
+=cut
+
+sub response {
+	my $self = shift;
+	my $uri = URI->new(shift);
+	my $response = Plack::Response->new;
+
+	my $headers_in = $self->request->headers;
+	my $endpoint_path = '/sparql';
+	if ($self->has_endpoint_config && defined($self->endpoint_config->{endpoint_path})) {
+      $endpoint_path = $self->endpoint_config->{endpoint_path};
+	}
+
+	if ($self->has_endpoint && ($uri->path eq $endpoint_path)) {
+      return $self->endpoint->run( $self->request );
+	}
+
+	my $type = $self->type;
+	$self->type('');
+	my $node = $self->my_node($uri);
+	$self->logger->info("Try rendering '$type' page for subject node: " . $node->as_string);
+	if ($self->count($node) > 0) {
+		if ($type) {
+			my $preds = $self->helper_properties;
+			my $page = $preds->page($node);
+			if (($type eq 'page') && ($page ne $node->uri_value . '/page')) {
+				# Then, we have a foaf:page set that we should redirect to
+				$response->status(301);
+				$response->headers->header('Location' => $page);
+				return $response;
+			}
+
+			$self->logger->debug("Will render '$type' page ");
+			if ($headers_in->can('header') && $headers_in->header('Accept')) {
+				$self->logger->debug('Found Accept header: ' . $headers_in->header('Accept'));
+			} else {
+				$headers_in->header(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
+				$self->logger->warn('Setting Accept header: ' . $headers_in->header('Accept'));
+			}
+			$response->status(200);
+			my $content = $self->content($node, $type);
+			$response->headers->header('Vary' => join(", ", qw(Accept)));
+			$response->headers->header('ETag' => $self->etag);
+			$response->headers->content_type($content->{content_type});
+			$response->content($content->{body});
+		} else {
+			$response->status(303);
+			my ($ct, $s);
+			eval {
+				($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $headers_in,
+                                                          base => $self->base_uri,
+                                                          namespaces => $self->namespaces,
+																			 extend => {
+																							'text/html' => 'html',
+																							'application/xhtml+xml' => 'html'
+																						  }
+																			)
+	      };
+			$self->logger->debug("Got $ct content type");
+			if ($@) {
+				$response->status(406);
+				$response->headers->content_type('text/plain');
+				$response->body('HTTP 406: No serialization available any specified content type');
+				return $response;
+			}
+			my $newurl = $uri . '/data';
+			unless ($s->isa('RDF::Trine::Serializer')) {
+				my $preds = $self->helper_properties;
+				$newurl = $preds->page($node);
+			}
+			$self->logger->debug('Will do a 303 redirect to ' . $newurl);
+			$response->headers->header('Location' => $newurl);
+			$response->headers->header('Vary' => join(", ", qw(Accept)));
+		}
+		return $response;
+	} else {
+		$response->status(404);
+		$response->headers->content_type('text/plain');
+		$response->body('HTTP 404: Unknown resource');
+		return $response;
+	}
+	# We should never get here.
+	$response->status(500);
+	$response->headers->content_type('text/plain');
+	$response->body('HTTP 500: No such functionality.');
+	return $response;
+}
 
 
 =item C<< helper_properties (  ) >>
@@ -214,7 +305,7 @@ sub my_node {
 	my ($self, $iri) = @_;
     
 	# not happy with this, but it helps for clients that do content sniffing based on filename
-	$iri	=~ s/.(nt|rdf|ttl)$//;
+	$iri =~ s/.(nt|rdf|ttl)$//;
 	$self->logger->info("Subject URI to be used: $iri");
 	return RDF::Trine::Node::Resource->new( $iri );
 }
@@ -259,10 +350,10 @@ sub content {
 	my %output;
 	if ($type eq 'data') {
 		$self->{_type} = 'data';
-		my ($type, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->request->headers,
+		my ($ctype, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->request->headers,
 																			base => $self->base_uri,
 																			namespaces => $self->namespaces);
-		$output{content_type} = $type;
+		$output{content_type} = $ctype;
 		$output{body} = $s->serialize_iterator_to_string ( $iter );
 	} else {
 		$self->{_type} = 'page';
@@ -271,7 +362,7 @@ sub content {
 			$returnmodel->add_statement($st);
 		}
 		my $preds = $self->helper_properties;
-		my $gen	= RDF::RDFa::Generator->new( style => 'HTML::Pretty',
+		my $gen  = RDF::RDFa::Generator->new( style => 'HTML::Pretty',
 														  title => $preds->title( $node ),
 														  base => $self->base_uri,
 														  namespaces => $self->namespaces);
@@ -284,110 +375,17 @@ sub content {
 
 
 
+=item C<< endpoint ( [ $endpoint ] ) >>
 
-=item C<< response ( $uri ) >>
-
-Will look up what to do with the given URI object and populate the
-response object.
-
-=cut
-
-sub response {
-	my $self = shift;
-	my $uri = URI->new(shift);
-	my $response = Plack::Response->new;
-
-	my $headers_in = $self->request->headers;
-	my $endpoint_path = '/sparql';
-	if ($self->has_endpoint_config && defined($self->endpoint_config->{endpoint_path})) {
-      my $endpoint_path = $self->endpoint_config->{endpoint_path};
-	}
-
-	if ($self->has_endpoint && ($uri->path eq $endpoint_path)) {
-      return $self->endpoint->run( $self->request );
-	}
-
-	my $type = $self->type;
-	$self->type('');
-	my $node = $self->my_node($uri);
-	$self->logger->info("Try rendering '$type' page for subject node: " . $node->as_string);
-	if ($self->count($node) > 0) {
-		if ($type) {
-			my $preds = $self->helper_properties;
-			my $page = $preds->page($node);
-			if (($type eq 'page') && ($page ne $node->uri_value . '/page')) {
-				# Then, we have a foaf:page set that we should redirect to
-				$response->status(301);
-				$response->headers->header('Location' => $page);
-				return $response;
-			}
-
-			$self->logger->debug("Will render '$type' page ");
-			if ($headers_in->can('header') && $headers_in->header('Accept')) {
-				$self->logger->debug('Found Accept header: ' . $headers_in->header('Accept'));
-			} else {
-				$headers_in->header(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
-				$self->logger->warn('Setting Accept header: ' . $headers_in->header('Accept'));
-			}
-			$response->status(200);
-			my $content = $self->content($node, $type);
-			$response->headers->header('Vary' => join(", ", qw(Accept)));
-			$response->headers->header('ETag' => $self->etag);
-			$response->headers->content_type($content->{content_type});
-			$response->content($content->{body});
-		} else {
-			$response->status(303);
-			my ($ct, $s);
-			eval {
-				($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $headers_in,
-                                                          base => $self->base_uri,
-                                                          namespaces => $self->namespaces,
-																			 extend => {
-																							'text/html'	=> 'html',
-																							'application/xhtml+xml' => 'html'
-																						  }
-																			)
-	      };
-			$self->logger->debug("Got $ct content type");
-			if ($@) {
-				$response->status(406);
-				$response->headers->content_type('text/plain');
-				$response->body('HTTP 406: No serialization available any specified content type');
-				return $response;
-			}
-			my $newurl = $uri . '/data';
-			unless ($s->isa('RDF::Trine::Serializer')) {
-				my $preds = $self->helper_properties;
-				$newurl = $preds->page($node);
-			}
-			$self->logger->debug('Will do a 303 redirect to ' . $newurl);
-			$response->headers->header('Location' => $newurl);
-			$response->headers->header('Vary' => join(", ", qw(Accept)));
-		}
-		return $response;
-	} else {
-		$response->status(404);
-		$response->headers->content_type('text/plain');
-		$response->body('HTTP 404: Unknown resource');
-		return $response;
-	}
-	# We should never get here.
-	$response->status(500);
-	$response->headers->content_type('text/plain');
-	$response->body('HTTP 500: No such functionality.');
-	return $response;
-}
-
-
-=item namespaces ( { skos => 'http://www.w3.org/2004/02/skos/core#', dct => 'http://purl.org/dc/terms/' } )
-
-Gets or sets the namespaces that some serializers use for pretty-printing.
+Returns the L<RDF::Endpoint> object if it exists or sets it if a
+L<RDF::Endpoint> object is given as parameter. In most cases, it will
+be created for you if you pass a C<endpoint_config> hashref to the
+constructor, so you would most likely not use this method.
 
 =cut
 
 
-
-has 'namespaces' => (is => 'rw', isa => 'HashRef', default => sub { { rdf => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#' } } );
+has endpoint => (is => 'rw', isa => 'RDF::Endpoint', predicate => 'has_endpoint');
 
 
 =back
@@ -423,6 +421,8 @@ L<http://lists.perlrdf.org/listinfo/dev>
 =item * Figure out what needs to be done to use this code in other frameworks, such as Magpie.
 
 =item * Make it read-write hypermedia.
+
+=item * Use a environment variable for config on the command line?
 
 =back
 

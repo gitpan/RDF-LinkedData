@@ -67,7 +67,7 @@
          }
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=RDF-LinkedData"
@@ -79,5 +79,5 @@
          "url" : "git://github.com/kjetilk/RDF-LinkedData.git"
       }
    },
-   "version" : "0.39_1"
+   "version" : "0.40"
 }
