@@ -52,4 +52,4 @@ resources:
   bugtracker: https://github.com/kjetilk/RDF-LinkedData/issues
   license: http://dev.perl.org/licenses/
   repository: git://github.com/kjetilk/RDF-LinkedData.git
-version: 0.42
+version: 0.44

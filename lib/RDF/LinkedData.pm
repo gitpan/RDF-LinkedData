@@ -36,11 +36,11 @@ RDF::LinkedData - A simple Linked Data implementation
 
 =head1 VERSION
 
-Version 0.42
+Version 0.44
 
 =cut
 
-our $VERSION = '0.42';
+our $VERSION = '0.44';
 
 
 =head1 SYNOPSIS
@@ -142,7 +142,7 @@ Returns or sets the base URI for this handler.
 
 =cut
 
-has base_uri => (is => 'rw', isa => 'Str' );
+has base_uri => (is => 'rw', isa => 'Str', default => '' );
 
 has hypermedia => (is => 'ro', isa => 'Bool', default => 1);
 
@@ -227,10 +227,14 @@ sub response {
 				$self->logger->debug('Found Accept header: ' . $headers_in->header('Accept'));
 			} else {
 				$headers_in->header(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
-				$self->logger->warn('Setting Accept header: ' . $headers_in->header('Accept'));
+				if ($headers_in->header('Accept')) {
+					$self->logger->warn('Setting Accept header: ' . $headers_in->header('Accept'));
+				} else {
+					$self->logger->warn('No content type header can be set');
+				}
 			}
 			$response->status(200);
-			my $content = $self->content($node, $type);
+			my $content = $self->content($node, $type, $endpoint_path);
 			$response->headers->header('Vary' => join(", ", qw(Accept)));
 			$response->headers->header('ETag' => $self->etag);
 			$response->headers->content_type($content->{content_type});
@@ -334,13 +338,14 @@ sub count {
 	return $self->model->count_statements( $node, undef, undef );
 }
 
-=item C<< content ( $node, $type) >>
+=item C<< content ( $node, $type, $endpoint_path) >>
 
 Will return the a hashref with content for this URI, based on the
 $node subject, and the type of node, which may be either C<data> or
 C<page>. In the first case, an RDF document serialized to a format set
 by content negotiation. In the latter, a simple HTML document will be
-returned. The returned hashref has two keys: C<content_type> and
+returned. Finally, you may pass the endpoint path if it is
+available. The returned hashref has two keys: C<content_type> and
 C<body>. The former is self-explanatory, the latter contains the
 actual content.
 
@@ -355,7 +360,7 @@ actual use cases that surfaces in the future.
 
 
 sub content {
-	my ($self, $node, $type) = @_;
+	my ($self, $node, $type, $endpoint_path) = @_;
 	my $model = $self->model;
 	my $iter = $model->bounded_description($node);
 	my %output;
@@ -373,7 +378,7 @@ sub content {
 															 blank('void')));
 				$hmmodel->add_statement(statement(blank('void'), 
 															 iri('http://rdfs.org/ns/void#sparqlEndpoint'),
-															 iri($self->base_uri . $self->endpoint_config->{endpoint_path})));
+															 iri($self->base_uri . $endpoint_path)));
 			}
 			if($self->namespaces_as_vocabularies) {
 				$hmmodel->add_statement(statement(iri($node->uri_value . '/data'), 

@@ -5,6 +5,15 @@ Created:      2009-04-23
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.44  2012-06-12  # Bugfix release.
+
+ - (Addition) More tests (obviously).
+ - (Bugfix) Actually, the TODO test about content type failed for everyone
+   else.
+ - (Bugfix) The endpoint path was not correctly sent to the hypermedia.
+ - Some minor fixes.
+ - Use empty string as default base_uri
+
 0.42  2012-06-11  # Enable very basic VoID for hypermedia.
 
  - (Addition) Add hypermedia method which will be on by default to enable
