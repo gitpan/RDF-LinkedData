@@ -63,6 +63,7 @@ my $base_uri = 'http://localhost/';
     $rxparser->parse_into_model( $base_uri, $mech->content, $model );
     has_subject($base_uri . 'bar/baz/bing', $model, "Subject URI in content");
     has_literal('Testing with longer URI.', 'en', undef, $model, "Test phrase in content");
+	 has_uri('http://rdfs.org/ns/void#sparqlEndpoint', $model, 'SPARQL endpoint link in data');
 }
 
 
@@ -76,9 +77,9 @@ my $base_uri = 'http://localhost/';
     $mech->submit_form_ok( {
             form_id => 'queryform',
             fields      => {
-                query => 'DESCRIBE <http://localhost/bar/baz/bing> WHERE {}',
-		'media-type' => 'text/turtle'
-            },
+            query => 'DESCRIBE <http://localhost/bar/baz/bing> WHERE {}',
+				'media-type' => 'text/turtle'
+          },
         }, 'Submitting DESCRIBE query.'
     );
     is_rdf($mech->content, 'turtle', 

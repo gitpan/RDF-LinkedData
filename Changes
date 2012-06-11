@@ -2,8 +2,21 @@ RDF-LinkedData
 ==============
 
 Created:      2009-04-23
-Bug tracker:  <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-LinkedData>
+Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
+
+0.42  2012-06-11  # Enable very basic VoID for hypermedia.
+
+ - (Addition) Add hypermedia method which will be on by default to enable
+   hypermedia.
+ - (Addition) Add namespaces_as_vocabularies method which will be on by
+   default to use declared namespaces as vocabularies.
+ - (Addition) Add void:endpoint and void:vocabulary to all output if
+   enabled.
+ - Some minor test and code fixes.
+ - TODO test about content type now pass.
+ - Use Test::RDF 0.26.
+ - Use the github issue tracker.
 
 0.40  2012-04-04  # Refactoring and code improvements.
 

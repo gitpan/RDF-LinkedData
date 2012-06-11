@@ -2,7 +2,7 @@ package RDF::LinkedData;
 
 use namespace::autoclean;
 
-use RDF::Trine;
+use RDF::Trine qw[iri literal blank statement];
 use RDF::Trine::Serializer;
 use Log::Log4perl qw(:easy);
 use Plack::Response;
@@ -36,11 +36,11 @@ RDF::LinkedData - A simple Linked Data implementation
 
 =head1 VERSION
 
-Version 0.40
+Version 0.42
 
 =cut
 
-our $VERSION = '0.40';
+our $VERSION = '0.42';
 
 
 =head1 SYNOPSIS
@@ -66,6 +66,7 @@ See L<Plack::App::RDF::LinkedData> for a complete example.
 =over
 
 =item C<< new ( store => $store, model => $model, base_uri => $base_uri, 
+                hypermedia => 1, namespaces_as_vocabularies => 1, 
                 request => $request, endpoint_config => $endpoint_config ) >>
 
 Creates a new handler object based on named parameters, given a store
@@ -75,6 +76,13 @@ can also be used) or model and a base URI. Optionally, you may pass a
 L<Plack::Request> object (must be passed before you call C<content>)
 and an C<endpoint_config> hashref if you want to have a SPARQL
 Endpoint running using the recommended module L<RDF::Endpoint>.
+
+This module can also provide additional triples to turn the respons
+into a hypermedia type. If you don't want this, set the C<hypermedia>
+argument to false. Currently this entails setting the SPARQL endpoint
+and vocabularies used using the L<VoID vocabulary|http://vocab.deri.ie/void>.
+The latter is very limited at present, all it'll do is use the namespaces
+if you have C<namespaces_as_vocabularies> enabled, which it is by default.
 
 =item C<< BUILD >>
 
@@ -136,6 +144,9 @@ Returns or sets the base URI for this handler.
 
 has base_uri => (is => 'rw', isa => 'Str' );
 
+has hypermedia => (is => 'ro', isa => 'Bool', default => 1);
+
+has namespaces_as_vocabularies => (is => 'ro', isa => 'Bool', default => 1);
 
 has endpoint_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
 								isa=>'HashRef', predicate => 'has_endpoint_config');
@@ -354,7 +365,31 @@ sub content {
 																			base => $self->base_uri,
 																			namespaces => $self->namespaces);
 		$output{content_type} = $ctype;
+		if ($self->hypermedia) {
+			my $hmmodel = RDF::Trine::Model->temporary_model;
+			if($self->has_endpoint) {
+				$hmmodel->add_statement(statement(iri($node->uri_value . '/data'), 
+															 iri('http://rdfs.org/ns/void#inDataset'), 
+															 blank('void')));
+				$hmmodel->add_statement(statement(blank('void'), 
+															 iri('http://rdfs.org/ns/void#sparqlEndpoint'),
+															 iri($self->base_uri . $self->endpoint_config->{endpoint_path})));
+			}
+			if($self->namespaces_as_vocabularies) {
+				$hmmodel->add_statement(statement(iri($node->uri_value . '/data'), 
+															 iri('http://rdfs.org/ns/void#inDataset'), 
+															 blank('void')));
+				foreach my $nsuri (values(%{$self->namespaces})) {
+					$hmmodel->add_statement(statement(blank('void'), 
+																 iri('http://rdfs.org/ns/void#vocabulary'),
+																 iri($nsuri)));
+				}
+			}
+			$iter = $iter->concat($hmmodel->as_stream);
+		}
 		$output{body} = $s->serialize_iterator_to_string ( $iter );
+		$self->logger->trace("Message body is $output{body}");
+
 	} else {
 		$self->{_type} = 'page';
 		my $returnmodel = RDF::Trine::Model->temporary_model;
@@ -397,9 +432,7 @@ Kjetil Kjernsmo, C<< <kjetilk@cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-rdf-linkeddata at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=RDF-LinkedData>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
+Please report any bugs using L<github|https://github.com/kjetilk/RDF-LinkedData/issues>
 
 
 =head1 SUPPORT
@@ -442,5 +475,8 @@ under the same terms as Perl itself.
 
 
 =cut
+
+# TODO : immutable doesn't seem to work with UndefTolerant
+#__PACKAGE__->meta->make_immutable();
 
 1;

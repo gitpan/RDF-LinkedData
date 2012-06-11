@@ -10,7 +10,7 @@ configure_requires 'URI::Escape'; # Seems to be required by the bugtracker below
 test_requires 'FindBin';
 test_requires 'Test::WWW::Mechanize::PSGI';
 test_requires 'Test::More' => 0.88;
-test_requires 'Test::RDF' => 0.20;
+test_requires 'Test::RDF' => 0.26;
 test_requires 'Test::Exception';
 test_requires 'Config::JFDI';
 test_requires 'Test::JSON';
@@ -41,7 +41,9 @@ install_script glob('script/*');
 author_tests('xt');
 
 auto_set_repository;
-auto_set_bugtracker;
+
+resources
+  bugtracker    => "https://github.com/kjetilk/RDF-LinkedData/issues";
 
 rdf_metadata;
 write_doap_changes;

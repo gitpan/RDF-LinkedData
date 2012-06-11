@@ -10,7 +10,7 @@ build_requires:
   Test::Exception: 0
   Test::JSON: 0
   Test::More: 0.88
-  Test::RDF: 0.2
+  Test::RDF: 0.26
   Test::WWW::Mechanize::PSGI: 0
   URI::Escape: 0
 configure_requires:
@@ -50,7 +50,7 @@ requires:
   URI: 1.52
   namespace::autoclean: 0.12
 resources:
-  bugtracker: http://rt.cpan.org/Public/Dist/Display.html?Name=RDF-LinkedData
+  bugtracker: https://github.com/kjetilk/RDF-LinkedData/issues
   license: http://dev.perl.org/licenses/
   repository: git://github.com/kjetilk/RDF-LinkedData.git
 version: 0.40

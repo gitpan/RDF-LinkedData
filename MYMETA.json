@@ -30,7 +30,7 @@
             "Test::Exception" : 0,
             "Test::JSON" : 0,
             "Test::More" : "0.88",
-            "Test::RDF" : "0.2",
+            "Test::RDF" : "0.26",
             "Test::WWW::Mechanize::PSGI" : 0,
             "URI::Escape" : 0
          }
@@ -70,7 +70,7 @@
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
-         "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=RDF-LinkedData"
+         "web" : "https://github.com/kjetilk/RDF-LinkedData/issues"
       },
       "license" : [
          "http://dev.perl.org/licenses/"
