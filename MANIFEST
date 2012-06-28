@@ -25,6 +25,7 @@ MYMETA.json
 MYMETA.yml
 rdf_linkeddata.json
 rdf_linkeddata_end.json
+rdf_linkeddata_void.json
 README
 script/linked_data.psgi
 script/write_sqlite-db.pl
@@ -37,6 +38,7 @@ t/17-hypermedia.t
 t/19_config_file.t
 t/20-psgi-basic.t
 t/25-psgi-endpoint.t
+t/28-psgi-void.t
 t/data/basic.ttl
 xt/0-signature.t
 xt/critic.t

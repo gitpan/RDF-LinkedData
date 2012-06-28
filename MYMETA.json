@@ -46,7 +46,8 @@
             "Config::JFDI" : 0,
             "JSON" : 0,
             "Plack::Middleware::CrossOrigin" : 0,
-            "RDF::Endpoint" : "0.03"
+            "RDF::Endpoint" : "0.03",
+            "RDF::Generator::Void" : 0
          },
          "requires" : {
             "Encode" : 0,
@@ -67,7 +68,7 @@
          }
       }
    },
-   "release_status" : "stable",
+   "release_status" : "testing",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/kjetilk/RDF-LinkedData/issues"
@@ -79,5 +80,5 @@
          "url" : "git://github.com/kjetilk/RDF-LinkedData.git"
       }
    },
-   "version" : "0.44"
+   "version" : "0.49_1"
 }

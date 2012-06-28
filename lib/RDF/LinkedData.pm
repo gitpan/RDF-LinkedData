@@ -36,11 +36,11 @@ RDF::LinkedData - A simple Linked Data implementation
 
 =head1 VERSION
 
-Version 0.44
+Version 0.49_1
 
 =cut
 
-our $VERSION = '0.44';
+our $VERSION = '0.49_1';
 
 
 =head1 SYNOPSIS
@@ -60,6 +60,14 @@ directly, you'd do stuff like:
 
 See L<Plack::App::RDF::LinkedData> for a complete example.
 
+=head1 DESCRIPTION
+
+This module is used to create a minimal Linked Data server that can
+serve RDF data out of an L<RDF::Trine::Model>. It will look up URIs in
+the model and do the right thing (known as the 303 dance) and mint
+URLs for that, as well as content negotiation. Thus, you can
+concentrate on URIs for your things, you need not be concerned about
+minting URLs for the pages to serve it.
 
 =head1 METHODS
 
@@ -67,7 +75,8 @@ See L<Plack::App::RDF::LinkedData> for a complete example.
 
 =item C<< new ( store => $store, model => $model, base_uri => $base_uri, 
                 hypermedia => 1, namespaces_as_vocabularies => 1, 
-                request => $request, endpoint_config => $endpoint_config ) >>
+                request => $request, endpoint_config => $endpoint_config, 
+                void_config => $void_config ) >>
 
 Creates a new handler object based on named parameters, given a store
 config (recommended usage is to pass a hashref of the type that can be
@@ -108,6 +117,20 @@ sub BUILD {
  	} else {
 		$self->logger->info('No endpoint config found');
 	}
+
+ 	if ($self->has_void_config) {
+		$self->logger->debug('VoID config found with parameters: ' . Dumper($self->void_config) );
+
+		unless (can_load( modules => { 'RDF::Generator::Void' => 0.02 })) {
+			throw Error -text => "RDF::Generator::Void not installed. Please install or remove its configuration.";
+		}
+		my $dataset_uri = (defined($self->void_config->{dataset_uri}))
+								  ? $self->void_config->{dataset_uri} 
+								  : URI->new($self->base_uri . '#dataset-0')->canonical;
+		$self->void(RDF::Generator::Void->new(inmodel => $self->model, dataset_uri => $dataset_uri));
+ 	} else {
+		$self->logger->info('No VoID config found');
+	}
 }
 
 has store => (is => 'rw', isa => 'HashRef' );
@@ -119,7 +142,7 @@ Returns the RDF::Trine::Model object.
 
 =cut
 
-has model => (is => 'ro', isa => 'RDF::Trine::Model', lazy => 1, builder => '_build_model');
+has model => (is => 'ro', isa => 'RDF::Trine::Model', lazy => 1, builder => '_build_model', handles => ['etag']);
 
 sub _build_model {
 	my $self = shift;
@@ -151,6 +174,9 @@ has namespaces_as_vocabularies => (is => 'ro', isa => 'Bool', default => 1);
 has endpoint_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
 								isa=>'HashRef', predicate => 'has_endpoint_config');
 
+has void_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
+								isa=>'HashRef', predicate => 'has_void_config');
+
 
 =item C<< request ( [ $request ] ) >>
 
@@ -164,16 +190,6 @@ has request => ( is => 'rw', isa => 'Plack::Request');
 =item C<< etag >>
 
 Returns an Etag suitable for use in a HTTP header
-
-=cut
-
-has etag => ( is => 'ro', isa => 'Str', lazy => 1, builder => '_build_etag');
-
-sub _build_etag {
-	return $_[0]->model->etag;
-}
-
-
 
 =item namespaces ( { skos => 'http://www.w3.org/2004/02/skos/core#', dct => 'http://purl.org/dc/terms/' } )
 
@@ -207,6 +223,11 @@ sub response {
       return $self->endpoint->run( $self->request );
 	}
 
+	if ($self->has_void) {
+		my $void_resp = $self->_void_content($uri, $endpoint_path);
+		return $void_resp if (defined($void_resp));
+	}
+
 	my $type = $self->type;
 	$self->type('');
 	my $node = $self->my_node($uri);
@@ -234,31 +255,15 @@ sub response {
 				}
 			}
 			$response->status(200);
-			my $content = $self->content($node, $type, $endpoint_path);
+			my $content = $self->_content($node, $type, $endpoint_path);
 			$response->headers->header('Vary' => join(", ", qw(Accept)));
 			$response->headers->header('ETag' => $self->etag);
 			$response->headers->content_type($content->{content_type});
 			$response->content($content->{body});
 		} else {
 			$response->status(303);
-			my ($ct, $s);
-			eval {
-				($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $headers_in,
-                                                          base => $self->base_uri,
-                                                          namespaces => $self->namespaces,
-																			 extend => {
-																							'text/html' => 'html',
-																							'application/xhtml+xml' => 'html'
-																						  }
-																			)
-	      };
-			$self->logger->debug("Got $ct content type");
-			if ($@) {
-				$response->status(406);
-				$response->headers->content_type('text/plain');
-				$response->body('HTTP 406: No serialization available any specified content type');
-				return $response;
-			}
+			my ($ct, $s) = $self->_negotiate($headers_in);
+			return $ct if ($ct->isa('Plack::Response')); # A hack to allow for the failed conneg case
 			my $newurl = $uri . '/data';
 			unless ($s->isa('RDF::Trine::Serializer')) {
 				my $preds = $self->helper_properties;
@@ -338,28 +343,18 @@ sub count {
 	return $self->model->count_statements( $node, undef, undef );
 }
 
-=item C<< content ( $node, $type, $endpoint_path) >>
+# =item C<< _content ( $node, $type, $endpoint_path) >>
+#
+# Private method to return the a hashref with content for this URI,
+# based on the $node subject, and the type of node, which may be either
+# C<data> or C<page>. In the first case, an RDF document serialized to a
+# format set by content negotiation. In the latter, a simple HTML
+# document will be returned. Finally, you may pass the endpoint path if
+# it is available. The returned hashref has two keys: C<content_type>
+# and C<body>. The former is self-explanatory, the latter contains the
+# actual content.
 
-Will return the a hashref with content for this URI, based on the
-$node subject, and the type of node, which may be either C<data> or
-C<page>. In the first case, an RDF document serialized to a format set
-by content negotiation. In the latter, a simple HTML document will be
-returned. Finally, you may pass the endpoint path if it is
-available. The returned hashref has two keys: C<content_type> and
-C<body>. The former is self-explanatory, the latter contains the
-actual content.
-
-One may argue that a hashref with magic keys should be a class of its
-own, and for that reason, this method should be considered "at
-risk". Currently, it is only used in one place, and it may be turned
-into a private method, get passed the L<Plack::Response> object,
-removed altogether or turned into a role of its own, depending on the
-actual use cases that surfaces in the future.
-
-=cut
-
-
-sub content {
+sub _content {
 	my ($self, $node, $type, $endpoint_path) = @_;
 	my $model = $self->model;
 	my $iter = $model->bounded_description($node);
@@ -427,6 +422,82 @@ constructor, so you would most likely not use this method.
 
 has endpoint => (is => 'rw', isa => 'RDF::Endpoint', predicate => 'has_endpoint');
 
+
+=item C<< void ( [ $voidg ] ) >>
+
+Returns the L<RDF::Generator::Void> object if it exists or sets it if
+a L<RDF::Generator::Void> object is given as parameter. Like
+C<endpoint>, it will be created for you if you pass a C<void_config>
+hashref to the constructor, so you would most likely not use this
+method.
+
+=cut
+
+
+has void => (is => 'rw', isa => 'RDF::Generator::Void', predicate => 'has_void');
+
+
+sub _negotiate {
+	my ($self, $headers_in) = @_;
+	my ($ct, $s);
+	eval {
+		($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $headers_in,
+																	 base_uri => $self->base_uri,
+																	 namespaces => $self->namespaces,
+																	 extend => {
+																					'text/html' => 'html',
+																					'application/xhtml+xml' => 'html'
+																				  }
+																	)
+	};
+	$self->logger->debug("Got $ct content type");
+	if ($@) {
+		my $response = Plack::Response->new;
+		$response->status(406);
+		$response->headers->content_type('text/plain');
+		$response->body('HTTP 406: No serialization available any specified content type');
+		return $response;
+	}
+	return ($ct, $s)
+}
+
+sub _void_content {
+	my ($self, $uri, $endpoint_path) = @_;
+	my $generator = $self->void;
+	my $dataset_uri = URI->new($generator->dataset_uri);
+	my $fragment = $dataset_uri->fragment;
+	$dataset_uri =~ s/(\#$fragment)$//;
+	if ($uri->eq($dataset_uri)) {
+		$generator->urispace($self->base_uri);
+		if ($self->has_endpoint) {
+			$generator->add_endpoints($self->base_uri . $endpoint_path);
+		}
+		my $voidmodel = $generator->generate;
+		my ($ct, $s) = $self->_negotiate($self->request->headers);
+		return $ct if ($ct->isa('Plack::Response')); # A hack to allow for the failed conneg case
+		my $body;
+		if ($s->isa('RDF::Trine::Serializer')) { # Then we just serialize since we have a serializer.
+			$body = $s->serialize_model_to_string($voidmodel);
+		} else {
+			# For (X)HTML, we need to do extra work
+			my $gen = RDF::RDFa::Generator->new( style => 'HTML::Pretty',
+															 title => 'VoID Description',
+															 base => $self->base_uri,
+															 namespaces => $self->namespaces);
+			my $writer = HTML::HTML5::Writer->new( markup => 'xhtml', doctype => DOCTYPE_XHTML_RDFA );
+			$body = encode_utf8( $writer->document($gen->create_document($voidmodel)) );
+		}
+		my $response = Plack::Response->new;
+		$response->status(200);
+		$response->headers->header('Vary' => join(", ", qw(Accept)));
+		$response->headers->header('ETag' => $self->etag);
+		$response->headers->content_type($ct);
+		$response->content($body);
+		return $response;
+	} else {
+		return;
+	}
+}
 
 =back
 
