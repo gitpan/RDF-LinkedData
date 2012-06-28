@@ -5,6 +5,16 @@ Created:      2009-04-23
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.50  2012-06-29  # Use VoID Generator.
+
+ - (Addition) Add descriptions to POD and README.
+ - (Addition) RDF::LinkedData now can use RDF::Generator::Void, but not all
+   its features.
+ - (Removal) Remove SQLite generator script.
+ - Some minor fixes.
+ - The content method is now private.
+ - Use current_etag instead of etag
+
 0.44  2012-06-12  # Bugfix release.
 
  - (Addition) More tests (obviously).

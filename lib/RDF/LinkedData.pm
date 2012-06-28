@@ -36,11 +36,11 @@ RDF::LinkedData - A simple Linked Data implementation
 
 =head1 VERSION
 
-Version 0.49_1
+Version 0.50
 
 =cut
 
-our $VERSION = '0.49_1';
+our $VERSION = '0.50';
 
 
 =head1 SYNOPSIS
@@ -142,7 +142,8 @@ Returns the RDF::Trine::Model object.
 
 =cut
 
-has model => (is => 'ro', isa => 'RDF::Trine::Model', lazy => 1, builder => '_build_model', handles => ['etag']);
+has model => (is => 'ro', isa => 'RDF::Trine::Model', lazy => 1, builder => '_build_model', 
+				  handles => { current_etag => 'etag' });
 
 sub _build_model {
 	my $self = shift;
@@ -187,9 +188,18 @@ Returns the L<Plack::Request> object if it exists or sets it if a L<Plack::Reque
 has request => ( is => 'rw', isa => 'Plack::Request');
 
 
-=item C<< etag >>
+=item C<< current_etag >>
 
-Returns an Etag suitable for use in a HTTP header
+Returns the current Etag of the model suitable for use in a HTTP header. This is a read-only attribute.
+
+=item C<< last_etag >>, C<< has_last_etag >>
+
+Returns or sets the last Etag of so that changes to the model can be detected.
+
+=cut
+
+has last_etag => ( is => 'rw', isa => 'Str', predicate => 'has_last_etag');
+
 
 =item namespaces ( { skos => 'http://www.w3.org/2004/02/skos/core#', dct => 'http://purl.org/dc/terms/' } )
 
@@ -257,7 +267,7 @@ sub response {
 			$response->status(200);
 			my $content = $self->_content($node, $type, $endpoint_path);
 			$response->headers->header('Vary' => join(", ", qw(Accept)));
-			$response->headers->header('ETag' => $self->etag);
+			$response->headers->header('ETag' => $self->current_etag);
 			$response->headers->content_type($content->{content_type});
 			$response->content($content->{body});
 		} else {
@@ -367,22 +377,28 @@ sub _content {
 		$output{content_type} = $ctype;
 		if ($self->hypermedia) {
 			my $hmmodel = RDF::Trine::Model->temporary_model;
-			if($self->has_endpoint) {
+			if($self->has_void) {
 				$hmmodel->add_statement(statement(iri($node->uri_value . '/data'), 
 															 iri('http://rdfs.org/ns/void#inDataset'), 
-															 blank('void')));
-				$hmmodel->add_statement(statement(blank('void'), 
-															 iri('http://rdfs.org/ns/void#sparqlEndpoint'),
-															 iri($self->base_uri . $endpoint_path)));
-			}
-			if($self->namespaces_as_vocabularies) {
-				$hmmodel->add_statement(statement(iri($node->uri_value . '/data'), 
-															 iri('http://rdfs.org/ns/void#inDataset'), 
-															 blank('void')));
-				foreach my $nsuri (values(%{$self->namespaces})) {
+															 $self->void->dataset_uri));
+			} else {
+				if($self->has_endpoint) {
+					$hmmodel->add_statement(statement(iri($node->uri_value . '/data'), 
+																 iri('http://rdfs.org/ns/void#inDataset'), 
+																 blank('void')));
 					$hmmodel->add_statement(statement(blank('void'), 
-																 iri('http://rdfs.org/ns/void#vocabulary'),
-																 iri($nsuri)));
+																 iri('http://rdfs.org/ns/void#sparqlEndpoint'),
+																 iri($self->base_uri . $endpoint_path)));
+				}
+				if($self->namespaces_as_vocabularies) {
+					$hmmodel->add_statement(statement(iri($node->uri_value . '/data'), 
+																 iri('http://rdfs.org/ns/void#inDataset'), 
+																 blank('void')));
+					foreach my $nsuri (values(%{$self->namespaces})) {
+						$hmmodel->add_statement(statement(blank('void'), 
+																	 iri('http://rdfs.org/ns/void#vocabulary'),
+																	 iri($nsuri)));
+					}
 				}
 			}
 			$iter = $iter->concat($hmmodel->as_stream);
@@ -468,16 +484,29 @@ sub _void_content {
 	my $fragment = $dataset_uri->fragment;
 	$dataset_uri =~ s/(\#$fragment)$//;
 	if ($uri->eq($dataset_uri)) {
-		$generator->urispace($self->base_uri);
+		if ($self->void_config->{urispace}) {
+			$generator->urispace($self->void_config->{urispace});
+		} else {
+			$generator->urispace($self->base_uri);
+		}
+		if ($self->namespaces_as_vocabularies) {
+			$generator->add_vocabularies(values(%{$self->namespaces}));
+		}
 		if ($self->has_endpoint) {
 			$generator->add_endpoints($self->base_uri . $endpoint_path);
 		}
-		my $voidmodel = $generator->generate;
+		if ($self->has_last_etag && ($self->last_etag ne $self->current_etag)) {
+			$self->_clear_voidmodel;
+		}
+		unless ($self->_has_voidmodel) {
+			$self->_voidmodel($generator->generate);
+			$self->last_etag($self->current_etag);
+		}
 		my ($ct, $s) = $self->_negotiate($self->request->headers);
 		return $ct if ($ct->isa('Plack::Response')); # A hack to allow for the failed conneg case
 		my $body;
 		if ($s->isa('RDF::Trine::Serializer')) { # Then we just serialize since we have a serializer.
-			$body = $s->serialize_model_to_string($voidmodel);
+			$body = $s->serialize_model_to_string($self->_voidmodel);
 		} else {
 			# For (X)HTML, we need to do extra work
 			my $gen = RDF::RDFa::Generator->new( style => 'HTML::Pretty',
@@ -485,12 +514,12 @@ sub _void_content {
 															 base => $self->base_uri,
 															 namespaces => $self->namespaces);
 			my $writer = HTML::HTML5::Writer->new( markup => 'xhtml', doctype => DOCTYPE_XHTML_RDFA );
-			$body = encode_utf8( $writer->document($gen->create_document($voidmodel)) );
+			$body = encode_utf8( $writer->document($gen->create_document($self->_voidmodel)) );
 		}
 		my $response = Plack::Response->new;
 		$response->status(200);
 		$response->headers->header('Vary' => join(", ", qw(Accept)));
-		$response->headers->header('ETag' => $self->etag);
+		$response->headers->header('ETag' => $self->last_etag);
 		$response->headers->content_type($ct);
 		$response->content($body);
 		return $response;
@@ -498,6 +527,9 @@ sub _void_content {
 		return;
 	}
 }
+
+has _voidmodel => (is => 'rw', isa => 'RDF::Trine::Model', predicate => '_has_voidmodel', clearer => '_clear_voidmodel');
+
 
 =back
 

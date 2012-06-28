@@ -28,12 +28,12 @@ rdf_linkeddata_end.json
 rdf_linkeddata_void.json
 README
 script/linked_data.psgi
-script/write_sqlite-db.pl
 SIGNATURE
 t/00-load.t
 t/10-basic.t
 t/11-constructor.t
 t/15-process.t
+t/16-void.t
 t/17-hypermedia.t
 t/19_config_file.t
 t/20-psgi-basic.t

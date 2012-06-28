@@ -8,7 +8,7 @@ use Test::RDF;
 use RDF::Trine qw[iri literal blank variable statement];
 use Test::WWW::Mechanize::PSGI;
 use Module::Load::Conditional qw[check_install];
-use RDF::Trine::Namespace qw(rdf);;
+use RDF::Trine::Namespace qw(rdf);
 
 
 unless (defined(check_install( module => 'RDF::Endpoint', version => 0.03))) {
@@ -58,11 +58,9 @@ my $base_uri = 'http://localhost/';
     $rxparser->parse_into_model( $base_uri, $mech->content, $model );
     has_subject($base_uri . 'bar/baz/bing', $model, "Subject URI in content");
     has_literal('Testing with longer URI.', 'en', undef, $model, "Test phrase in content");
-  TODO: {
-		 local $TODO = 'Hypermedia now only links to void';
-		 hasnt_uri('http://rdfs.org/ns/void#sparqlEndpoint', $model, 'SPARQL endpoint link in data');
-		 hasnt_uri($base_uri . 'sparql', $model, 'SPARQL endpoint in data');
-	 }
+	 hasnt_uri('http://rdfs.org/ns/void#sparqlEndpoint', $model, 'SPARQL endpoint link in data');
+	 hasnt_uri($base_uri . 'sparql', $model, 'SPARQL endpoint in data');
+	 has_object_uri($base_uri . '#dataset-0', $model, "Void oject URI in content");
 }
 
 {
@@ -96,6 +94,17 @@ my $base_uri = 'http://localhost/';
 							  ),
 				  'Common statements are there');
 }
+
+{
+	note "Get the base_uri with the VoID";
+	my $mech = Test::WWW::Mechanize::PSGI->new(app => $tester);
+	$mech->default_header('Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8');
+	$mech->get_ok($base_uri);
+	is($mech->ct, 'text/html', "Correct content-type");
+	my $model = RDF::Trine::Model->temporary_model;
+	is_valid_rdf($mech->content, 'rdfa', 'Returns valid RDFa');
+}
+
 
 
 
