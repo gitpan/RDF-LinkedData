@@ -5,6 +5,11 @@ Created:      2009-04-23
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.52  2012-06-30  # Bugfix release.
+
+ - (Bugfix) A bad plan caused by superfluous BEGIN block caused test
+   failures.
+
 0.50  2012-06-29  # Use VoID Generator.
 
  - (Addition) Add descriptions to POD and README.
