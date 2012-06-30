@@ -15,7 +15,7 @@ unless (defined(check_install( module => 'RDF::Endpoint', version => 0.03))) {
   plan skip_all => 'You need RDF::Endpoint for this test'
 }
 
-unless (defined(check_install( module => 'RDF::Generator::Void', version => 0.02))) {
+unless (defined(check_install( module => 'RDF::Generator::Void', version => 0.04))) {
   plan skip_all => 'You need RDF::Generator::Void for this test'
 }
 
@@ -60,6 +60,7 @@ my $base_uri = 'http://localhost/';
     has_literal('Testing with longer URI.', 'en', undef, $model, "Test phrase in content");
 	 hasnt_uri('http://rdfs.org/ns/void#sparqlEndpoint', $model, 'SPARQL endpoint link in data');
 	 hasnt_uri($base_uri . 'sparql', $model, 'SPARQL endpoint in data');
+	 hasnt_uri('http://purl.org/dc/terms/modified', $model, 'None of the added description in data');
 	 has_object_uri($base_uri . '#dataset-0', $model, "Void oject URI in content");
 }
 
@@ -73,6 +74,9 @@ my $base_uri = 'http://localhost/';
 	is_valid_rdf($mech->content, 'rdfxml', 'Returns valid RDF/XML');
 	$rxparser->parse_into_model( $base_uri, $mech->content, $model );
 	has_subject($base_uri . '#dataset-0', $model, "Subject URI in content");
+	has_literal("This is a title", "en", undef, $model, "Correct English title");
+	has_literal("Dette er en tittel", "no", undef, $model, "Correct Norwegian title");
+	has_literal("This is a test too", "en", undef, $model, "Correct English label from addon data");
 	pattern_target($model);
 	my $void = RDF::Trine::Namespace->new('http://rdfs.org/ns/void#');
 	my $xsd  = RDF::Trine::Namespace->new('http://www.w3.org/2001/XMLSchema#');
@@ -103,6 +107,7 @@ my $base_uri = 'http://localhost/';
 	is($mech->ct, 'text/html', "Correct content-type");
 	my $model = RDF::Trine::Model->temporary_model;
 	is_valid_rdf($mech->content, 'rdfa', 'Returns valid RDFa');
+	$mech->title_is('VoID Description for my dataset', 'Correct title in RDFa');
 }
 
 

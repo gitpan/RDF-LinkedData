@@ -39,6 +39,7 @@ t/19_config_file.t
 t/20-psgi-basic.t
 t/25-psgi-endpoint.t
 t/28-psgi-void.t
+t/data/add.ttl
 t/data/basic.ttl
 xt/0-signature.t
 xt/critic.t

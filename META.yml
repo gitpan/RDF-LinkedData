@@ -5,7 +5,7 @@ author:
   - 'Kjetil Kjernsmo <kjetilk@cpan.org>'
 build_requires:
   Config::JFDI: 0
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.36
   FindBin: 0
   Test::Exception: 0
   Test::JSON: 0
@@ -13,9 +13,10 @@ build_requires:
   Test::RDF: 0.26
   Test::WWW::Mechanize::PSGI: 0
 configure_requires:
-  ExtUtils::MakeMaker: 6.42
+  ExtUtils::MakeMaker: 6.36
 distribution_type: module
-generated_by: 'Module::Install version 1.02'
+dynamic_config: 1
+generated_by: 'Module::Install version 1.04'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -31,7 +32,7 @@ recommends:
   JSON: 0
   Plack::Middleware::CrossOrigin: 0
   RDF::Endpoint: 0.03
-  RDF::Generator::Void: 0
+  RDF::Generator::Void: 0.04
 requires:
   Encode: 0
   HTML::HTML5::Writer: 0
@@ -52,4 +53,4 @@ resources:
   bugtracker: https://github.com/kjetilk/RDF-LinkedData/issues
   license: http://dev.perl.org/licenses/
   repository: git://github.com/kjetilk/RDF-LinkedData.git
-version: 0.52
+version: 0.54

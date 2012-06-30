@@ -51,6 +51,9 @@ Create a configuration file C<rdf_linkeddata.json> that looks something like:
                     },
         "cors": {
                   "origins": "*"
+                },
+        "void": {
+                  "pagetitle": "VoID Description for my dataset"
                 }
   }
 
@@ -167,6 +170,39 @@ config in the appropriate C<VirtualHost> section:
   Alias /js/ /path/to/share/www/js/
   Alias /favicon.ico /path/to/share/www/favicon.ico
   Alias /css/ /path/to/share/www/css/
+
+=head2 VoID Generator Usage
+
+Like a SPARQL Endpoint, this is something most users would want. In
+fact, it is an even stronger recommendation than an endpoint. To
+enable it, you must have L<RDF::Generator::Void> installed, and just
+anything in the config file to enable it, like in the SYNOPSIS example.
+
+You can set several things in the config, the property attributes of
+L<RDF::Generator::Void> can all be set there somehow. You can also set
+C<pagetitle>, which sets the title for the RDFa page that can be
+generated. Moreover, you can set titles in several languages for the
+dataset using C<titles> as the key, pointing to an arrayref with
+titles, where each title is a two element arrayref, where the first
+element is the title itself and the second is the language for that
+title.
+
+Please refer to the L<RDF::Generator::Void> for more details about
+what can be set, and the C<rdf_linkeddata_void.json> test config in
+the distribution for example.
+
+By adding an C<add_void> config key, you can make pass a file to the
+generator so that arbitrary RDF can be added to the VoID
+description. This is a very preliminary implementation, but it solves
+many use cases as much of the VoID description cannot be simply
+generated. To use it, the configuration would in JSON look something
+like this:
+
+	"add_void": { "file": "/data/add.ttl", "syntax": "turtle" }
+
+where C<file> is the full path to RDF that should be added and
+C<syntax> is needed by the parser to parse it.
+
 
 
 =head1 FEEDBACK WANTED

@@ -5,6 +5,14 @@ Created:      2009-04-23
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.54  2012-06-30  # Improve VoID generator use.
+
+ - (Addition) Make it possible to use the Generators property attributes.
+ - (Addition) Use the Generators new feature to add a model with arbitrary
+   data to load a file.
+ - Add a pagetitle config parameter for RDFa title.
+ - Some minor fixes.
+
 0.52  2012-06-30  # Bugfix release.
 
  - (Bugfix) A bad plan caused by superfluous BEGIN block caused test
