@@ -36,11 +36,11 @@ RDF::LinkedData - A simple Linked Data implementation
 
 =head1 VERSION
 
-Version 0.54
+Version 0.55_1
 
 =cut
 
-our $VERSION = '0.54';
+our $VERSION = '0.55_1';
 
 
 =head1 SYNOPSIS
@@ -127,7 +127,9 @@ sub BUILD {
 		my $dataset_uri = (defined($self->void_config->{dataset_uri}))
 								  ? $self->void_config->{dataset_uri} 
 								  : URI->new($self->base_uri . '#dataset-0')->canonical;
-		$self->void(RDF::Generator::Void->new(inmodel => $self->model, dataset_uri => $dataset_uri));
+		$self->void(RDF::Generator::Void->new(inmodel => $self->model, 
+														  dataset_uri => $dataset_uri,
+														  namespaces_as_vocabularies => $self->void_config->{namespaces_as_vocabularies}));
  	} else {
 		$self->logger->info('No VoID config found');
 	}
@@ -267,9 +269,11 @@ sub response {
 			$response->status(200);
 			my $content = $self->_content($node, $type, $endpoint_path);
 			$response->headers->header('Vary' => join(", ", qw(Accept)));
-			$response->headers->header('ETag' => $self->current_etag);
+			if (defined($self->current_etag)) {
+				$response->headers->header('ETag' => $self->current_etag);
+			}
 			$response->headers->content_type($content->{content_type});
-			$response->content($content->{body});
+			$response->body(encode_utf8($content->{body}));
 		} else {
 			$response->status(303);
 			my ($ct, $s) = $self->_negotiate($headers_in);
@@ -417,8 +421,8 @@ sub _content {
 														  title => $preds->title( $node ),
 														  base => $self->base_uri,
 														  namespaces => $self->namespaces);
-		my $writer = HTML::HTML5::Writer->new( markup => 'xhtml', doctype => DOCTYPE_XHTML_RDFA );
-		$output{body} = encode_utf8( $writer->document($gen->create_document($returnmodel)) );
+		my $writer = HTML::HTML5::Writer->new( charset => 'ascii', markup => 'html' );
+		$output{body} = $writer->document($gen->create_document($returnmodel));
 		$output{content_type} = 'text/html';
 	}
 	return \%output;
@@ -462,7 +466,7 @@ sub _negotiate {
 																	 namespaces => $self->namespaces,
 																	 extend => {
 																					'text/html' => 'html',
-																					'application/xhtml+xml' => 'html'
+																					'application/xhtml+xml' => 'xhtml'
 																				  }
 																	)
 	};
@@ -484,45 +488,57 @@ sub _void_content {
 	my $fragment = $dataset_uri->fragment;
 	$dataset_uri =~ s/(\#$fragment)$//;
 	if ($uri->eq($dataset_uri)) {
-	  if ($self->void_config->{urispace}) {
-		 $generator->urispace($self->void_config->{urispace});
-	  } else {
-		 $generator->urispace($self->base_uri);
-	  }
-	  if ($self->namespaces_as_vocabularies) {
-		 $generator->add_vocabularies(values(%{$self->namespaces}));
-	  }
-	  if ($self->has_endpoint) {
-		 $generator->add_endpoints($self->base_uri . $endpoint_path);
-	  }
-	  if ($self->void_config->{licenses}) {
-		 $generator->add_licenses($self->void_config->{licenses});
-	  }
-	  foreach my $title (@{$self->void_config->{titles}}) {
-		 $generator->add_titles(literal(@{$title}));
-	  }
-	  if ($self->void_config->{endpoints}) {
-		 $generator->add_endpoints(literal($self->void_config->{endpoints}));
-	  }
-	  if ($self->void_config->{vocabularies}) {
-		 $generator->add_vocabularies($self->void_config->{vocabularies});
-	  }
 
-	  if ($self->has_last_etag && ($self->last_etag ne $self->current_etag)) {
-		 $self->_clear_voidmodel; 
-	  }
+		# First check if the model has changed, the etag will have
+		# changed, and we will have to regenerate at some point. If
+		# there is no current etag, we clear anyway
+		if ((! defined($self->current_etag)) || ($self->has_last_etag && ($self->last_etag ne $self->current_etag))) {
+			$self->_clear_voidmodel; 
+		}
 
-	  my $file_model = undef;
-	  if ($self->void_config->{add_void}) {
-		 $file_model = RDF::Trine::Model->temporary_model;
-		 my $parser = RDF::Trine::Parser->new($self->void_config->{add_void}->{syntax});
-		 $parser->parse_file_into_model($self->base_uri, $self->void_config->{add_void}->{file}, $file_model);
-	  }
 
+		# Now really regenerate if there is no model now
 	   unless ($self->_has_voidmodel) {
+
+			# First see if we should read some static stuff from file
+			my $file_model = undef;
+			if ($self->void_config->{add_void}) {
+				$file_model = RDF::Trine::Model->temporary_model;
+				my $parser = RDF::Trine::Parser->new($self->void_config->{add_void}->{syntax});
+				$parser->parse_file_into_model($self->base_uri, $self->void_config->{add_void}->{file}, $file_model);
+			}
+
+			# Use the methods of the generator to add stuff from config, etc
+			if ($self->void_config->{urispace}) {
+				$generator->urispace($self->void_config->{urispace});
+			} else {
+				$generator->urispace($self->base_uri);
+			}
+			if ($self->namespaces_as_vocabularies) {
+				$generator->add_vocabularies(values(%{$self->namespaces}));
+			}
+			if ($self->has_endpoint) {
+				$generator->add_endpoints($self->base_uri . $endpoint_path);
+			}
+			if ($self->void_config->{licenses}) {
+				$generator->add_licenses($self->void_config->{licenses});
+			}
+			foreach my $title (@{$self->void_config->{titles}}) {
+				$generator->add_titles(literal(@{$title}));
+			}
+			if ($self->void_config->{endpoints}) {
+				$generator->add_endpoints($self->void_config->{endpoints});
+			}
+			if ($self->void_config->{vocabularies}) {
+				$generator->add_vocabularies($self->void_config->{vocabularies});
+			}
+
+			# Do the stats and statements
 			$self->_voidmodel($generator->generate($file_model));
 			$self->last_etag($self->current_etag);
 		}
+
+		# Now start serializing.
 		my ($ct, $s) = $self->_negotiate($self->request->headers);
 		return $ct if ($ct->isa('Plack::Response')); # A hack to allow for the failed conneg case
 		my $body;
@@ -534,15 +550,16 @@ sub _void_content {
 															 title => $self->void_config->{pagetitle} || 'VoID Description',
 															 base => $self->base_uri,
 															 namespaces => $self->namespaces);
-			my $writer = HTML::HTML5::Writer->new( markup => 'xhtml', doctype => DOCTYPE_XHTML_RDFA );
-			$body = encode_utf8( $writer->document($gen->create_document($self->_voidmodel)) );
+			my $markup = ($ct eq 'application/xhtml+xml') ? 'xhtml' : 'html';
+			my $writer = HTML::HTML5::Writer->new( charset => 'ascii', markup => $markup );
+			$body = $writer->document($gen->create_document($self->_voidmodel));
 		}
 		my $response = Plack::Response->new;
 		$response->status(200);
 		$response->headers->header('Vary' => join(", ", qw(Accept)));
 		$response->headers->header('ETag' => $self->last_etag);
 		$response->headers->content_type($ct);
-		$response->content($body);
+		$response->body(encode_utf8($body));
 		return $response;
 	} else {
 		return;
