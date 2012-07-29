@@ -5,6 +5,18 @@ Created:      2009-04-23
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.56  2012-07-29  # Bugfix release.
+
+ - (Addition) More tests.
+ - (Bugfix) Fix major UTF8 breakage by encoding all strings.
+ - (Bugfix) Fix performance problems by stat-ing the external VoID-file to
+   see if needs reloading.
+ - (Bugfix) Fix performance problems caused by regeneration of VoID
+   descriptions for every request.
+ - (Bugfix) Improve the way different HTML serializations are returned.
+ - Skip some tests when Redland is installed, causes test-specific bugs.
+ - Some cosmetic fixes.
+
 0.54  2012-06-30  # Improve VoID generator use.
 
  - (Addition) Make it possible to use the Generators property attributes.
