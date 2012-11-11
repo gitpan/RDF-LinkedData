@@ -5,6 +5,12 @@ Created:      2009-04-23
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.57_1  2012-11-01  # Bugfix release.
+
+ - (Addition) Add read-write hypermedia stuff, not yet working though.
+ - (Bugfix) POST to SPARQL endpoint will not be denied.
+ - Use URI::NamespaceMap.
+
 0.56  2012-07-29  # Bugfix release.
 
  - (Addition) More tests.
@@ -201,9 +207,9 @@ Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
  - (Removal) Remove the negotiate method.
  - Require RDF::Trine 0.121.
 
-0.001_01  # Code on Github by Gregory Todd Williams.
-
-
 0.01  2010-04-29  # Initial release. Kjetil Kjernsmo refactored Gregs code to separate the web server logic from the rest.
+
+
+0.001_01  2010-04-28  # Code on Github by Gregory Todd Williams.
 
 

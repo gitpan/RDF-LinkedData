@@ -1,11 +1,11 @@
 #line 1
 package Module::Install::RDF;
 
-use 5.008;
+use 5.005;
 use base qw(Module::Install::Base);
 use strict;
 
-our $VERSION = '0.004';
+our $VERSION = '0.007';
 our $AUTHOR_ONLY = 1;
 
 sub rdf_metadata

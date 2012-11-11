@@ -4,7 +4,7 @@ use FindBin qw($Bin);
 use Plack::Request;
 
 use strict;
-use Test::More tests => 23;
+use Test::More;# tests => 23;
 use Test::RDF;
 use Test::Exception;
 
@@ -16,6 +16,7 @@ Log::Log4perl->easy_init( { level   => $FATAL } ) unless $ENV{TEST_VERBOSE};
 
 BEGIN {
     use_ok('RDF::LinkedData');
+    use_ok('URI::NamespaceMap');
     use_ok('RDF::Helper::Properties');
     use_ok('RDF::Trine::Parser');
     use_ok('RDF::Trine::Model');
@@ -51,9 +52,10 @@ is($preds->title($node), 'This is a test', "Correct title");
 {
     my $req = Plack::Request->new({ HTTP_ACCEPT  => 'application/rdf+xml' });
     my $ldh = $ld;
+	 $ldh->namespaces(URI::NamespaceMap->new({ skos => 'http://www.w3.org/2004/02/skos/core#', dct => 'http://purl.org/dc/terms/' } ));
     $ldh->request($req);
     my $content = $ldh->_content($node, 'data');
-
+	 like($content->{body}, qr|xmlns:skos="http://www.w3.org/2004/02/skos/core#"|, 'SKOS NS URI');
     is($content->{content_type}, 'application/rdf+xml', "RDF/XML content type");
 }
 
@@ -67,11 +69,7 @@ is($preds->title($node), 'This is a test', "Correct title");
     is_rdf($content->{body}, 'turtle', 
 	   '@base <http://localhost/> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . </foo> rdfs:label "This is a test"@en ; <http://xmlns.com/foaf/0.1/page> <http://en.wikipedia.org/wiki/Foo> .', 'turtle',
 	   '/foo return RDF is OK');
-  SKIP: {
-        skip 'Need RDF::Trine 0.127_02 for @base test, you have '. $RDF::Trine::Serializer::VERSION,
-          1 unless $RDF::Trine::Serializer::VERSION >= 0.127;
-        like($content->{body}, qr/\@base <$base_uri> ./, 'Base URI is present in serialization');
-    }
+	 like($content->{body}, qr/\@base <$base_uri> ./, 'Base URI is present in serialization');
 }
 
 my $barnode = $ld->my_node(URI->new($base_uri . '/bar/baz/bing'));

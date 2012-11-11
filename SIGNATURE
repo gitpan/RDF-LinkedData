@@ -12,68 +12,72 @@ the distribution may already have been compromised, and you should
 not run its Makefile.PL or Build.PL.
 
 -----BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA256
+Hash: SHA1
 
-SHA1 73a70ea6a868cc9c94a2600a955c240a5c5578ca Changes
-SHA1 5cfbcb85524c563916fbc603d6fccd10df1992e8 MANIFEST
+SHA1 31213f0b077a76ca139ea5cc94d57ce8fc70b558 Changes
+SHA1 ec09feb47149ca2f0cb504988c310a3967bb0b4d MANIFEST
 SHA1 faf1d02a4b5dad4042e13e546e17ab1b66728977 MANIFEST.SKIP
-SHA1 1a2d79d62f97d362ad073fc758a8109f96996add META.yml
-SHA1 984d5342b35aab33499b06e88ec8b25728773336 MYMETA.json
-SHA1 6ac6607f7e870ec3b088a7e53f2a03b4c6caadb6 MYMETA.yml
-SHA1 430f80d5362803a1d89f2cae0f8a019f56b887c4 Makefile.PL
+SHA1 d60e7a13082ac97380cdb04475536758a8a506cf META.yml
+SHA1 f998723b772a0225bd4f0d5bc5fd3de869265c99 MYMETA.json
+SHA1 98fb4b9e2693e85671243979b9ee70193d5f0d02 MYMETA.yml
+SHA1 d05db2f588224b157b7b3529f55619e20f2bc6aa Makefile.PL
 SHA1 e3ba3c4089bdcf720f6f72c7f4f7ce8f77535b5a README
-SHA1 40106479d4e07f379cb82ca1d69fca92e3a40f47 inc/Module/Install.pm
+SHA1 7ba8556ded0e1b8465b2ebe703e073b416d454d7 inc/Module/Install.pm
 SHA1 d001b4b9a48395a8c4134b234a0e1789138427c5 inc/Module/Install/AuthorTests.pm
-SHA1 ae8aa01a73cb83da31c39e8eed1120c59cb530a1 inc/Module/Install/Base.pm
-SHA1 5c87d2d0e2c08b5173259006c88ad81c24303f9d inc/Module/Install/Can.pm
-SHA1 3a22e858cc213fb00103130c738cf8809ad65263 inc/Module/Install/DOAPChangeSets.pm
-SHA1 98daf9d8c50b4b7e8988cf1fa2b86044ad219533 inc/Module/Install/Fetch.pm
-SHA1 e67589fcbacdda6c98ff34d8e26a004ab0467bdc inc/Module/Install/Makefile.pm
-SHA1 209ea405d4ab94475661bb450d0ea042d2ec25b5 inc/Module/Install/Metadata.pm
-SHA1 9bd51ed9c44582cb3afd0555269cd8e2a7c0b49e inc/Module/Install/RDF.pm
+SHA1 69a3a256888658cbbe0164171744838e53dc06e3 inc/Module/Install/Base.pm
+SHA1 17be8c56d695ed14cf77e37542438a5eebf1c9e1 inc/Module/Install/Can.pm
+SHA1 6050a97c61a5e8ebe62668415dd7d180d506edcc inc/Module/Install/DOAPChangeSets.pm
+SHA1 b842371af51441beb020ce37349f96123841f684 inc/Module/Install/Fetch.pm
+SHA1 474ff5d11d1dd3327487f13d44d3c7b3945050a8 inc/Module/Install/Makefile.pm
+SHA1 fdf68f7c27a463011640b0739299834a65268056 inc/Module/Install/Metadata.pm
+SHA1 e4217d82f45d214cf094516de9c4e73e65f2720e inc/Module/Install/RDF.pm
 SHA1 fd81bc0e85a1193f278760edb82928d8b4dff2c1 inc/Module/Install/Repository.pm
-SHA1 87011c8a6c6fd2070ddf05c1b9a6c2eb9e074a34 inc/Module/Install/Scripts.pm
-SHA1 1326052d1df1065debee74f9d8583a734b9b3d00 inc/Module/Install/Win32.pm
-SHA1 bb607f3715c40fc3bc1c46496587cdb215bc4fa2 inc/Module/Install/WriteAll.pm
-SHA1 01180147d3c0ecd7b9e3825542440ed009eb9ac1 lib/Plack/App/RDF/LinkedData.pm
-SHA1 fad17f77ca06c0dd96b6a7dc1ecfe74124cb8975 lib/RDF/LinkedData.pm
-SHA1 4b9b1a9e6672b7869664c819b11bbe4f99a51b54 meta/changes.ttl
+SHA1 e54dc9b8673cdae894834a1aa780580631fb80e9 inc/Module/Install/Scripts.pm
+SHA1 fe19e1641d3642424ba4088909e0f2e05747c76f inc/Module/Install/Win32.pm
+SHA1 b71a7355e7c74219f0d24aedf057121981ff0f95 inc/Module/Install/WriteAll.pm
+SHA1 5e951f790a87c388f9bff6693e1c89fa56e7f7b9 lib/Plack/App/RDF/LinkedData.pm
+SHA1 651cc55c55f14e8ac283041de15b431215fb0fbf lib/RDF/LinkedData.pm
+SHA1 96801f6a8033f70c881a44ab10573aba327a9853 meta/changes.ttl
 SHA1 0e21643ab8b9b3e385b54b4431ee90c91aa00ba9 meta/people.ttl
-SHA1 9227ec701cc1055214ea37caa39528af31b4d4ac meta/project.ttl
+SHA1 afcc21ceecb6cdb259b50261f3e44977b1bdf6c6 meta/project.ttl
 SHA1 ac489dc0edb5fbf019ec8795eb6fc9fdd6af8a9b rdf_linkeddata.json
+SHA1 11cb972dfd9bfcab87895e485dc2a92487d900fa rdf_linkeddata_acl.json
 SHA1 7615d2557aa4bfec8779dcfb077144fd19419123 rdf_linkeddata_end.json
 SHA1 520e39b454a4cae190615f47e4e7eb35e4d34ed0 rdf_linkeddata_void.json
 SHA1 b6e5f75f77a1863dd811e721966370bce2b3ece5 script/linked_data.psgi
 SHA1 af175eb27d75d4dc2890b917d845a2e2b04b5d49 t/00-load.t
-SHA1 9eaca29f6f4676d44ce19782919ae16ca3d92b95 t/10-basic.t
+SHA1 7987c5b09c721b51d53d1dd071ca4cad361f299c t/10-basic.t
 SHA1 f1542abc490ba630eb93d7fbb0c689a6d96788e8 t/11-constructor.t
 SHA1 da3c0600c0e2913529d38201baae80c5c6e07724 t/15-process.t
 SHA1 ecee325c14bbcae1615feadde5b679711fb1528a t/16-void.t
-SHA1 f47c53b6358b148b2cbd026eae9f20480183b1f6 t/17-hypermedia.t
+SHA1 2a5ecfcdf2bd91cdc94fd856a79e31e2125e2060 t/17-hypermedia-ro.t
+SHA1 e9260b887d5d7ca2be51f06cdb1c16d0e77f975f t/17-hypermedia-rw.t
 SHA1 c0b3595724941c5698fa493d96c1aae49ba0fad1 t/19_config_file.t
-SHA1 0bb32d655251de3a5ea3304c737a3584fadb61a9 t/20-psgi-basic.t
-SHA1 27e9299783227b68a46eb7d05933fe3bfd2a8e21 t/25-psgi-endpoint.t
+SHA1 3055588aa9ba7c3c92d81a51508fea8f113fced4 t/20-psgi-basic.t
+SHA1 09f9884f7d7e37d90a3c3a043f5cce72a88dc82f t/25-psgi-endpoint.t
 SHA1 f29be9d3afe9c102c72175a76bc0e266ba46cca9 t/28-psgi-void.t
+SHA1 d6b399ff987b3a7b145173cf8a61c2162e93d9ca t/29-psgi-acl.t
 SHA1 1d86dd1d9b115cd33c2c38402d1c99d069aa1918 t/data/add.ttl
 SHA1 a0946a1631578df073be5dbef1e81694bcd83fd2 t/data/basic.ttl
 SHA1 6027ca8dcc9ba30201cef5639abdab726a7ff2e5 xt/0-signature.t
-SHA1 f2c4bbebe2dda34263d59bbfdba98698ca13ba93 xt/critic.t
+SHA1 6df86d36c512043aa5918d414834ca855494a452 xt/check-changes.t
+SHA1 7d96d86d0eb064c2a3c364808737dec50a3a2acd xt/critic.t
 SHA1 e5d02727dedb63edd5ecd0c662ad259dc34041fb xt/pod-coverage.t
 SHA1 640935336dc1123c0069bcf5432bcaedc2cf22d3 xt/pod.t
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.10 (GNU/Linux)
+Version: GnuPG v1.4.11 (GNU/Linux)
 
-iQIVAwUBUBUbpX++6N86nkqlAQhTjA/+ID45t0sBQyhBx3P7wanqMJ+psI/qmyq/
-jwtEUz46TCZhjg/sDVmi4s3vQ/m89uxInGiYjjlamcaSQKjRuVKcXIKn1ZldwwPF
-5I9UzLuU/jMTnSxHFFbMCYVDKuPROogmurlqMPL8DR4C7+s4N/Gsl3kyuiMpvKx9
-hfO4ffApVX1UsA0NUrNkEHPQ86obqAfxSEz2+L71cb2uzvGsO19ZdivG8dNpJ3Ls
-iGhb0ghoW8is4+L+zIqsBceZ9vJi6/WsuTT9doH0jTbKE+DprGK606pHrCQOK8TB
-UMfbQd23vQa11v/1go0JtO14b0l7ByvfxJSOdB/UFbmm9slTGhY/H4A5Lu0gwtIn
-8TrTCwvS0bOZJBvXzW8n77jaKj2yyItRHJzLQJpme/gqqjxxAHphIsGh5dpkono6
-M1u16czelZhuVlUs17TrSGYceM1qNhyxATnmEdXQsTCInINnj1F/Oh/5UE6CE/vM
-3JGc8vmVHsg3cqOZ4PDSawJ3AVaVwgsjDl+Kp1mTLq6rg6tzvzy8cNPeft9K/XR9
-O2/JShaJmq2O7GT/S1vJtgk6XCyI93pueSiawCy6m3L0U+3FG4NOr+oLeNnqf/eB
-EvqwrnPP27QBu1SyMmEdX4Wh6pGUvC26A3/vBHQjJRJCnwtwCutqOa6h+YilVAac
-9LqNLSuR/Eo=
-=0zvj
+iQIcBAEBAgAGBQJQnyowAAoJEH++6N86nkqlFeQP/iZQTmPOSJ8cRmK8JTfnIw55
+CtKHey7cY7SRj27/N82vrcPU6BOxJ1Z6LG+Jr8yY5CrPjmg1RShoaCYKbl6jg/al
++9cBFyGSgrMQ7Om4UPitgPIplD2jKrYNh1+sz0IMkXWLP8J+2Ve4VgMKRR+tWQ83
+zPTUHhrMWPexxhgO7S4ydrQaytKkPxKCR5wsyxPZ8Z3tYuC7VmcsAn4Yq1+zUJ1G
+Kqt6L0PdFrcwiIaHDeoOrY7Q/SB+prt1v1ocNll/r9sIk12a+T5lKpBvIwo3qZh/
+CDHGU8ed7uZsWjP2zPnsaigOV58XASapvvat+fxAN+EDlQlj2XB4k74k5PIWFAjr
+/InBm+javB2+NkNF1Ww9tfwoIG4k3l91+oC+s+U/StGroyNhiyf5O9OAHfg8YbUK
+7f6+AmkgneuoZICpJ0GNFZSY6bDl/rTNDDIw9EeSnyPfDDpMQefLF+KWMD2q3/lT
+4pc94LCJgTTmldst9thjTgGTPbJBuzwXLaqwy/rvtF+sMjZpNLUj7LqI8Idj4AsE
+EswkHEnVWYdYYbUfj7xcyAzppcZqmBr5EkaCIPwQbhiP+ngWBS6FWyDZ+BGpPIpz
+64BYDsoRoLNDF0Swcu7Rpg1fAp4cnLItAGP0mFBqeBAuvp8QBUkWaGjY/XQT+r4p
+MiAqeMAs5A5ly5Oqzpv6
+=UeTL
 -----END PGP SIGNATURE-----

@@ -4,9 +4,11 @@ use namespace::autoclean;
 
 use RDF::Trine qw[iri literal blank statement];
 use RDF::Trine::Serializer;
+use RDF::Trine::Namespace;
 use Log::Log4perl qw(:easy);
 use Plack::Response;
 use RDF::Helper::Properties;
+use URI::NamespaceMap;
 use URI;
 use HTTP::Headers;
 use Module::Load::Conditional qw[can_load];
@@ -36,11 +38,11 @@ RDF::LinkedData - A simple Linked Data implementation
 
 =head1 VERSION
 
-Version 0.56
+Version 0.57_01
 
 =cut
 
-our $VERSION = '0.56';
+our $VERSION = '0.57_01';
 
 
 =head1 SYNOPSIS
@@ -99,6 +101,8 @@ Called by Moose to initialize an object.
 
 =cut
 
+# TODO look at buildargs to replace UndefTolerant
+
 sub BUILD {
 	my $self = shift;
 
@@ -113,6 +117,11 @@ sub BUILD {
 		unless (can_load( modules => { 'RDF::Endpoint' => 0.03 })) {
 			throw Error -text => "RDF::Endpoint not installed. Please install or remove its configuration.";
 		}
+
+		unless (defined($self->endpoint_config->{endpoint_path})) {
+		  $self->endpoint_config->{endpoint_path} = '/sparql';
+		}
+
 		$self->endpoint(RDF::Endpoint->new($self->model, $self->endpoint_config));
  	} else {
 		$self->logger->info('No endpoint config found');
@@ -150,15 +159,29 @@ has model => (is => 'ro', isa => 'RDF::Trine::Model', lazy => 1, builder => '_bu
 
 sub _build_model {
 	my $self = shift;
+	return $self->_load_model($self->store);
+}
+
+has acl_model => (is => 'ro', isa => 'RDF::Trine::Model', lazy => 1, builder => '_build_acl_model', 
+				  handles => { acl_etag => 'etag' });
+
+sub _build_acl_model {
+	my $self = shift;
+	return $self->_load_model($self->acl_config->{store});
+}
+
+
+sub _load_model {
+	my ($self, $store_config) = @_;
 	# First, set the base if none is configured
 	my $i = 0;
-	foreach my $source (@{$self->store->{sources}}) {
+	foreach my $source (@{$store_config->{sources}}) {
 		unless ($source->{base_uri}) {
-			${$self->store->{sources}}[$i]->{base_uri} = $self->base_uri;
+			${$store_config->{sources}}[$i]->{base_uri} = $self->base_uri;
 		}
 		$i++;
 	}
-	my $store = RDF::Trine::Store->new( $self->store );
+	my $store = RDF::Trine::Store->new( $store_config );
 	return RDF::Trine::Model->new( $store );
 }
 
@@ -180,6 +203,9 @@ has endpoint_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attrib
 
 has void_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
 								isa=>'HashRef', predicate => 'has_void_config');
+
+has acl_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
+								isa=>'HashRef', predicate => 'has_acl_config');
 
 
 =item C<< request ( [ $request ] ) >>
@@ -210,8 +236,32 @@ Gets or sets the namespaces that some serializers use for pretty-printing.
 
 =cut
 
-has 'namespaces' => (is => 'rw', isa => 'HashRef', default => sub { { rdf => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#' } } );
+has 'namespaces' => (is => 'rw', 
+							isa => 'URI::NamespaceMap',
+							builder => '_build_namespaces',
+							lazy => 1,
+							handles => {
+											'add_namespace_mapping' => 'add_mapping',
+											'list_namespaces' => 'list_namespaces'
+										  });
 
+
+sub _build_namespaces {
+  my ($self, $ns_hash) = @_;
+  return $ns_hash || URI::NamespaceMap->new({ rdf => 'http://www.w3.org/1999/02/22-rdf-syntax-ns#' });
+}
+
+# Just a temporary compatibility hack
+sub _namespace_hashref {
+  my $self = shift;
+  my %hash;
+  foreach my $prefix ($self->namespaces->list_prefixes) {
+	 $hash{$prefix} = $self->namespaces->namespace_uri($prefix)->as_string;
+  }
+  return \%hash;
+}
+
+  
 
 
 =item C<< response ( $uri ) >>
@@ -227,13 +277,13 @@ sub response {
 	my $response = Plack::Response->new;
 
 	my $headers_in = $self->request->headers;
-	my $endpoint_path = '/sparql';
-	if ($self->has_endpoint_config && defined($self->endpoint_config->{endpoint_path})) {
-      $endpoint_path = $self->endpoint_config->{endpoint_path};
-	}
 
-	if ($self->has_endpoint && ($uri->path eq $endpoint_path)) {
-      return $self->endpoint->run( $self->request );
+	my $endpoint_path;
+	if ($self->has_endpoint) {
+	  $endpoint_path = $self->endpoint_config->{endpoint_path};
+	  if ($uri->path eq $endpoint_path) {
+		 return $self->endpoint->run( $self->request );
+	  }
 	}
 
 	if ($self->has_void) {
@@ -302,6 +352,27 @@ sub response {
 	return $response;
 }
 
+sub merge {
+	my $self = shift;
+	my $uri = URI->new(shift);
+#	my $payloadmodel = RDF::Trine::Model->temporary_model;
+	my $payload = $self->request->content;
+	my $headers_in = $self->request->headers;
+	my $response = Plack::Response->new;
+	eval {
+		my $parser = RDF::Trine::Parser->parser_by_media_type($headers_in->content_type);
+		$parser->parse_into_model($self->base_uri, $payload, $self->model);
+	};
+	if ($@) {
+		$response->status(400);
+		$response->content_type('text/plain');
+		$response->body("Couldn't parse the payload: $@");
+		return $response;
+	}
+	$response->status(204);
+	return $response;
+}
+
 
 =item C<< helper_properties (  ) >>
 
@@ -358,6 +429,38 @@ sub count {
 	return $self->model->count_statements( $node, undef, undef );
 }
 
+#has webid => (is => 'ro', isa => 'Web::Id', predicate => 'has_webid', clearer => 'clear_webid');
+
+has auth_uri => (
+					  is        => 'rw',
+					  isa       => 'Str',
+					  predicate => 'has_auth_uri',
+					  clearer   => 'clear_auth_uri'
+					 );
+
+has auth_level => (
+						 is       => 'rw',
+						 traits   => ['Array'],
+						 isa      => 'ArrayRef[Str]',
+						 default  => sub { ['http://www.w3.org/ns/auth/acl#Read'] },
+						 handles  => {
+										  all_auth_levels    => 'uniq',
+										  add_auth_levels    => 'push',
+										  has_no_auth_levels => 'is_empty',
+										 },
+						 clearer  => 'clear_auth_level'
+						);
+
+sub has_auth_level { # Clearly, my Moose-fu is inadequate, just hack it for now.
+	my ($self, $level) = @_;
+	return 1 if scalar(grep(/\#$level$/i, $self->all_auth_levels));
+	if (lc($level) eq 'append') { # Special case, surely write entails append?
+		return 1 if scalar(grep(/\#Write$/, $self->all_auth_levels));
+	}
+	return 0;
+}
+
+
 # =item C<< _content ( $node, $type, $endpoint_path) >>
 #
 # Private method to return the a hashref with content for this URI,
@@ -371,6 +474,7 @@ sub count {
 
 sub _content {
 	my ($self, $node, $type, $endpoint_path) = @_;
+	
 	my $model = $self->model;
 	my $iter = $model->bounded_description($node);
 	my %output;
@@ -378,17 +482,18 @@ sub _content {
 		$self->{_type} = 'data';
 		my ($ctype, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $self->request->headers,
 																			base => $self->base_uri,
-																			namespaces => $self->namespaces);
+																			namespaces => $self->_namespace_hashref);
 		$output{content_type} = $ctype;
 		if ($self->hypermedia) {
+			my $data_iri = iri($node->uri_value . '/data');
 			my $hmmodel = RDF::Trine::Model->temporary_model;
 			if($self->has_void) {
-				$hmmodel->add_statement(statement(iri($node->uri_value . '/data'), 
+				$hmmodel->add_statement(statement($data_iri, 
 															 iri('http://rdfs.org/ns/void#inDataset'), 
 															 $self->void->dataset_uri));
 			} else {
 				if($self->has_endpoint) {
-					$hmmodel->add_statement(statement(iri($node->uri_value . '/data'), 
+					$hmmodel->add_statement(statement($data_iri, 
 																 iri('http://rdfs.org/ns/void#inDataset'), 
 																 blank('void')));
 					$hmmodel->add_statement(statement(blank('void'), 
@@ -396,16 +501,32 @@ sub _content {
 																 iri($self->base_uri . $endpoint_path)));
 				}
 				if($self->namespaces_as_vocabularies) {
-					$hmmodel->add_statement(statement(iri($node->uri_value . '/data'), 
+					$hmmodel->add_statement(statement($data_iri, 
 																 iri('http://rdfs.org/ns/void#inDataset'), 
 																 blank('void')));
-					foreach my $nsuri (values(%{$self->namespaces})) {
+					foreach my $nsuri ($self->list_namespaces) {
 						$hmmodel->add_statement(statement(blank('void'), 
 																	 iri('http://rdfs.org/ns/void#vocabulary'),
-																	 iri($nsuri)));
+																	 iri($nsuri->uri)));
 					}
 				}
 			}
+			my $hmns = RDF::Trine::Namespace->new('http://example.org/hypermedia#');
+			if ($self->has_auth_level('write')) {
+				$hmmodel->add_statement(statement($data_iri,
+															 $hmns->canBe,
+															 $hmns->replaced));
+				$hmmodel->add_statement(statement($data_iri,
+															 $hmns->canBe,
+															 $hmns->deleted));
+			}
+			if ($self->has_auth_level('append')) {
+				$hmmodel->add_statement(statement($data_iri,
+															 $hmns->canBe,
+															 $hmns->mergedInto));
+			}
+
+
 			$iter = $iter->concat($hmmodel->as_stream);
 		}
 		$output{body} = $s->serialize_iterator_to_string ( $iter );
@@ -421,7 +542,7 @@ sub _content {
 		my $gen  = RDF::RDFa::Generator->new( style => 'HTML::Pretty',
 														  title => $preds->title( $node ),
 														  base => $self->base_uri,
-														  namespaces => $self->namespaces);
+														  namespaces => $self->_namespace_hashref);
 		my $writer = HTML::HTML5::Writer->new( charset => 'ascii', markup => 'html' );
 		$output{body} = $writer->document($gen->create_document($returnmodel));
 		$output{content_type} = 'text/html';
@@ -464,7 +585,7 @@ sub _negotiate {
 	eval {
 		($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $headers_in,
 																	 base_uri => $self->base_uri,
-																	 namespaces => $self->namespaces,
+																	 namespaces => $self->_namespace_hashref,
 																	 extend => {
 																					'text/html' => 'html',
 																					'application/xhtml+xml' => 'xhtml'
@@ -522,7 +643,7 @@ sub _void_content {
 				$generator->urispace($self->base_uri);
 			}
 			if ($self->namespaces_as_vocabularies) {
-				$generator->add_vocabularies(values(%{$self->namespaces}));
+				$generator->add_vocabularies($self->list_namespaces);
 			}
 			if ($self->has_endpoint) {
 				$generator->add_endpoints($self->base_uri . $endpoint_path);
@@ -556,7 +677,7 @@ sub _void_content {
 			my $gen = RDF::RDFa::Generator->new( style => 'HTML::Pretty',
 															 title => $self->void_config->{pagetitle} || 'VoID Description',
 															 base => $self->base_uri,
-															 namespaces => $self->namespaces);
+															 namespaces => $self->_namespace_hashref);
 			my $markup = ($ct eq 'application/xhtml+xml') ? 'xhtml' : 'html';
 			my $writer = HTML::HTML5::Writer->new( charset => 'ascii', markup => $markup );
 			$body = $writer->document($gen->create_document($self->_voidmodel));

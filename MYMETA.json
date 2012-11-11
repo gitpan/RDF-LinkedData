@@ -5,7 +5,7 @@
       "Kjetil Kjernsmo <kjetilk@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Module::Install version 1.02, CPAN::Meta::Converter version 2.112150",
+   "generated_by" : "Module::Install version 1.04, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -24,44 +24,46 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Config::JFDI" : 0,
-            "ExtUtils::MakeMaker" : "6.42",
-            "FindBin" : 0,
-            "Test::Exception" : 0,
-            "Test::JSON" : 0,
+            "Config::JFDI" : "0",
+            "ExtUtils::MakeMaker" : "6.36",
+            "FindBin" : "0",
+            "RDF::RDFa::Parser" : "0",
+            "Test::Exception" : "0",
+            "Test::JSON" : "0",
             "Test::More" : "0.88",
             "Test::RDF" : "0.26",
-            "Test::WWW::Mechanize::PSGI" : 0
+            "Test::WWW::Mechanize::PSGI" : "0"
          }
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "6.42"
+            "ExtUtils::MakeMaker" : "6.36"
          }
       },
       "runtime" : {
          "recommends" : {
-            "Config::JFDI" : 0,
-            "JSON" : 0,
-            "Plack::Middleware::CrossOrigin" : 0,
+            "Config::JFDI" : "0",
+            "JSON" : "0",
+            "Plack::Middleware::CrossOrigin" : "0",
             "RDF::Endpoint" : "0.03",
             "RDF::Generator::Void" : "0.04"
          },
          "requires" : {
-            "Encode" : 0,
-            "HTML::HTML5::Writer" : 0,
-            "HTTP::Headers" : 0,
-            "Log::Log4perl" : 0,
-            "Module::Load::Conditional" : 0,
-            "Moose" : 0,
-            "MooseX::Log::Log4perl::Easy" : 0,
-            "MooseX::UndefTolerant" : 0,
+            "Encode" : "0",
+            "HTML::HTML5::Writer" : "0",
+            "HTTP::Headers" : "0",
+            "Log::Log4perl" : "0",
+            "Module::Load::Conditional" : "0",
+            "Moose" : "0",
+            "MooseX::Log::Log4perl::Easy" : "0",
+            "MooseX::UndefTolerant" : "0",
             "Plack" : "0.9939",
             "RDF::Helper::Properties" : "0.1",
             "RDF::RDFa::Generator" : "0.102",
             "RDF::Trine" : "0.133",
-            "Scalar::Util" : 0,
+            "Scalar::Util" : "0",
             "URI" : "1.52",
+            "URI::NamespaceMap" : "0.04",
             "namespace::autoclean" : "0.12"
          }
       }
@@ -78,5 +80,5 @@
          "url" : "git://github.com/kjetilk/RDF-LinkedData.git"
       }
    },
-   "version" : "0.55_2"
+   "version" : "0.57_01"
 }
