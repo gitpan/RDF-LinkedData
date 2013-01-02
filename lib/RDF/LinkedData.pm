@@ -38,11 +38,11 @@ RDF::LinkedData - A simple Linked Data implementation
 
 =head1 VERSION
 
-Version 0.57_01
+Version 0.57_02
 
 =cut
 
-our $VERSION = '0.57_01';
+our $VERSION = '0.57_02';
 
 
 =head1 SYNOPSIS
@@ -310,7 +310,7 @@ sub response {
 			if ($headers_in->can('header') && $headers_in->header('Accept')) {
 				$self->logger->debug('Found Accept header: ' . $headers_in->header('Accept'));
 			} else {
-				$headers_in->header(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
+				$headers_in->header('Accept' => 'application/rdf+xml');
 				if ($headers_in->header('Accept')) {
 					$self->logger->warn('Setting Accept header: ' . $headers_in->header('Accept'));
 				} else {
