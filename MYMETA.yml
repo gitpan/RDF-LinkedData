@@ -1,8 +1,7 @@
 ---
 abstract: 'A simple Linked Data implementation'
 author:
-  - 'Kjetil Kjernsmo, C<< <kjetilk@cpan.org> >>'
-  - 'Kjetil Kjernsmo <kjetilk@cpan.org>'
+  - 'Kjetil Kjernsmo, C<< <kjetilk@cpan.org> >>, Kjetil Kjernsmo <kjetilk@cpan.org>'
 build_requires:
   Config::JFDI: 0
   ExtUtils::MakeMaker: 6.36
@@ -14,9 +13,9 @@ build_requires:
   Test::RDF: 0.26
   Test::WWW::Mechanize::PSGI: 0
 configure_requires:
-  ExtUtils::MakeMaker: 6.36
+  ExtUtils::MakeMaker: 0
 dynamic_config: 0
-generated_by: 'Module::Install version 1.04, CPAN::Meta::Converter version 2.120921'
+generated_by: 'ExtUtils::MakeMaker version 6.64, CPAN::Meta::Converter version 2.112621'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -24,15 +23,8 @@ meta-spec:
 name: RDF-LinkedData
 no_index:
   directory:
-    - inc
     - t
-    - xt
-recommends:
-  Config::JFDI: 0
-  JSON: 0
-  Plack::Middleware::CrossOrigin: 0
-  RDF::Endpoint: 0.03
-  RDF::Generator::Void: 0.04
+    - inc
 requires:
   Encode: 0
   HTML::HTML5::Writer: 0
@@ -50,8 +42,4 @@ requires:
   URI: 1.52
   URI::NamespaceMap: 0.04
   namespace::autoclean: 0.12
-resources:
-  bugtracker: https://github.com/kjetilk/RDF-LinkedData/issues
-  license: http://dev.perl.org/licenses/
-  repository: git://github.com/kjetilk/RDF-LinkedData.git
-version: 0.57_02
+version: 0.57_03

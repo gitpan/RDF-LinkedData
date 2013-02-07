@@ -17,7 +17,7 @@ configure_requires:
   ExtUtils::MakeMaker: 6.36
 distribution_type: module
 dynamic_config: 1
-generated_by: 'Module::Install version 1.04'
+generated_by: 'Module::Install version 1.06'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -55,4 +55,4 @@ resources:
   bugtracker: https://github.com/kjetilk/RDF-LinkedData/issues
   license: http://dev.perl.org/licenses/
   repository: git://github.com/kjetilk/RDF-LinkedData.git
-version: 0.57_02
+version: 0.57_03
