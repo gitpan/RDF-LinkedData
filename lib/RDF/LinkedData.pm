@@ -18,6 +18,8 @@ use Encode;
 use RDF::RDFa::Generator 0.102;
 use HTML::HTML5::Writer qw(DOCTYPE_XHTML_RDFA);
 use Data::Dumper;
+use Digest::MD5 ('md5_hex');
+
 
 with 'MooseX::Log::Log4perl::Easy';
 
@@ -42,11 +44,11 @@ RDF::LinkedData - A simple Linked Data server implementation
 
 =head1 VERSION
 
-Version 0.57_04
+Version 0.57_05
 
 =cut
 
-our $VERSION = '0.57_04';
+ our $VERSION = '0.57_05';
 
 
 =head1 SYNOPSIS
@@ -149,7 +151,7 @@ sub BUILD {
 	}
 }
 
-has store => (is => 'rw', isa => 'HashRef' );
+has store => (is => 'rw', isa => 'HashRef | Str' );
 
 
 =item C<< model >>
@@ -170,11 +172,13 @@ sub _load_model {
 	my ($self, $store_config) = @_;
 	# First, set the base if none is configured
 	my $i = 0;
-	foreach my $source (@{$store_config->{sources}}) {
-		unless ($source->{base_uri}) {
-			${$store_config->{sources}}[$i]->{base_uri} = $self->base_uri;
+	if (ref($store_config) eq 'HASH') {
+		foreach my $source (@{$store_config->{sources}}) {
+			unless ($source->{base_uri}) {
+				${$store_config->{sources}}[$i]->{base_uri} = $self->base_uri;
+			}
+			$i++;
 		}
-		$i++;
 	}
 	my $store = RDF::Trine::Store->new( $store_config );
 	return RDF::Trine::Model->new( $store );
@@ -314,7 +318,9 @@ sub response {
 			my $content = $self->_content($node, $type, $endpoint_path);
 			$response->headers->header('Vary' => join(", ", qw(Accept)));
 			if (defined($self->current_etag)) {
-				$response->headers->header('ETag' => $self->current_etag);
+				$self->current_etag =~ m|(^W/)|; # If the ETag is declared as weak, preserve that
+				my $weak = defined($1) ? $1 : '';
+				$response->headers->header('ETag' => $weak . md5_hex($self->current_etag . $content->{content_type}));
 			}
 			$response->headers->content_type($content->{content_type});
 			$response->body(encode_utf8($content->{body}));
@@ -614,7 +620,9 @@ sub _void_content {
 		$etag = $self->_last_extvoid_mtime if ($self->void_config->{add_void});
 		$etag .= $self->last_etag if (defined($self->last_etag));
 		if ($etag) {
-			$response->headers->header('ETag' => $etag);
+			$etag =~ m|(^W/)|; # If the ETag is declared as weak, preserve that
+			my $weak = defined($1) ? $1 : '';
+			$response->headers->header('ETag' => $weak . md5_hex($etag . $ct));
 		}
 		$response->headers->content_type($ct);
 		$response->body(encode_utf8($body));

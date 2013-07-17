@@ -6,6 +6,7 @@ Source: https://metacpan.org/release/RDF-LinkedData
 Files: CREDITS
  Changes
  LICENSE
+ MANIFEST
  MANIFEST.SKIP
  META.ttl
  META.yml
@@ -53,7 +54,7 @@ Copyright: Copyright 2002, 2003, 2004 Audrey Tang and Brian Ingerson.
 License: GPL-1.0+ or Artistic-1.0
 
 Files: lib/Plack/App/RDF/LinkedData.pm
-Copyright: Copyright 2010-2012 Kjetil Kjernsmo.
+Copyright: Copyright 2010-2013 Kjetil Kjernsmo.
 License: GPL-1.0+ or Artistic-1.0
 
 Files: COPYRIGHT

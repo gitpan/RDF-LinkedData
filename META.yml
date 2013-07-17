@@ -38,6 +38,7 @@ recommends:
   RDF::Endpoint: 0.03
   RDF::Generator::Void: 0.04
 requires:
+  Digest::MD5: 0
   Encode: 0
   HTML::HTML5::Writer: 0
   HTTP::Headers: 0
@@ -58,6 +59,6 @@ resources:
   bugtracker: https://github.com/kjetilk/RDF-LinkedData/issues
   homepage: https://metacpan.org/release/RDF-LinkedData
   license: http://dev.perl.org/licenses/
-version: 0.57_04
+version: 0.57_05
 x_contributors:
   - 'Gregory Todd Williams <gwilliams@cpan.org>'
