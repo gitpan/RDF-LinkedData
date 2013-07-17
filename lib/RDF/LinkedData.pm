@@ -1,5 +1,6 @@
 package RDF::LinkedData;
 
+use Moose;
 use namespace::autoclean;
 
 use RDF::Trine qw[iri literal blank statement];
@@ -12,7 +13,6 @@ use URI::NamespaceMap;
 use URI;
 use HTTP::Headers;
 use Module::Load::Conditional qw[can_load];
-use Moose;
 use MooseX::UndefTolerant::Attribute;
 use Encode;
 use RDF::RDFa::Generator 0.102;
@@ -23,9 +23,13 @@ with 'MooseX::Log::Log4perl::Easy';
 
 BEGIN {
 	if ($ENV{TEST_VERBOSE}) {
-		Log::Log4perl->easy_init( { level   => $TRACE } );
+		Log::Log4perl->easy_init( { level   => $TRACE,
+											 category => 'RDF.LinkedData' 
+										  } );
 	} else {
-		Log::Log4perl->easy_init( { level   => $FATAL } );
+		Log::Log4perl->easy_init( { level   => $FATAL,
+											 category => 'RDF.LinkedData' 
+										  } );
 	}
 }
 
@@ -34,15 +38,15 @@ BEGIN {
 
 =head1 NAME
 
-RDF::LinkedData - A simple Linked Data implementation
+RDF::LinkedData - A simple Linked Data server implementation
 
 =head1 VERSION
 
-Version 0.57_03
+Version 0.57_04
 
 =cut
 
-our $VERSION = '0.57_03';
+our $VERSION = '0.57_04';
 
 
 =head1 SYNOPSIS
@@ -162,15 +166,6 @@ sub _build_model {
 	return $self->_load_model($self->store);
 }
 
-has acl_model => (is => 'ro', isa => 'RDF::Trine::Model', lazy => 1, builder => '_build_acl_model', 
-				  handles => { acl_etag => 'etag' });
-
-sub _build_acl_model {
-	my $self = shift;
-	return $self->_load_model($self->acl_config->{store});
-}
-
-
 sub _load_model {
 	my ($self, $store_config) = @_;
 	# First, set the base if none is configured
@@ -204,8 +199,6 @@ has endpoint_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attrib
 has void_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
 								isa=>'HashRef', predicate => 'has_void_config');
 
-has acl_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
-								isa=>'HashRef', predicate => 'has_acl_config');
 
 
 =item C<< request ( [ $request ] ) >>
@@ -310,7 +303,7 @@ sub response {
 			if ($headers_in->can('header') && $headers_in->header('Accept')) {
 				$self->logger->debug('Found Accept header: ' . $headers_in->header('Accept'));
 			} else {
-				$headers_in->header('Accept' => 'application/rdf+xml');
+				$headers_in->header(HTTP::Headers->new('Accept' => 'application/rdf+xml'));
 				if ($headers_in->header('Accept')) {
 					$self->logger->warn('Setting Accept header: ' . $headers_in->header('Accept'));
 				} else {
@@ -349,29 +342,6 @@ sub response {
 	$response->status(500);
 	$response->headers->content_type('text/plain');
 	$response->body('HTTP 500: No such functionality.');
-	return $response;
-}
-
-sub merge {
-	my $self = shift;
-	my $uri = URI->new(shift);
-	my $response = Plack::Response->new;
-	my $payload = $self->request->content;
-	if ($payload) {
-	  my $headers_in = $self->request->headers;
-	  $self->logger->debug('Will merge payload as ' . $headers_in->content_type);
-	  eval {
-		 my $parser = RDF::Trine::Parser->parser_by_media_type($headers_in->content_type);
-		 $parser->parse_into_model($self->base_uri, $payload, $self->model);
-	  };
-	  if ($@) {
-		 $response->status(400);
-		 $response->content_type('text/plain');
-		 $response->body("Couldn't parse the payload: $@");
-		 return $response;
-	  }
-	}
-	$response->status(204);
 	return $response;
 }
 
@@ -431,37 +401,6 @@ sub count {
 	return $self->model->count_statements( $node, undef, undef );
 }
 
-#has webid => (is => 'ro', isa => 'Web::Id', predicate => 'has_webid', clearer => 'clear_webid');
-
-has auth_uri => (
-					  is        => 'rw',
-					  isa       => 'Str',
-					  predicate => 'has_auth_uri',
-					  clearer   => 'clear_auth_uri'
-					 );
-
-has auth_level => (
-						 is       => 'rw',
-						 traits   => ['Array'],
-						 isa      => 'ArrayRef[Str]',
-						 default  => sub { ['http://www.w3.org/ns/auth/acl#Read'] },
-						 handles  => {
-										  all_auth_levels    => 'uniq',
-										  add_auth_levels    => 'push',
-										  has_no_auth_levels => 'is_empty',
-										 },
-						 clearer  => 'clear_auth_level'
-						);
-
-sub has_auth_level { # Clearly, my Moose-fu is inadequate, just hack it for now.
-	my ($self, $level) = @_;
-	return 1 if scalar(grep(/\#$level$/i, $self->all_auth_levels));
-	if (lc($level) eq 'append') { # Special case, surely write entails append?
-		return 1 if scalar(grep(/\#Write$/, $self->all_auth_levels));
-	}
-	return 0;
-}
-
 
 # =item C<< _content ( $node, $type, $endpoint_path) >>
 #
@@ -513,22 +452,6 @@ sub _content {
 					}
 				}
 			}
-			my $hmns = RDF::Trine::Namespace->new('http://example.org/hypermedia#');
-			if ($self->has_auth_level('write')) {
-				$hmmodel->add_statement(statement($data_iri,
-															 $hmns->canBe,
-															 $hmns->replaced));
-				$hmmodel->add_statement(statement($data_iri,
-															 $hmns->canBe,
-															 $hmns->deleted));
-			}
-			if ($self->has_auth_level('append')) {
-				$hmmodel->add_statement(statement($data_iri,
-															 $hmns->canBe,
-															 $hmns->mergedInto));
-			}
-
-
 			$iter = $iter->concat($hmmodel->as_stream);
 		}
 		$output{body} = $s->serialize_iterator_to_string ( $iter );
@@ -742,6 +665,8 @@ L<http://lists.perlrdf.org/listinfo/dev>
 
 =item * Use a environment variable for config on the command line?
 
+=item * Make the result graph configurable.
+
 =back
 
 
@@ -753,7 +678,11 @@ almost totally rewritten.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2010 Gregory Todd Williams and ABC Startsiden AS, 2010-2012 Kjetil Kjernsmo
+Copyright 2010 Gregory Todd Williams
+
+Copyright 2010 ABC Startsiden AS
+
+Copyright 2010, 2011, 2012, 2013 Kjetil Kjernsmo
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

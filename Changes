@@ -2,14 +2,18 @@ RDF-LinkedData
 ==============
 
 Created:      2009-04-23
+Home page:    <https://metacpan.org/release/RDF-LinkedData>
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
-0.57_1  2012-11-01  # Bugfix release.
+0.57_04  2013-07-17  # Stability and modernization release.
 
- - (Addition) Add read-write hypermedia stuff, not yet working though.
- - (Bugfix) POST to SPARQL endpoint will not be denied.
- - Use URI::NamespaceMap.
+ - (Bugfix) Allow POST requests to the endpoint.
+ - (Bugfix) Fix newline bug causing problems.
+ - (Removal) Remove write_sqlite script.
+ - (Update) Use URI::NamespaceMap for namespaces.
+ - Change packaging to use Module::Package::RDF.
+ - Improved tests.
 
 0.56  2012-07-29  # Bugfix release.
 
