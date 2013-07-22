@@ -6,7 +6,7 @@ Home page:    <https://metacpan.org/release/RDF-LinkedData>
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
-0.57_06  2013-07-18  # Stability and modernization release.
+0.57_07  2013-07-18  # Stability and modernization release.
 
  - (Addition) Enable optional use of environment for config.
  - (Bugfix) Add the use of content type to Etag to work around some bugs.
