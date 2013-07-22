@@ -53,12 +53,13 @@ requires:
   RDF::Trine: 0.133
   Scalar::Util: 0
   URI: 1.52
+  URI::NamespaceMap: 0
   namespace::autoclean: 0.12
   perl: 5.6.0
 resources:
   bugtracker: https://github.com/kjetilk/RDF-LinkedData/issues
   homepage: https://metacpan.org/release/RDF-LinkedData
   license: http://dev.perl.org/licenses/
-version: 0.57_05
+version: 0.57_06
 x_contributors:
   - 'Gregory Todd Williams <gwilliams@cpan.org>'

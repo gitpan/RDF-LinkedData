@@ -11,6 +11,7 @@ Files: CREDITS
  META.ttl
  META.yml
  Makefile.PL
+ RDF-LinkedData-0.57_05.tar.gz
  README
  SIGNATURE
  meta/changes.ttl
