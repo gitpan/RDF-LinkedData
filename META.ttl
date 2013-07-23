@@ -8,7 +8,10 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-_:r1374510606r0 dcs:item [
+_:r1374565388r0 dcs:item [
+		a dcs:Bugfix ;
+		rdfs:label "Simplify setting headers by removing call to HTTP::Headers."@en
+	], [
 		a dcs:Bugfix ;
 		rdfs:label "Fix newline bug causing problems."@en
 	], [
@@ -33,11 +36,33 @@ _:r1374510606r0 dcs:item [
 		a dcs:Removal ;
 		rdfs:label "Remove write_sqlite script."@en
 	] .
-_:r1374510606r10 a dcs:Bugfix ;
-	rdfs:label "Fix major UTF8 breakage by encoding all strings."@en .
-_:r1374510606r100 a dcs:Addition ;
-	rdfs:label "Add TODO test to check whether Firefox' default Accept header returns data."@en .
-_:r1374510606r101 dcs:item [
+_:r1374565388r10 dcs:item [
+		a dcs:Bugfix ;
+		rdfs:label "Fix major UTF8 breakage by encoding all strings."@en
+	], [
+		a dcs:Change ;
+		rdfs:label "Some cosmetic fixes."@en
+	], [
+		a dcs:Addition ;
+		rdfs:label "More tests."@en
+	], [
+		a dcs:Bugfix ;
+		rdfs:label "Fix performance problems caused by regeneration of VoID descriptions for every request."@en
+	], [
+		a dcs:Bugfix ;
+		rdfs:label "Fix performance problems by stat-ing the external VoID-file to see if needs reloading."@en
+	], [
+		a dcs:Bugfix ;
+		rdfs:label "Improve the way different HTML serializations are returned."@en
+	], [
+		a dcs:Change ;
+		rdfs:label "Skip some tests when Redland is installed, causes test-specific bugs."@en
+	] .
+_:r1374565388r100 dcs:item [
+		a dcs:Addition ;
+		rdfs:label "Add TODO test to check whether Firefox' default Accept header returns data."@en
+	] .
+_:r1374565388r102 dcs:item [
 		a dcs:Update ;
 		rdfs:label "Split off RDF::LinkedData::Predicates into distribution of its own."@en
 	], [
@@ -53,7 +78,7 @@ _:r1374510606r101 dcs:item [
 		a dcs:Addition ;
 		rdfs:label "create a helper_properties method to pass the properties."@en
 	] .
-_:r1374510606r107 dcs:item [
+_:r1374565388r108 dcs:item [
 		a dcs:Update ;
 		rdfs:label "Require RDF::Trine 0.125."@en
 	], [
@@ -66,16 +91,14 @@ _:r1374510606r107 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Now use a hashref config for new_with_config instead of config string."@en
 	] .
-_:r1374510606r11 a dcs:Change ;
-	rdfs:label "Some cosmetic fixes."@en .
-_:r1374510606r112 dcs:item [
+_:r1374565388r113 dcs:item [
 		a dcs:Bugfix ;
 		rdfs:label "Fix minor POD bugs."@en
 	], [
 		a dcs:Addition ;
 		rdfs:label "Add number of PSGI tests."@en
 	] .
-_:r1374510606r115 dcs:item [
+_:r1374565388r116 dcs:item [
 		rdfs:label "Many smaller changes."@en
 	], [
 		a dcs:Addition ;
@@ -108,17 +131,40 @@ _:r1374510606r115 dcs:item [
 		a dcs:Removal ;
 		rdfs:label "Remove Mojolicious::Lite script."@en
 	] .
-_:r1374510606r12 a dcs:Addition ;
-	rdfs:label "More tests."@en .
-_:r1374510606r13 a dcs:Bugfix ;
-	rdfs:label "Fix performance problems caused by regeneration of VoID descriptions for every request."@en .
-_:r1374510606r14 a dcs:Bugfix ;
-	rdfs:label "Fix performance problems by stat-ing the external VoID-file to see if needs reloading."@en .
-_:r1374510606r15 a dcs:Bugfix ;
-	rdfs:label "Improve the way different HTML serializations are returned."@en .
-_:r1374510606r16 a dcs:Change ;
-	rdfs:label "Skip some tests when Redland is installed, causes test-specific bugs."@en .
-_:r1374510606r17 dcs:item [
+_:r1374565388r128 dcs:item [
+		a dcs:Bugfix ;
+		rdfs:label "Really does require RDF::Trine 0.122."@en
+	], [
+		rdfs:label "Minor cleanups."@en
+	], [
+		a dcs:Addition ;
+		rdfs:label "Add a page method that uses foaf:homepage or foaf:page to override the default page for redirect."@en
+	], [
+		a dcs:Removal ;
+		rdfs:label "Remove boilerplate tests."@en
+	] .
+_:r1374565388r133 dcs:item [
+		rdfs:label "Require RDF::Trine 0.121."@en
+	], [
+		a dcs:Addition ;
+		rdfs:label "Use RDF::Trine's content negotiation code."@en
+	], [
+		a dcs:Addition ;
+		rdfs:label "Use RDF::Trine's bounded description code."@en
+	], [
+		a dcs:Addition ;
+		rdfs:label "Use a HTTP::Headers object for conneg."@en
+	], [
+		a dcs:Addition ;
+		rdfs:label "Add some log messages."@en
+	], [
+		a dcs:Addition ;
+		rdfs:label "Add and improve a type method that returns page or data."@en
+	], [
+		a dcs:Removal ;
+		rdfs:label "Remove the negotiate method."@en
+	] .
+_:r1374565388r18 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Some minor fixes."@en
 	], [
@@ -131,11 +177,11 @@ _:r1374510606r17 dcs:item [
 		a dcs:Addition ;
 		rdfs:label "Make it possible to use the Generators property attributes."@en
 	] .
-_:r1374510606r22 dcs:item [
+_:r1374565388r23 dcs:item [
 		a dcs:Bugfix ;
 		rdfs:label "A bad plan caused by superfluous BEGIN block caused test failures."@en
 	] .
-_:r1374510606r24 dcs:item [
+_:r1374565388r25 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Some minor fixes."@en
 	], [
@@ -154,7 +200,7 @@ _:r1374510606r24 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Use current_etag instead of etag"@en
 	] .
-_:r1374510606r31 dcs:item [
+_:r1374565388r32 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Some minor fixes."@en
 	], [
@@ -170,7 +216,7 @@ _:r1374510606r31 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Use empty string as default base_uri"@en
 	] .
-_:r1374510606r37 dcs:item [
+_:r1374565388r38 dcs:item [
 		a dcs:Addition ;
 		rdfs:label "Add hypermedia method which will be on by default to enable hypermedia."@en
 	], [
@@ -192,7 +238,7 @@ _:r1374510606r37 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Use the github issue tracker."@en
 	] .
-_:r1374510606r45 dcs:item [
+_:r1374565388r46 dcs:item [
 		a dcs:Addition ;
 		rdfs:label "Add URI::Escape configure_requires."@en
 	], [
@@ -229,7 +275,7 @@ _:r1374510606r45 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Use MooseX::UndefTolerant to allow the endpoint_config to be undef."@en
 	] .
-_:r1374510606r58 dcs:item [
+_:r1374565388r59 dcs:item [
 		a dcs:Addition ;
 		rdfs:label "Optionally use RDF::Endpoint to set up a SPARQL endpoint for the data."@en
 	], [
@@ -257,7 +303,7 @@ _:r1374510606r58 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Allow namespaces to be skipped from the config."@en
 	] .
-_:r1374510606r68 dcs:item [
+_:r1374565388r69 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Many minor documentation fixes."@en
 	], [
@@ -288,11 +334,11 @@ _:r1374510606r68 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Now use the RDF::Trine::Store->new method, since it now supports checking the type itself."@en
 	] .
-_:r1374510606r79 dcs:item [
+_:r1374565388r80 dcs:item [
 		a dcs:Bugfix ;
 		rdfs:label "Found out the hard way that JSON doesn't allow single quotes."@en
 	] .
-_:r1374510606r81 dcs:item [
+_:r1374565388r82 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Many minor documentation fixes."@en
 	], [
@@ -323,8 +369,7 @@ _:r1374510606r81 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Use a memory model for testing that loads the file directly"@en
 	] .
-_:r1374510606r9 dcs:item _:r1374510606r10, _:r1374510606r11, _:r1374510606r12, _:r1374510606r13, _:r1374510606r14, _:r1374510606r15, _:r1374510606r16 .
-_:r1374510606r92 dcs:item [
+_:r1374565388r93 dcs:item [
 		a dcs:Change ;
 		rdfs:label "Minor documentation fixes."@en
 	], [
@@ -334,46 +379,12 @@ _:r1374510606r92 dcs:item [
 		a dcs:Update ;
 		rdfs:label "Fix the warning described in http://search.cpan.org/~shlomif/Error-0.17016/lib/Error.pm#COMPATIBILITY"@en
 	] .
-_:r1374510606r96 dcs:item [
+_:r1374565388r97 dcs:item [
 		a dcs:Addition ;
 		rdfs:label "Support base URI in serializations for RDF::Trine 0.127_02."@en
 	], [
 		a dcs:Addition ;
 		rdfs:label "Use Module::Install::AuthorTests."@en
-	] .
-_:r1374510606r99 dcs:item _:r1374510606r100 .
-_:r1374510607r127 dcs:item [
-		a dcs:Bugfix ;
-		rdfs:label "Really does require RDF::Trine 0.122."@en
-	], [
-		rdfs:label "Minor cleanups."@en
-	], [
-		a dcs:Addition ;
-		rdfs:label "Add a page method that uses foaf:homepage or foaf:page to override the default page for redirect."@en
-	], [
-		a dcs:Removal ;
-		rdfs:label "Remove boilerplate tests."@en
-	] .
-_:r1374510607r132 dcs:item [
-		rdfs:label "Require RDF::Trine 0.121."@en
-	], [
-		a dcs:Addition ;
-		rdfs:label "Use RDF::Trine's content negotiation code."@en
-	], [
-		a dcs:Addition ;
-		rdfs:label "Use RDF::Trine's bounded description code."@en
-	], [
-		a dcs:Addition ;
-		rdfs:label "Use a HTTP::Headers object for conneg."@en
-	], [
-		a dcs:Addition ;
-		rdfs:label "Add some log messages."@en
-	], [
-		a dcs:Addition ;
-		rdfs:label "Add and improve a type method that returns page or data."@en
-	], [
-		a dcs:Removal ;
-		rdfs:label "Remove the negotiate method."@en
 	] .
 <file:///home/kjetil/dev/RDF-LinkedData/meta/project.ttl> <http://purl.org/dc/terms/creator> <http://www.kjetil.kjernsmo.net/foaf#me> ;
 	<http://purl.org/dc/terms/subject> dist:project ;
@@ -403,117 +414,118 @@ dist:project cpant:all_from <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/pr
 	doap:maintainer <http://www.kjetil.kjernsmo.net/foaf#me> ;
 	doap:name "RDF-LinkedData" ;
 	doap:programming-language "Perl" ;
-	doap:release dist:pre, dist:v_0-57_07, dist:v_0_01, dist:v_0_02, dist:v_0_03, dist:v_0_05, dist:v_0_06, dist:v_0_08, dist:v_0_09_1, dist:v_0_10, dist:v_0_12, dist:v_0_14, dist:v_0_16, dist:v_0_18, dist:v_0_20, dist:v_0_30, dist:v_0_40, dist:v_0_42, dist:v_0_44, dist:v_0_50, dist:v_0_52, dist:v_0_54, dist:v_0_56 ;
+	doap:release dist:pre, dist:v_0-58, dist:v_0_01, dist:v_0_02, dist:v_0_03, dist:v_0_05, dist:v_0_06, dist:v_0_08, dist:v_0_09_1, dist:v_0_10, dist:v_0_12, dist:v_0_14, dist:v_0_16, dist:v_0_18, dist:v_0_20, dist:v_0_30, dist:v_0_40, dist:v_0_42, dist:v_0_44, dist:v_0_50, dist:v_0_52, dist:v_0_54, dist:v_0_56 ;
 	doap:shortdesc "Base class and scripts for servers that serve RDF as Linked Data."@en ;
 	a doap:Project ;
 	rdfs:seeAlso <http://packages.qa.debian.org/libr/librdf-linkeddata-perl.ttl> ;
 	<http://www.w3.org/2002/07/owl#sameAs> <http://packages.qa.debian.org/librdf-linkeddata-perl#upstream> .
 <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/project#main> <http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#fileName> "lib/RDF/LinkedData.pm" .
-dist:v_0-57_07 dcs:changeset _:r1374510606r0 ;
-	<http://purl.org/dc/terms/issued> "2013-07-18"^^<http://www.w3.org/2001/XMLSchema#date> ;
-	doap:revision "0.57_07"^^<http://www.w3.org/2001/XMLSchema#string> ;
+dist:v_0-58 dcs:changeset _:r1374565388r0 ;
+	<http://purl.org/dc/terms/issued> "2013-07-23"^^<http://www.w3.org/2001/XMLSchema#date> ;
+	doap:revision "0.58"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
-	rdfs:label "Stability and modernization release."@en .
+	rdfs:label "Stability and modernization release."@en ;
+	<http://www.w3.org/2002/07/owl#sameAs> <http://packages.qa.debian.org/librdf-linkeddata-perl#upstreamsrc_0.58> .
 dist:v_0_01 <http://purl.org/dc/terms/issued> "2010-04-29"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.01"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Initial release. Kjetil Kjernsmo refactored Gregs code to separate the web server logic from the rest."@en .
-dist:v_0_02 dcs:changeset _:r1374510607r132 ;
+dist:v_0_02 dcs:changeset _:r1374565388r133 ;
 	<http://purl.org/dc/terms/issued> "2010-05-05"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.02"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Use RDF::Trine's conneg and bounded description code."@en .
-dist:v_0_03 dcs:changeset _:r1374510607r127 ;
+dist:v_0_03 dcs:changeset _:r1374565388r128 ;
 	<http://purl.org/dc/terms/issued> "2010-05-06"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.03"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Add page method to use foaf:page for redirects."@en .
-dist:v_0_05 dcs:changeset _:r1374510606r115 ;
+dist:v_0_05 dcs:changeset _:r1374565388r116 ;
 	<http://purl.org/dc/terms/issued> "2010-06-13"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.05"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Major refactor, use Moose and Plack."@en .
-dist:v_0_06 dcs:changeset _:r1374510606r112 ;
+dist:v_0_06 dcs:changeset _:r1374565388r113 ;
 	<http://purl.org/dc/terms/issued> "2010-06-13"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.06"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Minor POD syntax documentation bug fix release."@en .
-dist:v_0_08 dcs:changeset _:r1374510606r107 ;
+dist:v_0_08 dcs:changeset _:r1374565388r108 ;
 	<http://purl.org/dc/terms/issued> "2010-08-02"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.08"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Update to use config hashrefs and various fixes for recent RDF::Trine."@en .
-dist:v_0_09_1 dcs:changeset _:r1374510606r101 ;
+dist:v_0_09_1 dcs:changeset _:r1374565388r102 ;
 	<http://purl.org/dc/terms/issued> "2010-08-18"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.09_1"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Refactor helper modules; ."@en .
-dist:v_0_10 dcs:changeset _:r1374510606r99 ;
+dist:v_0_10 dcs:changeset _:r1374565388r100 ;
 	<http://purl.org/dc/terms/issued> "2010-08-19"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.10"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Better tested release."@en .
-dist:v_0_12 dcs:changeset _:r1374510606r96 ;
+dist:v_0_12 dcs:changeset _:r1374565388r97 ;
 	<http://purl.org/dc/terms/issued> "2010-08-24"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.12"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Support base URI."@en .
-dist:v_0_14 dcs:changeset _:r1374510606r92 ;
+dist:v_0_14 dcs:changeset _:r1374565388r93 ;
 	<http://purl.org/dc/terms/issued> "2010-08-26"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.14"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Use URI object."@en .
-dist:v_0_16 dcs:changeset _:r1374510606r81 ;
+dist:v_0_16 dcs:changeset _:r1374565388r82 ;
 	<http://purl.org/dc/terms/issued> "2010-12-09"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.16"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Instantiate on startup; Many small fixes."@en .
-dist:v_0_18 dcs:changeset _:r1374510606r79 ;
+dist:v_0_18 dcs:changeset _:r1374565388r80 ;
 	<http://purl.org/dc/terms/issued> "2010-12-09"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.18"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Minor JSON syntax documentation bug fix release."@en .
-dist:v_0_20 dcs:changeset _:r1374510606r68 ;
+dist:v_0_20 dcs:changeset _:r1374565388r69 ;
 	<http://purl.org/dc/terms/issued> "2011-02-08"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.20"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Improved conneg; use Test::RDF; Many small fixes."@en .
-dist:v_0_30 dcs:changeset _:r1374510606r58 ;
+dist:v_0_30 dcs:changeset _:r1374565388r59 ;
 	<http://purl.org/dc/terms/issued> "2011-06-09"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.30"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Use RDF::Endpoint for the same data."@en .
-dist:v_0_40 dcs:changeset _:r1374510606r45 ;
+dist:v_0_40 dcs:changeset _:r1374565388r46 ;
 	<http://purl.org/dc/terms/issued> "2012-04-04"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.40"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Refactoring and code improvements."@en .
-dist:v_0_42 dcs:changeset _:r1374510606r37 ;
+dist:v_0_42 dcs:changeset _:r1374565388r38 ;
 	<http://purl.org/dc/terms/issued> "2012-06-11"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.42"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Enable very basic VoID for hypermedia."@en .
-dist:v_0_44 dcs:changeset _:r1374510606r31 ;
+dist:v_0_44 dcs:changeset _:r1374565388r32 ;
 	<http://purl.org/dc/terms/issued> "2012-06-12"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.44"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Bugfix release."@en .
-dist:v_0_50 dcs:changeset _:r1374510606r24 ;
+dist:v_0_50 dcs:changeset _:r1374565388r25 ;
 	<http://purl.org/dc/terms/issued> "2012-06-29"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.50"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Use VoID Generator."@en .
-dist:v_0_52 dcs:changeset _:r1374510606r22 ;
+dist:v_0_52 dcs:changeset _:r1374565388r23 ;
 	<http://purl.org/dc/terms/issued> "2012-06-30"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.52"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Bugfix release."@en .
-dist:v_0_54 dcs:changeset _:r1374510606r17 ;
+dist:v_0_54 dcs:changeset _:r1374565388r18 ;
 	<http://purl.org/dc/terms/issued> "2012-06-30"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.54"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;
 	rdfs:label "Improve VoID generator use."@en .
-dist:v_0_56 dcs:changeset _:r1374510606r9 ;
+dist:v_0_56 dcs:changeset _:r1374565388r10 ;
 	<http://purl.org/dc/terms/issued> "2012-07-29"^^<http://www.w3.org/2001/XMLSchema#date> ;
 	doap:revision "0.56"^^<http://www.w3.org/2001/XMLSchema#string> ;
 	a doap:Version ;

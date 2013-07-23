@@ -6,12 +6,13 @@ Home page:    <https://metacpan.org/release/RDF-LinkedData>
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
-0.57_07  2013-07-18  # Stability and modernization release.
+0.58  2013-07-23  # Stability and modernization release.
 
  - (Addition) Enable optional use of environment for config.
  - (Bugfix) Add the use of content type to Etag to work around some bugs.
  - (Bugfix) Allow POST requests to the endpoint.
  - (Bugfix) Fix newline bug causing problems.
+ - (Bugfix) Simplify setting headers by removing call to HTTP::Headers.
  - (Removal) Remove write_sqlite script.
  - (Update) Use URI::NamespaceMap for namespaces.
  - Change packaging to use Module::Package::RDF.
