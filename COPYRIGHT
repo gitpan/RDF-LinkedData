@@ -11,7 +11,7 @@ Files: CREDITS
  META.ttl
  META.yml
  Makefile.PL
- RDF-LinkedData-0.57_07.tar.gz
+ RDF-LinkedData-0.58.tar.gz
  README
  SIGNATURE
  meta/changes.ttl
@@ -43,6 +43,7 @@ License: Unknown
 Files: inc/Module/Install.pm
  inc/Module/Install/Include.pm
  inc/Module/Install/Metadata.pm
+ inc/Module/Install/Scripts.pm
 Copyright: Copyright 2002 - 2012 Brian Ingerson, Audrey Tang and Adam Kennedy.
 License: GPL-1.0+ or Artistic-1.0
 

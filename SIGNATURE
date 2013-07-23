@@ -14,15 +14,15 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA256
 
-SHA1 4ca72a537a984f90edd57ec03ee0206ac2276e23 COPYRIGHT
+SHA1 936d976debd22eb4a3338c4273ad71dccfc86c28 COPYRIGHT
 SHA1 cbcedf918f9c775287af2af12a421740746ad0ed CREDITS
-SHA1 5b4001a6b802f80345305619950b312587bd78ab Changes
+SHA1 cb0d638820801312e553f5754b0ba58152e77896 Changes
 SHA1 230fc89727db5d7e5e9bea0af3024f2226759fd8 LICENSE
-SHA1 0aa3be49bdb8119ccfe5c6faf6628e6fb9a75bec MANIFEST
-SHA1 b5144f1f5b30a79ced3c9a82942c346a1b966016 META.ttl
-SHA1 b8ef968b50b00b407ebac948ac465ad04e792db7 META.yml
+SHA1 af42a19e7f214604a81a1462dbdc1af752f0e052 MANIFEST
+SHA1 490e20cb394753bbef91d34b33fa5480e045afe5 META.ttl
+SHA1 665285d564526ba870e4405f8a4bdb3cd7e7673a META.yml
 SHA1 c3bae6660b43ab21dece40b803b50b139dd7cbcc Makefile.PL
-SHA1 1a2d5edd022c179f97b07f10e7d14b9debb00978 README
+SHA1 5c086697d32aa07776e77f14f4c30dd911ea1875 README
 SHA1 06c410f05488c1612ed66b06d3a86b2580581e4a inc/Module/AutoInstall.pm
 SHA1 8a924add836b60fb23b25c8506d45945e02f42f4 inc/Module/Install.pm
 SHA1 61ab1dd37e33ddbe155907ce51df8a3e56ac8bbf inc/Module/Install/AutoInstall.pm
@@ -35,6 +35,7 @@ SHA1 66d3d335a03492583a3be121a7d888f63f08412c inc/Module/Install/Include.pm
 SHA1 b62ca5e2d58fa66766ccf4d64574f9e1a2250b34 inc/Module/Install/Makefile.pm
 SHA1 1aa925be410bb3bfcd84a16985921f66073cc1d2 inc/Module/Install/Metadata.pm
 SHA1 3b9281ddf7dd6d6f5de0a9642c69333023193c80 inc/Module/Install/Package.pm
+SHA1 4d793c044726e06fe35d8d129b76da2803377f92 inc/Module/Install/Scripts.pm
 SHA1 b86d0385e10881db680d28bde94f275e49e34a27 inc/Module/Install/TrustMetaYml.pm
 SHA1 e4196994fa75e98bdfa2be0bdeeffef66de88171 inc/Module/Install/Win32.pm
 SHA1 c3a6d0d5b84feb3280622e9599e86247d58b0d18 inc/Module/Install/WriteAll.pm
@@ -43,9 +44,9 @@ SHA1 5a2f84a7a82eee0d1e5ed3628fe503a608efc10f inc/Module/Package/Dist/RDF.pm
 SHA1 0e0eed2e69d9583081868cf4f220068d0a018568 inc/Scalar/Util.pm
 SHA1 feb933cefe2e3762e8322bd6071a2499f3440da1 inc/YAML/Tiny.pm
 SHA1 a76eb57f1e61c3a7338c30e86f232d1fc5c2fc70 lib/Plack/App/RDF/LinkedData.pm
-SHA1 f9325be351d5d353e3c75788d63f69870c83f44a lib/RDF/LinkedData.pm
-SHA1 0590d63f6a55e68ec27fa2f2d649545d389014f6 meta/changes.ttl
-SHA1 15c8c0456449835ec688176c234c465eb5fe6070 meta/makefile.ttl
+SHA1 462016e99673dd9beac4e77e6e221ef2dc6161af lib/RDF/LinkedData.pm
+SHA1 fa9c686717d52b425e264279d5618750d2ddb37f meta/changes.ttl
+SHA1 f04965019b01fe1ad95dbcef33459886b7c4870a meta/makefile.ttl
 SHA1 0e21643ab8b9b3e385b54b4431ee90c91aa00ba9 meta/people.ttl
 SHA1 5a7ed0692494d346a460dd1373327b13670b81cb meta/project.ttl
 SHA1 ac489dc0edb5fbf019ec8795eb6fc9fdd6af8a9b rdf_linkeddata.json
@@ -53,7 +54,7 @@ SHA1 11cb972dfd9bfcab87895e485dc2a92487d900fa rdf_linkeddata_acl.json
 SHA1 5b8f0b2e42bf2a1350789102ada489e3baf66c61 rdf_linkeddata_dev.json
 SHA1 7615d2557aa4bfec8779dcfb077144fd19419123 rdf_linkeddata_end.json
 SHA1 520e39b454a4cae190615f47e4e7eb35e4d34ed0 rdf_linkeddata_void.json
-SHA1 98c762c08af1792a8c473b31e8efb869172c02be script/linked_data.psgi
+SHA1 0e877f3c7d4c227f10678eae072f0d710eca08b4 script/linked_data.psgi
 SHA1 af175eb27d75d4dc2890b917d845a2e2b04b5d49 t/00-load.t
 SHA1 30f3237b0c05d40a7e5ff60ceec0f9eaa4b4e435 t/10-basic.t
 SHA1 f1542abc490ba630eb93d7fbb0c689a6d96788e8 t/11-constructor.t
@@ -69,17 +70,17 @@ SHA1 a0946a1631578df073be5dbef1e81694bcd83fd2 t/data/basic.ttl
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.12 (GNU/Linux)
 
-iQIVAwUBUe40UH++6N86nkqlAQj55g/+IeSBkIJpxK4dwYtk1f/+1IoGixE0h2mK
-B7TaC5xuymJ4pkHBN3Fmrgjg4oUbV9hSFOw9RDBxCiMW1J6f8wbKiMI4EHCGANhS
-S6B58QPiagzXFUsUIWC4gua+hGSLkctECMS3MsjPmqNNkY3eRII07oEsSWoT6UGa
-hXbElnEzKMlGJgxyVO5VoWMeDcA1F2L2eqOaBWVrmufsGgpyw7SPcB80vvH8jxzA
-A5+2dM8HHEn/b6nPfJxxhZEmx8f1nZIbulNn/6XU6n4gKawchUweopDdxjsC10WB
-a3SmMcyEZdfteFl15IV8i7OLDubS9t1AFfwhIaZE8+quhowgSsOBXJ9Wcoc+SU7n
-8b9tA9LDfeKZRjubFQeSjBsv7qae48TUCdnbYufv2KNhvsUVI6uDIyFI4nelzVlm
-fQNYbnP8mUv2miomMG5I6gTaEvWWC8HKluxbGxa7BObVgQBDEGElmoYsDOiLsAZA
-p+rvOSpzZcKDeSTJZTQJvUPbPlcEnrWnk3CmLEcVSzldRIMJ/aM09CV4dlrjwxUU
-0RvqV4yR+GSg7nTMZiR6U7yeNWJhwPp+AX99uOOq/iE4O4mGzjjQgkiotNufeAS+
-+QEkoXh0HJPNOfbZ0j65iPTkNn5q+abibNVKKCldjdVtkgF2AIQ2qjCcndzj1lo/
-C9QrC6YK3Ks=
-=Uyqh
+iQIVAwUBUe756n++6N86nkqlAQhz8w//YcupAEw3F/Z18XlHkDv2WF4hafFCOYM9
+uA5YoSVd//ivgzIgcKOkjHmtcXc1EAzhavTfBAk4xJ5yGuh7dSrEtxSB/wWVEC/V
+8T5t4u3FwpfWVcWX2yMGBqh4TpGpfAz3QzhLklaYwB3MxNGTPt9PrBXek8hgd9pk
+n92SRGYaI4v+7Xt1bn9f6cyYxxgX5Jy5XQppYy+N5Nkdc8IqgDeCrZgQx6b+jSxE
+/2VmyMOV8x05cqAruDdlr5FlsEfLw4uzYGa3gqX8e9HtaBLp5mEIk6lK/rh1CN8Q
+nOYbvxAOCpUCcK3kM/u0lBSDvFuQbAZ2Szg0PGhyjlu11ph37lwHVo1/mWmxWXPE
+gywJGJkBqipGpQH4Tm0r9yXYG2avEVK77llW3klnCuoXxEEnsvPozXuxU5X6ZATP
+AU4NQY8ONYep2xKFvJhAPO/x4ZtF7mWefvan6QOtN+rPNQAI2OcVMpOqGkMBFnft
+FQShbWuYBMbB9xQKJIvNRSHV/OXuvffB7WTjyzdjxeBpkzxFfy8jcQ5nBajXtjDo
+o2JOvQLJ1ohWDfhHrvRX6oYPQkSa08G3UQ6webe7HecMrHu9hLF1thc7cMqOKkBp
+6gtUXD7yj7F/TRCXRj0GxiNrvOn3bvtMsPVhDKZDSvS6cOZJP8UdmiV9ptGkdZLx
+a9H5nWKXWW4=
+=kRUy
 -----END PGP SIGNATURE-----

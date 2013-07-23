@@ -6,6 +6,10 @@ Home page:    <https://metacpan.org/release/RDF-LinkedData>
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.60  2013-07-23  # Install script.
+
+ - (Bugfix) The PSGI script wasn't installed.
+
 0.58  2013-07-23  # Stability and modernization release.
 
  - (Addition) Enable optional use of environment for config.
