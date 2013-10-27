@@ -44,11 +44,11 @@ RDF::LinkedData - A simple Linked Data server implementation
 
 =head1 VERSION
 
-Version 0.60
+Version 0.62
 
 =cut
 
- our $VERSION = '0.60';
+ our $VERSION = '0.62';
 
 
 =head1 SYNOPSIS
@@ -274,6 +274,10 @@ sub response {
 	my $response = Plack::Response->new;
 
 	my $headers_in = $self->request->headers;
+
+	my $server = "RDF::LinkedData/$VERSION";
+	$server .= " " . $response->headers->header('Server') if defined($response->headers->header('Server'));
+	$response->headers->header('Server' => $server);
 
 	my $endpoint_path;
 	if ($self->has_endpoint) {
