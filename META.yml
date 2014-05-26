@@ -5,7 +5,7 @@ author:
   - 'Kjetil Kjernsmo <kjetilk@cpan.org>'
 build_requires:
   Config::JFDI: 0
-  ExtUtils::MakeMaker: 6.59
+  ExtUtils::MakeMaker: 6.36
   FindBin: 0
   RDF::RDFa::Parser: 0
   Test::Exception: 0
@@ -14,7 +14,7 @@ build_requires:
   Test::RDF: 0.26
   Test::WWW::Mechanize::PSGI: 0
 configure_requires:
-  ExtUtils::MakeMaker: 6.59
+  ExtUtils::MakeMaker: 6.36
 distribution_type: module
 dynamic_config: 0
 generated_by: 'Module::Install version 1.06'
@@ -35,7 +35,7 @@ recommends:
   Config::JFDI: 0
   JSON: 0
   Plack::Middleware::CrossOrigin: 0
-  RDF::Endpoint: 0.03
+  RDF::Endpoint: 0.05
   RDF::Generator::Void: 0.04
 requires:
   Digest::MD5: 0
@@ -55,12 +55,10 @@ requires:
   URI: 1.52
   URI::NamespaceMap: 0
   namespace::autoclean: 0.12
-  perl: 5.6.0
+  perl: 5.005
 resources:
   bugtracker: https://github.com/kjetilk/RDF-LinkedData/issues
   homepage: https://metacpan.org/release/RDF-LinkedData
   license: http://dev.perl.org/licenses/
   repository: https://github.com/kjetilk/RDF-LinkedData/
-version: 0.62
-x_contributors:
-  - 'Gregory Todd Williams <gwilliams@cpan.org>'
+version: 0.63_1

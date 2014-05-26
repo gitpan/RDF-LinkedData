@@ -44,11 +44,11 @@ RDF::LinkedData - A simple Linked Data server implementation
 
 =head1 VERSION
 
-Version 0.62
+Version 0.63_1
 
 =cut
 
- our $VERSION = '0.62';
+ our $VERSION = '0.63_1';
 
 
 =head1 SYNOPSIS
@@ -525,16 +525,16 @@ sub _negotiate {
 																					'text/html' => 'html',
 																					'application/xhtml+xml' => 'xhtml'
 																				  }
-																	)
-	};
-	$self->logger->debug("Got $ct content type");
-	if ($@) {
+																	);
+		$self->logger->debug("Got $ct content type");
+		1;
+	} or do {
 		my $response = Plack::Response->new;
 		$response->status(406);
 		$response->headers->content_type('text/plain');
 		$response->body('HTTP 406: No serialization available any specified content type');
 		return $response;
-	}
+	};
 	return ($ct, $s)
 }
 
@@ -578,7 +578,9 @@ sub _void_content {
 				$generator->urispace($self->base_uri);
 			}
 			if ($self->namespaces_as_vocabularies) {
-				$generator->add_vocabularies($self->list_namespaces);
+			  foreach my $nsuri ($self->list_namespaces) {
+				 $generator->add_vocabularies($nsuri->as_string); # TODO: Should be fixed in RDF::Generator::Void, but we fix it here for now
+			  }
 			}
 			if ($self->has_endpoint) {
 				$generator->add_endpoints($self->base_uri . $endpoint_path);
