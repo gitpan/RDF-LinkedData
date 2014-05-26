@@ -1,0 +1,99 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: RDF-LinkedData
+Upstream-Contact: Gregory Todd Williams <gwilliams@cpan.org>
+Source: https://metacpan.org/release/RDF-LinkedData
+
+Files: CREDITS
+ Changes
+ LICENSE
+ MANIFEST.SKIP
+ META.ttl
+ META.yml
+ Makefile.PL
+ README
+ meta/changes.ttl
+ meta/makefile.ttl
+ meta/people.ttl
+ meta/project.ttl
+ rdf_linkeddata.json
+ rdf_linkeddata_acl.json
+ rdf_linkeddata_dev.json
+ rdf_linkeddata_end.json
+ rdf_linkeddata_void.json
+ script/linked_data.psgi
+ t/00-load.t
+ t/10-basic.t
+ t/11-constructor.t
+ t/15-process.t
+ t/16-void.t
+ t/17-hypermedia-ro.t
+ t/19_config_file.t
+ t/20-psgi-basic.t
+ t/25-psgi-endpoint.t
+ t/28-psgi-void.t
+ t/data/add.ttl
+ t/data/basic.ttl
+Copyright: Unknown
+License: Unknown
+
+Files: inc/Module/Install.pm
+ inc/Module/Install/Include.pm
+ inc/Module/Install/Metadata.pm
+ inc/Module/Install/Scripts.pm
+Copyright: Copyright 2002 - 2012 Brian Ingerson, Audrey Tang and Adam Kennedy.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: inc/Module/Install/TrustMetaYml.pm
+ inc/Module/Package/Dist/RDF.pm
+Copyright: This software is copyright (c) 2011-2012 by Toby Inkster.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: inc/Module/Install/Contributors.pm
+Copyright: This software is copyright (c) 2013 by Toby Inkster.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: inc/Module/Install/Makefile.pm
+Copyright: Copyright 2002, 2003, 2004 Audrey Tang and Brian Ingerson.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: lib/Plack/App/RDF/LinkedData.pm
+Copyright: Copyright 2010-2013 Kjetil Kjernsmo.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: COPYRIGHT
+Copyright: None
+License: public-domain
+Comment: This file! Automatically generated.
+
+Files: inc/Module/Install/Package.pm
+Copyright: Copyright (c) 2011. Ingy doet Net.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: inc/Module/Install/Base.pm
+Copyright: Copyright 2003, 2004 by Audrey Tang <autrijus@autrijus.org>.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: lib/RDF/LinkedData.pm
+Copyright: Copyright 2010 Gregory Todd Williams.
+ Copyright 2010 ABC Startsiden AS.
+ Copyright 2010, 2011, 2012, 2013 Kjetil Kjernsmo.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: inc/YAML/Tiny.pm
+Copyright: Copyright 2006 - 2012 Adam Kennedy.
+License: GPL-1.0+ or Artistic-1.0
+
+License: Artistic-1.0
+ This software is Copyright (c) 2014 by the copyright holder(s).
+ 
+ This is free software, licensed under:
+ 
+   The Artistic License 1.0
+
+License: GPL-1.0
+ This software is Copyright (c) 2014 by the copyright holder(s).
+ 
+ This is free software, licensed under:
+ 
+   The GNU General Public License, Version 1, February 1989
+
