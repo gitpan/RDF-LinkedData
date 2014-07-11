@@ -6,6 +6,12 @@ Home page:    <https://metacpan.org/release/RDF-LinkedData>
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.66  2014-07-11  Fix bug in ETag handling.
+
+ - (Bugfix) ETags could have the URI prefixed.
+ - (Bugfix) RFC2616 says ETags have to be quoted.
+ - Make ETags use base64 encoding rather than a hex.
+
 0.64  2014-05-26  Fix bug in vocabulary URIs.
 
  - (Addition) Add git2prov links to the meta information, so there's a
