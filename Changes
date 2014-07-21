@@ -6,6 +6,13 @@ Home page:    <https://metacpan.org/release/RDF-LinkedData>
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
+0.67_02  2014-07-22  Documentation updates and small fixes.
+
+ - (Update) Many smaller documentation updates.
+ - Document the use of the PERLRDF_STORE environment variable.
+ - Drop the weak ETag checking.
+ - Use Try::Tiny instead of eval.
+
 0.66  2014-07-11  Fix bug in ETag handling.
 
  - (Bugfix) ETags could have the URI prefixed.

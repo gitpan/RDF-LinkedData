@@ -19,7 +19,7 @@ use RDF::RDFa::Generator 0.102;
 use HTML::HTML5::Writer qw(DOCTYPE_XHTML_RDFA);
 use Data::Dumper;
 use Digest::MD5 ('md5_base64');
-
+use Try::Tiny;
 
 with 'MooseX::Log::Log4perl::Easy';
 
@@ -44,11 +44,11 @@ RDF::LinkedData - A simple Linked Data server implementation
 
 =head1 VERSION
 
-Version 0.66
+Version 0.67_02
 
 =cut
 
- our $VERSION = '0.66';
+ our $VERSION = '0.67_02';
 
 
 =head1 SYNOPSIS
@@ -322,11 +322,7 @@ sub response {
 			my $content = $self->_content($node, $type, $endpoint_path);
 			$response->headers->header('Vary' => join(", ", qw(Accept)));
 			if (defined($self->current_etag)) {
-			  my $weak = '';
-			  if ($self->current_etag =~ m|^W/|) { # If the ETag is declared as weak, preserve that
-				 $weak = 'W/';
-			  }
-			  $response->headers->header('ETag' => '"' . $weak . md5_base64($self->current_etag . $content->{content_type}) . '"');
+			  $response->headers->header('ETag' => '"' . md5_base64($self->current_etag . $content->{content_type}) . '"');
 			}
 			$response->headers->content_type($content->{content_type});
 			$response->body(encode_utf8($content->{body}));
@@ -519,7 +515,7 @@ has void => (is => 'rw', isa => 'RDF::Generator::Void', predicate => 'has_void')
 sub _negotiate {
 	my ($self, $headers_in) = @_;
 	my ($ct, $s);
-	eval {
+	try {
 		($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $headers_in,
 																	 base_uri => $self->base_uri,
 																	 namespaces => $self->_namespace_hashref,
@@ -530,7 +526,7 @@ sub _negotiate {
 																	);
 		$self->logger->debug("Got $ct content type");
 		1;
-	} or do {
+	} catch {
 		my $response = Plack::Response->new;
 		$response->status(406);
 		$response->headers->content_type('text/plain');
@@ -628,11 +624,7 @@ sub _void_content {
 		$etag = $self->_last_extvoid_mtime if ($self->void_config->{add_void});
 		$etag .= $self->last_etag if (defined($self->last_etag));
 		if ($etag) {
-		  my $weak = '';
-		  if($etag =~ m|^W/|) { # If the ETag is declared as weak, preserve that
-			 $weak = 'W/';
-		  }
-		  $response->headers->header('ETag' => '"' . $weak . md5_base64($etag . $ct) . '"');
+		  $response->headers->header('ETag' => '"' . md5_base64($etag . $ct) . '"');
 		}
 		$response->headers->content_type($ct);
 		$response->body(encode_utf8($body));
@@ -680,8 +672,6 @@ L<http://lists.perlrdf.org/listinfo/dev>
 =item * Figure out what needs to be done to use this code in other frameworks, such as Magpie.
 
 =item * Make it read-write hypermedia.
-
-=item * Use a environment variable for config on the command line?
 
 =item * Make the result graph configurable.
 

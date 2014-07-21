@@ -52,6 +52,7 @@ requires:
   RDF::RDFa::Generator: 0.102
   RDF::Trine: 0.133
   Scalar::Util: 0
+  Try::Tiny: 0
   URI: 1.52
   URI::NamespaceMap: 0
   namespace::autoclean: 0.12
@@ -61,6 +62,6 @@ resources:
   homepage: https://metacpan.org/release/RDF-LinkedData
   license: http://dev.perl.org/licenses/
   repository: https://github.com/kjetilk/RDF-LinkedData/
-version: 0.66
+version: 0.67_02
 x_contributors:
   - 'Gregory Todd Williams <gwilliams@cpan.org>'

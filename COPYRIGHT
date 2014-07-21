@@ -10,6 +10,7 @@ Files: CREDITS
  META.ttl
  META.yml
  Makefile.PL
+ RDF-LinkedData-0.66.tar.gz
  README
  SIGNATURE
  meta/changes.ttl
@@ -58,10 +59,6 @@ Files: inc/Module/Install/Makefile.pm
 Copyright: Copyright 2002, 2003, 2004 Audrey Tang and Brian Ingerson.
 License: GPL-1.0+ or Artistic-1.0
 
-Files: lib/Plack/App/RDF/LinkedData.pm
-Copyright: Copyright 2010-2013 Kjetil Kjernsmo.
-License: GPL-1.0+ or Artistic-1.0
-
 Files: COPYRIGHT
 Copyright: None
 License: public-domain
@@ -79,6 +76,10 @@ License: GPL-1.0+ or Artistic-1.0
 
 Files: inc/Module/Install/Base.pm
 Copyright: Copyright 2003, 2004 by Audrey Tang <autrijus@autrijus.org>.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: lib/Plack/App/RDF/LinkedData.pm
+Copyright: Copyright 2010,2011,2012,2013,2014 Kjetil Kjernsmo.
 License: GPL-1.0+ or Artistic-1.0
 
 Files: inc/YAML/Tiny.pm
