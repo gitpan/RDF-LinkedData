@@ -6,11 +6,12 @@ Source: https://metacpan.org/release/RDF-LinkedData
 Files: CREDITS
  Changes
  LICENSE
+ MANIFEST
  MANIFEST.SKIP
  META.ttl
  META.yml
  Makefile.PL
- RDF-LinkedData-0.66.tar.gz
+ RDF-LinkedData-0.67_02.tar.gz
  README
  SIGNATURE
  meta/changes.ttl

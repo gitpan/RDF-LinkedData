@@ -6,7 +6,7 @@ Home page:    <https://metacpan.org/release/RDF-LinkedData>
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <mailto:kjetilk@cpan.org>
 
-0.67_02  2014-07-22  Documentation updates and small fixes.
+0.68  2014-07-22  Documentation updates and small fixes.
 
  - (Update) Many smaller documentation updates.
  - Document the use of the PERLRDF_STORE environment variable.

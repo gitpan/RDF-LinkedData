@@ -62,6 +62,6 @@ resources:
   homepage: https://metacpan.org/release/RDF-LinkedData
   license: http://dev.perl.org/licenses/
   repository: https://github.com/kjetilk/RDF-LinkedData/
-version: 0.67_02
+version: 0.68
 x_contributors:
   - 'Gregory Todd Williams <gwilliams@cpan.org>'
