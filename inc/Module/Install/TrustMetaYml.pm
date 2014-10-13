@@ -1,12 +1,16 @@
 #line 1
 package Module::Install::TrustMetaYml;
 
-use 5.005;
+use 5.008;
+use constant { FALSE => 0, TRUE => 1 };
 use strict;
+use utf8;
 
 BEGIN {
 	$Module::Install::TrustMetaYml::AUTHORITY = 'cpan:TOBYINK';
-	$Module::Install::TrustMetaYml::VERSION   = '0.003';
+}
+BEGIN {
+	$Module::Install::TrustMetaYml::VERSION   = '0.001';
 }
 
 use base qw(Module::Install::Base);
@@ -16,15 +20,15 @@ sub trust_meta_yml
 	my ($self, $where) = @_;
 	$where ||= 'META.yml';
 
-	$self->perl_version('5.005') unless defined $self->perl_version;
+	$self->perl_version('5.006') unless defined $self->perl_version;
 	
-	$self->include('YAML::Tiny', 0);
+	$self->include_deps('YAML::Tiny', 0);
 	return $self if $self->is_admin;
 
 	require YAML::Tiny;
 	my $data = YAML::Tiny::LoadFile($where);
 
-	$self->perl_version($data->{requires}{perl} || '5.005');
+	$self->perl_version($data->{requires}{perl} || '5.006');
 	
 	KEY: foreach my $key (qw(requires recommends build_requires))
 	{
@@ -42,9 +46,7 @@ sub trust_meta_yml
 
 *trust_meta_yaml = \&trust_meta_yml;
 
-1;
+TRUE;
 
 __END__
-
-=encoding utf8
 

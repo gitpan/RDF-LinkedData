@@ -8,7 +8,6 @@
 <project>
     :version_from <project#main> ;
     :all_from <project#main> ;
-    :readme_from <project#main> ;
     :install_script [ nfo:fileName "script/linked_data.psgi" ] ;
     :test_requires "Test::More 0.88", "Test::RDF 0.26", "FindBin", "Test::WWW::Mechanize::PSGI", 
     		   "Test::Exception", "Config::JFDI", "Test::JSON", "RDF::RDFa::Parser" ;
@@ -16,7 +15,7 @@
     	      "RDF::Trine 0.133", "Scalar::Util", "Plack 0.9939", "namespace::autoclean 0.12",
     	      "HTTP::Headers", "RDF::Helper::Properties 0.10", "URI 1.52", "URI::NamespaceMap",
 	      "Module::Load::Conditional", "Encode", "RDF::RDFa::Generator 0.102", 
-	      "HTML::HTML5::Writer", "Digest::MD5", "Try::Tiny" ;
+	      "HTML::HTML5::Writer", "Digest::MD5", "Try::Tiny", "List::Util 1.33" ;
     :recommends 
     		"Config::JFDI",		          # If you plan to use the Plack script
 		"JSON",                           # If you plan to use the Plack script

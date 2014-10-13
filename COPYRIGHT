@@ -3,7 +3,8 @@ Upstream-Name: RDF-LinkedData
 Upstream-Contact: Gregory Todd Williams <gwilliams@cpan.org>
 Source: https://metacpan.org/release/RDF-LinkedData
 
-Files: CREDITS
+Files: .travis.yml
+ CREDITS
  Changes
  LICENSE
  MANIFEST
@@ -11,9 +12,9 @@ Files: CREDITS
  META.ttl
  META.yml
  Makefile.PL
- RDF-LinkedData-0.67_02.tar.gz
  README
  SIGNATURE
+ inc/Sub/Util.pm
  meta/changes.ttl
  meta/makefile.ttl
  meta/people.ttl
@@ -31,12 +32,14 @@ Files: CREDITS
  t/15-process.t
  t/16-void.t
  t/17-hypermedia-ro.t
+ t/18-fragments.t
  t/19_config_file.t
  t/20-psgi-basic.t
  t/25-psgi-endpoint.t
  t/28-psgi-void.t
  t/data/add.ttl
  t/data/basic.ttl
+ t/data/fragments.ttl
 Copyright: Unknown
 License: Unknown
 
@@ -45,11 +48,6 @@ Files: inc/Module/Install.pm
  inc/Module/Install/Metadata.pm
  inc/Module/Install/Scripts.pm
 Copyright: Copyright 2002 - 2012 Brian Ingerson, Audrey Tang and Adam Kennedy.
-License: GPL-1.0+ or Artistic-1.0
-
-Files: inc/Module/Install/TrustMetaYml.pm
- inc/Module/Package/Dist/RDF.pm
-Copyright: This software is copyright (c) 2011-2012 by Toby Inkster.
 License: GPL-1.0+ or Artistic-1.0
 
 Files: inc/Module/Install/Contributors.pm
@@ -64,6 +62,17 @@ Files: COPYRIGHT
 Copyright: None
 License: public-domain
 Comment: This file! Automatically generated.
+
+Files: inc/Scalar/Util.pm
+Copyright: Copyright (c) 1997-2007 Graham Barr <gbarr@pobox.com>. All rights reserved.
+ Copyright (c) 1999 Tuomas J. Lukka <lukka@iki.fi>. All rights reserved.
+ Copyright (C) 2004, 2008  Matthijs van Duin.  All rights reserved.
+ Copyright (C) 2014 cPanel Inc.  All rights reserved.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: inc/Module/Install/TrustMetaYml.pm
+Copyright: This software is copyright (c) 2011 by Toby Inkster.
+License: GPL-1.0+ or Artistic-1.0
 
 Files: inc/Module/Install/Package.pm
 Copyright: Copyright (c) 2011. Ingy doet Net.
@@ -81,6 +90,10 @@ License: GPL-1.0+ or Artistic-1.0
 
 Files: lib/Plack/App/RDF/LinkedData.pm
 Copyright: Copyright 2010,2011,2012,2013,2014 Kjetil Kjernsmo.
+License: GPL-1.0+ or Artistic-1.0
+
+Files: inc/Module/Package/Dist/RDF.pm
+Copyright: This software is copyright (c) 2011-2012 by Toby Inkster.
 License: GPL-1.0+ or Artistic-1.0
 
 Files: inc/YAML/Tiny.pm
