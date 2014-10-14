@@ -4,7 +4,7 @@
       "Kjetil Kjernsmo <kjetilk@cpan.org>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Dist::Inkt::Profile::TOBYINK version 0.016, CPAN::Meta::Converter version 2.142060",
+   "generated_by" : "Dist::Inkt::Profile::TOBYINK version 0.023, CPAN::Meta::Converter version 2.142060",
    "keywords" : [
       "Semantic Web"
    ],
@@ -80,12 +80,11 @@
       },
       "RDF::LinkedData" : {
          "file" : "lib/RDF/LinkedData.pm",
-         "version" : "0.69_02"
+         "version" : "0.69_03"
       }
    },
    "release_status" : "testing",
    "resources" : {
-      "X_identifier" : "http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/project",
       "bugtracker" : {
          "web" : "https://github.com/kjetilk/RDF-LinkedData/issues"
       },
@@ -96,9 +95,11 @@
       "repository" : {
          "type" : "git",
          "web" : "https://github.com/kjetilk/RDF-LinkedData/"
-      }
+      },
+      "x_IRC" : "irc://irc.perl.org/#perlrdf",
+      "x_identifier" : "http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/project"
    },
-   "version" : "0.69_02",
+   "version" : "0.69_03",
    "x_contributors" : [
       "Gregory Todd Williams <gwilliams@cpan.org>"
    ],

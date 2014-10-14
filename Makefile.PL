@@ -7,7 +7,7 @@ my $meta = {
   "abstract"           => "Base class and scripts for servers that serve RDF as Linked Data.",
   "author"             => ["Kjetil Kjernsmo <kjetilk\@cpan.org>"],
   "dynamic_config"     => 0,
-  "generated_by"       => "Dist::Inkt::Profile::TOBYINK version 0.016, CPAN::Meta::Converter version 2.142060",
+  "generated_by"       => "Dist::Inkt::Profile::TOBYINK version 0.023, CPAN::Meta::Converter version 2.142060",
   "keywords"           => ["Semantic Web"],
   "license"            => ["perl_5"],
   "meta-spec"          => {
@@ -62,7 +62,7 @@ my $meta = {
                           },
   "provides"           => {
                             "Plack::App::RDF::LinkedData" => { file => "lib/Plack/App/RDF/LinkedData.pm" },
-                            "RDF::LinkedData" => { file => "lib/RDF/LinkedData.pm", version => "0.69_02" },
+                            "RDF::LinkedData" => { file => "lib/RDF/LinkedData.pm", version => "0.69_03" },
                           },
   "release_status"     => "testing",
   "resources"          => {
@@ -70,9 +70,10 @@ my $meta = {
                             homepage     => "https://metacpan.org/release/RDF-LinkedData",
                             license      => ["http://dev.perl.org/licenses/"],
                             repository   => { type => "git", web => "https://github.com/kjetilk/RDF-LinkedData/" },
-                            X_identifier => "http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/project",
+                            x_identifier => "http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/project",
+                            x_IRC        => "irc://irc.perl.org/#perlrdf",
                           },
-  "version"            => "0.69_02",
+  "version"            => "0.69_03",
   "x_contributors"     => ["Gregory Todd Williams <gwilliams\@cpan.org>"],
   "x_provides_scripts" => { "linked_data.psgi" => { file => "script/linked_data.psgi" } },
 };
