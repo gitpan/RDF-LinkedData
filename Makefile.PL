@@ -1,7 +1,175 @@
-use inc::Module::Package 'RDF';
+use strict;
+use ExtUtils::MakeMaker 6.17;
 
-if ($ENV{AUTOMATED_TESTING}) {
-  requires 'RDF::Endpoint'              => 0.03; # If you plan to use the Plack script with a SPARQL Endpoint
-  requires 'Plack::Middleware::CrossOrigin' => 0; # If you'd like to add CORS headers
-  requires 'RDF::Generator::Void'       => 0.04; # If you'd like a VoID description
+my $EUMM = eval( $ExtUtils::MakeMaker::VERSION );
+
+my $meta = {
+  "abstract"           => "Base class and scripts for servers that serve RDF as Linked Data.",
+  "author"             => ["Kjetil Kjernsmo <kjetilk\@cpan.org>"],
+  "dynamic_config"     => 0,
+  "generated_by"       => "Dist::Inkt::Profile::TOBYINK version 0.016, CPAN::Meta::Converter version 2.142060",
+  "keywords"           => ["Semantic Web"],
+  "license"            => ["perl_5"],
+  "meta-spec"          => {
+                            url => "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+                            version => 2,
+                          },
+  "name"               => "RDF-LinkedData",
+  "no_index"           => { directory => ["eg", "examples", "inc", "t", "xt"] },
+  "prereqs"            => {
+                            configure => { requires => { "ExtUtils::MakeMaker" => 6.17 } },
+                            runtime => {
+                              recommends => {
+                                              "Config::JFDI" => 0,
+                                              "JSON" => 0,
+                                              "Plack::Middleware::CrossOrigin" => 0,
+                                              "RDF::Endpoint" => 0.05,
+                                              "RDF::Generator::Void" => 0.04,
+                                            },
+                              requires   => {
+                                              "Digest::MD5" => 0,
+                                              "Encode" => 0,
+                                              "HTML::HTML5::Writer" => 0,
+                                              "HTTP::Headers" => 0,
+                                              "Log::Log4perl" => 0,
+                                              "Module::Load::Conditional" => 0,
+                                              "Moose" => 0,
+                                              "MooseX::Log::Log4perl::Easy" => 0,
+                                              "MooseX::UndefTolerant" => 0,
+                                              "namespace::autoclean" => 0.12,
+                                              "Plack" => 0.9939,
+                                              "RDF::Helper::Properties" => "0.10",
+                                              "RDF::RDFa::Generator" => 0.102,
+                                              "RDF::Trine" => 0.133,
+                                              "Scalar::Util" => 0,
+                                              "Try::Tiny" => 0,
+                                              "URI" => 1.52,
+                                              "URI::NamespaceMap" => 0,
+                                            },
+                            },
+                            test => {
+                              requires => {
+                                "Config::JFDI"               => 0,
+                                "FindBin"                    => 0,
+                                "RDF::RDFa::Parser"          => 0,
+                                "Test::Exception"            => 0,
+                                "Test::JSON"                 => 0,
+                                "Test::More"                 => 0.88,
+                                "Test::RDF"                  => 0.26,
+                                "Test::WWW::Mechanize::PSGI" => 0,
+                              },
+                            },
+                          },
+  "provides"           => {
+                            "Plack::App::RDF::LinkedData" => { file => "lib/Plack/App/RDF/LinkedData.pm" },
+                            "RDF::LinkedData" => { file => "lib/RDF/LinkedData.pm", version => "0.69_02" },
+                          },
+  "release_status"     => "testing",
+  "resources"          => {
+                            bugtracker   => { web => "https://github.com/kjetilk/RDF-LinkedData/issues" },
+                            homepage     => "https://metacpan.org/release/RDF-LinkedData",
+                            license      => ["http://dev.perl.org/licenses/"],
+                            repository   => { type => "git", web => "https://github.com/kjetilk/RDF-LinkedData/" },
+                            X_identifier => "http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/project",
+                          },
+  "version"            => "0.69_02",
+  "x_contributors"     => ["Gregory Todd Williams <gwilliams\@cpan.org>"],
+  "x_provides_scripts" => { "linked_data.psgi" => { file => "script/linked_data.psgi" } },
+};
+
+my %dynamic_config;
+
+my %WriteMakefileArgs = (
+	ABSTRACT   => $meta->{abstract},
+	AUTHOR     => ($EUMM >= 6.5702 ? $meta->{author} : $meta->{author}[0]),
+	DISTNAME   => $meta->{name},
+	VERSION    => $meta->{version},
+	EXE_FILES  => [ map $_->{file}, values %{ $meta->{x_provides_scripts} || {} } ],
+	NAME       => do { my $n = $meta->{name}; $n =~ s/-/::/g; $n },
+	test       => { TESTS => "t/*.t" },
+	%dynamic_config,
+);
+
+$WriteMakefileArgs{LICENSE} = $meta->{license}[0] if $EUMM >= 6.3001;
+
+sub deps
+{
+	my %r;
+	for my $stage (@_)
+	{
+		for my $dep (keys %{$meta->{prereqs}{$stage}{requires}})
+		{
+			next if $dep eq 'perl';
+			my $ver = $meta->{prereqs}{$stage}{requires}{$dep};
+			$r{$dep} = $ver if !exists($r{$dep}) || $ver >= $r{$dep};
+		}
+	}
+	\%r;
 }
+
+my ($build_requires, $configure_requires, $runtime_requires, $test_requires);
+if ($EUMM >= 6.6303)
+{
+	$WriteMakefileArgs{BUILD_REQUIRES}     ||= deps('build');
+	$WriteMakefileArgs{CONFIGURE_REQUIRES} ||= deps('configure');
+	$WriteMakefileArgs{TEST_REQUIRES}      ||= deps('test');
+	$WriteMakefileArgs{PREREQ_PM}          ||= deps('runtime');
+}
+elsif ($EUMM >= 6.5503)
+{
+	$WriteMakefileArgs{BUILD_REQUIRES}     ||= deps('build', 'test');
+	$WriteMakefileArgs{CONFIGURE_REQUIRES} ||= deps('configure');
+	$WriteMakefileArgs{PREREQ_PM}          ||= deps('runtime');	
+}
+elsif ($EUMM >= 6.52)
+{
+	$WriteMakefileArgs{CONFIGURE_REQUIRES} ||= deps('configure');
+	$WriteMakefileArgs{PREREQ_PM}          ||= deps('runtime', 'build', 'test');	
+}
+else
+{
+	$WriteMakefileArgs{PREREQ_PM}          ||= deps('configure', 'build', 'test', 'runtime');	
+}
+
+{
+	my ($minperl) = reverse sort(
+		grep defined && /^[0-9]+(\.[0-9]+)?$/,
+		map $meta->{prereqs}{$_}{requires}{perl},
+		qw( configure build runtime )
+	);
+	
+	if (defined($minperl))
+	{
+		die "Installing $meta->{name} requires Perl >= $minperl"
+			unless $] >= $minperl;
+		
+		$WriteMakefileArgs{MIN_PERL_VERSION} ||= $minperl
+			if $EUMM >= 6.48;
+	}
+}
+
+sub FixMakefile
+{
+	return unless -d 'inc';
+	my $file = shift;
+	
+	local *MAKEFILE;
+	open MAKEFILE, "< $file" or die "FixMakefile: Couldn't open $file: $!; bailing out";
+	my $makefile = do { local $/; <MAKEFILE> };
+	close MAKEFILE or die $!;
+	
+	$makefile =~ s/\b(test_harness\(\$\(TEST_VERBOSE\), )/$1'inc', /;
+	$makefile =~ s/( -I\$\(INST_ARCHLIB\))/ -Iinc$1/g;
+	$makefile =~ s/( "-I\$\(INST_LIB\)")/ "-Iinc"$1/g;
+	$makefile =~ s/^(FULLPERL = .*)/$1 "-Iinc"/m;
+	$makefile =~ s/^(PERL = .*)/$1 "-Iinc"/m;
+	
+	open  MAKEFILE, "> $file" or die "FixMakefile: Couldn't open $file: $!; bailing out";
+	print MAKEFILE $makefile or die $!;
+	close MAKEFILE or die $!;
+}
+
+my $mm = WriteMakefile(%WriteMakefileArgs);
+FixMakefile($mm->{FIRST_MAKEFILE} || 'Makefile');
+exit(0);
+
