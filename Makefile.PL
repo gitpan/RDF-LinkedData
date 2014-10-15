@@ -55,14 +55,14 @@ my $meta = {
                                 "Test::Exception"            => 0,
                                 "Test::JSON"                 => 0,
                                 "Test::More"                 => 0.88,
-                                "Test::RDF"                  => 0.26,
+                                "Test::RDF"                  => 1.16,
                                 "Test::WWW::Mechanize::PSGI" => 0,
                               },
                             },
                           },
   "provides"           => {
                             "Plack::App::RDF::LinkedData" => { file => "lib/Plack/App/RDF/LinkedData.pm" },
-                            "RDF::LinkedData" => { file => "lib/RDF/LinkedData.pm", version => "0.69_03" },
+                            "RDF::LinkedData" => { file => "lib/RDF/LinkedData.pm", version => "0.69_04" },
                           },
   "release_status"     => "testing",
   "resources"          => {
@@ -73,7 +73,7 @@ my $meta = {
                             x_identifier => "http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/project",
                             x_IRC        => "irc://irc.perl.org/#perlrdf",
                           },
-  "version"            => "0.69_03",
+  "version"            => "0.69_04",
   "x_contributors"     => ["Gregory Todd Williams <gwilliams\@cpan.org>"],
   "x_provides_scripts" => { "linked_data.psgi" => { file => "script/linked_data.psgi" } },
 };

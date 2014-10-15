@@ -1,24 +1,13 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: RDF-LinkedData
-Upstream-Contact: Gregory Todd Williams <gwilliams@cpan.org>
+Upstream-Contact: Kjetil Kjernsmo <kjetilk@cpan.org>
 Source: https://metacpan.org/release/RDF-LinkedData
 
-Files: .travis.yml
- CREDITS
- Changes
+Files: INSTALL
  LICENSE
  MANIFEST
  MANIFEST.SKIP
- META.ttl
- META.yml
- Makefile.PL
  README
- SIGNATURE
- inc/Sub/Util.pm
- meta/changes.ttl
- meta/makefile.ttl
- meta/people.ttl
- meta/project.ttl
  pm_to_blib
  rdf_linkeddata.json
  rdf_linkeddata_acl.json
@@ -26,56 +15,44 @@ Files: .travis.yml
  rdf_linkeddata_end.json
  rdf_linkeddata_void.json
  script/linked_data.psgi
- t/00-load.t
- t/10-basic.t
- t/11-constructor.t
- t/15-process.t
- t/16-void.t
- t/17-hypermedia-ro.t
- t/18-fragments.t
- t/19_config_file.t
- t/20-psgi-basic.t
- t/25-psgi-endpoint.t
- t/28-psgi-void.t
  t/data/add.ttl
  t/data/basic.ttl
  t/data/fragments.ttl
 Copyright: Unknown
 License: Unknown
 
-Files: inc/Module/Install.pm
- inc/Module/Install/Include.pm
- inc/Module/Install/Metadata.pm
- inc/Module/Install/Scripts.pm
-Copyright: Copyright 2002 - 2012 Brian Ingerson, Audrey Tang and Adam Kennedy.
+Files: Changes
+ META.json
+ META.yml
+ dist.ini
+ doap.ttl
+ t/15-process.t
+ t/17-hypermedia-ro.t
+ t/18-fragments.t
+ t/20-psgi-basic.t
+ t/25-psgi-endpoint.t
+ t/28-psgi-void.t
+Copyright: Copyright 2014 Kjetil Kjernsmo.
 License: GPL-1.0+ or Artistic-1.0
 
-Files: inc/Module/Install/Contributors.pm
-Copyright: This software is copyright (c) 2013 by Toby Inkster.
-License: GPL-1.0+ or Artistic-1.0
-
-Files: inc/Module/Install/Makefile.pm
-Copyright: Copyright 2002, 2003, 2004 Audrey Tang and Brian Ingerson.
+Files: t/11-constructor.t
+ t/16-void.t
+ t/19_config_file.t
+Copyright: Copyright 2012 Kjetil Kjernsmo.
 License: GPL-1.0+ or Artistic-1.0
 
 Files: COPYRIGHT
+ CREDITS
+ SIGNATURE
 Copyright: None
 License: public-domain
-Comment: This file! Automatically generated.
 
-Files: inc/Scalar/Util.pm
-Copyright: Copyright (c) 1997-2007 Graham Barr <gbarr@pobox.com>. All rights reserved.
- Copyright (c) 1999 Tuomas J. Lukka <lukka@iki.fi>. All rights reserved.
- Copyright (C) 2004, 2008  Matthijs van Duin.  All rights reserved.
- Copyright (C) 2014 cPanel Inc.  All rights reserved.
+Files: Makefile.PL
+Copyright: Copyright 2013 Toby Inkster.
 License: GPL-1.0+ or Artistic-1.0
 
-Files: inc/Module/Install/TrustMetaYml.pm
-Copyright: This software is copyright (c) 2011 by Toby Inkster.
-License: GPL-1.0+ or Artistic-1.0
-
-Files: inc/Module/Install/Package.pm
-Copyright: Copyright (c) 2011. Ingy doet Net.
+Files: t/00-load.t
+Copyright: Copyright 2010 Kjetil Kjernsmo.
 License: GPL-1.0+ or Artistic-1.0
 
 Files: lib/RDF/LinkedData.pm
@@ -84,20 +61,12 @@ Copyright: Copyright 2010 Gregory Todd Williams.
  Copyright 2010, 2011, 2012, 2013, 2014 Kjetil Kjernsmo.
 License: GPL-1.0+ or Artistic-1.0
 
-Files: inc/Module/Install/Base.pm
-Copyright: Copyright 2003, 2004 by Audrey Tang <autrijus@autrijus.org>.
+Files: t/10-basic.t
+Copyright: Copyright 2013 Kjetil Kjernsmo.
 License: GPL-1.0+ or Artistic-1.0
 
 Files: lib/Plack/App/RDF/LinkedData.pm
 Copyright: Copyright 2010,2011,2012,2013,2014 Kjetil Kjernsmo.
-License: GPL-1.0+ or Artistic-1.0
-
-Files: inc/Module/Package/Dist/RDF.pm
-Copyright: This software is copyright (c) 2011-2012 by Toby Inkster.
-License: GPL-1.0+ or Artistic-1.0
-
-Files: inc/YAML/Tiny.pm
-Copyright: Copyright 2006 - 2012 Adam Kennedy.
 License: GPL-1.0+ or Artistic-1.0
 
 License: Artistic-1.0
@@ -113,4 +82,3 @@ License: GPL-1.0
  This is free software, licensed under:
  
    The GNU General Public License, Version 1, February 1989
-

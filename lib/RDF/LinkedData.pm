@@ -47,11 +47,11 @@ RDF::LinkedData - A simple Linked Data server implementation
 
 =head1 VERSION
 
-Version 0.69_03
+Version 0.69_04
 
 =cut
 
- our $VERSION = '0.69_03';
+ our $VERSION = '0.69_04';
 
 
 =head1 SYNOPSIS
@@ -829,8 +829,6 @@ L<http://lists.perlrdf.org/listinfo/dev>
 =item * Figure out what needs to be done to use this code in other frameworks, such as Magpie.
 
 =item * Make it read-write hypermedia.
-
-=item * Use a environment variable for config on the command line?
 
 =item * Make the result graph configurable.
 

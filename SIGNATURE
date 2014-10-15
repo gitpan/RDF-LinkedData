@@ -14,53 +14,21 @@ not run its Makefile.PL or Build.PL.
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA256
 
-SHA1 b067c9a5664785d15810aaed298ad5b35b691dfd COPYRIGHT
-SHA1 cbcedf918f9c775287af2af12a421740746ad0ed CREDITS
-SHA1 b1fadca71b3150e0510d26648fa527f1eb52dc34 Changes
+SHA1 f7313b6762b11f98161219736ed99d2fec895b86 COPYRIGHT
+SHA1 47033ba9d86dad0bb7da4212bf898e1eae46a259 CREDITS
+SHA1 41ba8922a1f91637131c38c77ae1022b98c55179 Changes
 SHA1 a545b0fdb29256f6b04bd794e34de8e0aa421a99 INSTALL
-SHA1 d49accd904f0988a1e1ca86c87deb2dcca4d09a3 LICENSE
-SHA1 882e0a757063df799e93f0da64ca4f28e0f8742e MANIFEST
+SHA1 3b3d4e058223e91ddf5bb7fba2a77d084ae60a4a LICENSE
+SHA1 f8aaa6ddafb2ff925fe1f976b1757ec037445966 MANIFEST
 SHA1 235561e6f72d90278444b98fed04cd1cab9d2305 MANIFEST.SKIP
-SHA1 49ff28042ff1fc677f454eb2fcb843823605d124 META.json
-SHA1 2bb2a6ef1b2c01391629ad18d9891b53dadf52ba META.ttl
-SHA1 6a45ea3c82bb7ca7fa04d9f3ed184b9760fe4d47 META.yml
-SHA1 e631a1a7137b97bd024988fa0dc1692adbcd2ebc MYMETA.json
-SHA1 d9e3dbce049e7cf7c067805dae5ddb3c528c6b51 MYMETA.yml
-SHA1 ffd989d0f23ba803c98377c3f1fad84539de80ef Makefile
-SHA1 110875f2673e6e6a9840fb3d5c8f117616882368 Makefile.PL
+SHA1 e2003260ebd6cb32a3fa9e710de56de2fd3df346 META.json
+SHA1 21ba21e811dd4ae33b79b24f41f51df47848bebc META.yml
+SHA1 cb5d4b9de6c689834c8e4a8b85e3b7d72dbabe75 Makefile.PL
 SHA1 4b3fb1254d77f3a52bd6d41b6d9c00cf97a25186 README
 SHA1 157d43e84e6d5cfd366437aee68e9ef433d697b7 dist.ini
-SHA1 2d04000a1688bea8c1f16b425b3588202d8e2b0e doap.ttl
-SHA1 248dabb0dbdd603ecf7374c69e9a51073453e15d inc/Module/AutoInstall.pm
-SHA1 9b5001bfa9cf8607b3b3935284d9253e0391c9f1 inc/Module/Install.pm
-SHA1 4d21888488f7c6a67742343a0be404bb7e1b3e66 inc/Module/Install/AutoInstall.pm
-SHA1 b0ea9f3fc94eaec503b247ff4bbdc9fc91963727 inc/Module/Install/AutoLicense.pm
-SHA1 c04f94f91fa97b9f8cfb5a36071098ab0e6c78e3 inc/Module/Install/AutoManifest.pm
-SHA1 cab0e564f9bdf658535f683aa197157e06d0dcea inc/Module/Install/Base.pm
-SHA1 a1559b5b3b40f68efbbd256f4fef85970891b3ae inc/Module/Install/Can.pm
-SHA1 9e4cc10c7f138a3f2c60d9ee1f34261f0d8c5aae inc/Module/Install/Contributors.pm
-SHA1 8dde5b8c2020629644464296269d9551431aaf3c inc/Module/Install/Copyright.pm
-SHA1 2fcf74964120f40d4f7ea17540509d907c64c557 inc/Module/Install/Credits.pm
-SHA1 10ddee88509716f0ea54b8b7e93243c90f4df61c inc/Module/Install/DOAP.pm
-SHA1 470809a1dbe03e197e74dde79c6af40b5f7f9b26 inc/Module/Install/DOAPChangeSets.pm
-SHA1 f15c1ba85f6d52e70c48c64bf0752c90a4ad66f9 inc/Module/Install/Fetch.pm
-SHA1 d44d96acd20793306dd201030c688e2a7d3083ee inc/Module/Install/Include.pm
-SHA1 eb48df8bafd07c6a862126d9b274df42b4395742 inc/Module/Install/Makefile.pm
-SHA1 1a0e63581916a939cf578e2de0e3deb74206a120 inc/Module/Install/ManifestSkip.pm
-SHA1 95c73873c6c3cb7024614c225c53863e1e90c134 inc/Module/Install/Metadata.pm
-SHA1 3b9281ddf7dd6d6f5de0a9642c69333023193c80 inc/Module/Install/Package.pm
-SHA1 a4940c9337b07080f3e01d80080b0d6de9fc874f inc/Module/Install/RDF.pm
-SHA1 a1820d820772de5eb9c190425babf2c29a2caaf7 inc/Module/Install/Scripts.pm
-SHA1 b86d0385e10881db680d28bde94f275e49e34a27 inc/Module/Install/TrustMetaYml.pm
-SHA1 f8b2ae3386f6ba26c33408968a953d450842eade inc/Module/Install/Win32.pm
-SHA1 f302bc703d76299cff243e5b44cecd61aac27b76 inc/Module/Install/WriteAll.pm
-SHA1 26d58a041cd6b3d21db98b32e8fd1841aae21204 inc/Module/Package.pm
-SHA1 5a2f84a7a82eee0d1e5ed3628fe503a608efc10f inc/Module/Package/Dist/RDF.pm
-SHA1 10caade1ff1ffcd1ec3e26ffc4c419353bc0df29 inc/Scalar/Util.pm
-SHA1 86912b6619e497efe823d39c8887da093e677ac8 inc/Sub/Util.pm
-SHA1 feb933cefe2e3762e8322bd6071a2499f3440da1 inc/YAML/Tiny.pm
+SHA1 77a5ccbbfee7b3b7b7b588005780262a90bdd83c doap.ttl
 SHA1 7161d3dd54ce147392bd9a472ab76d6f37d05a82 lib/Plack/App/RDF/LinkedData.pm
-SHA1 b3360e52b0fef674b5afd523ed9f1fec31438716 lib/RDF/LinkedData.pm
+SHA1 81139c50eb58ff625d1cef8c8e83953a804f4502 lib/RDF/LinkedData.pm
 SHA1 da39a3ee5e6b4b0d3255bfef95601890afd80709 pm_to_blib
 SHA1 ac489dc0edb5fbf019ec8795eb6fc9fdd6af8a9b rdf_linkeddata.json
 SHA1 11cb972dfd9bfcab87895e485dc2a92487d900fa rdf_linkeddata_acl.json
@@ -74,7 +42,7 @@ SHA1 f1542abc490ba630eb93d7fbb0c689a6d96788e8 t/11-constructor.t
 SHA1 cad7ecd9da1827b51e2ca73e4e1b8ab1fe40e1d5 t/15-process.t
 SHA1 ecee325c14bbcae1615feadde5b679711fb1528a t/16-void.t
 SHA1 0b9926e533ee024f0f9dd23d12f57b7460370e4f t/17-hypermedia-ro.t
-SHA1 e1063194d5d003000ef52899ed211864f59ebd89 t/18-fragments.t
+SHA1 cb1689255c24c980e0691ae3177b23d646c651cd t/18-fragments.t
 SHA1 c0b3595724941c5698fa493d96c1aae49ba0fad1 t/19_config_file.t
 SHA1 0ff5f39448674ac1194fc4b3d8ea72122ae2c48d t/20-psgi-basic.t
 SHA1 09f9884f7d7e37d90a3c3a043f5cce72a88dc82f t/25-psgi-endpoint.t
@@ -85,17 +53,17 @@ SHA1 262ba8c31b0d06304f5cdd1dbfcf1e6ad8e189d5 t/data/fragments.ttl
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.12 (GNU/Linux)
 
-iQIVAwUBVD2jJH++6N86nkqlAQh8Dw//d010DpR2yq9CRAXqu6s97puDRQpCYmKV
-PJRl2o/FPS55izhUT5f5Z5v8mxGgGcLbsKuwQqTWdW4Nlj05GqkEWneNJoYyCImk
-jzeVsymHkrSpMhNCYIeIBFEk0UFGtad84fUs6EYhYHAD/53qdruFtNTgIPlJ8cJG
-1ZWWqVFeO8xCX2RnTpKUBjOUJg4ZHI8zE6Kry6Mk4nFHLYGmdSjJpdINoyIXCUhH
-60j7bx5LxmtpXIv9ezl9T2KFo4XzM5ySg/WHrWbkCGHxkb0OGKnZdu37+12VcjUQ
-7qz71HdcKgQtzdKmw4dj+zkVHF9LHY0I/Q9/3iUHtHXACjy0CMyfxNEnfGejTMku
-pwXdxcP7Va4E/teCGXOQktG4irTfLqza/n4piD8P/qj5c4M5eRcF5+tfZzrDNiDH
-LJBwOBOSw8W0oKxaGa7EphAJMdJx10LQljItB/3KBX09s0vYw4hN5jWcQsWZzsMc
-SoxG4Q5TxYdV1wB+l3oYV9sMoRSB1i8rJ496HT/iKBgau7bIjSQXpMkNfvbL2Qb0
-TZ6+dojmQWyUz57cp2Qwo78JSnhPiYMolhoPp7MglTb9+5HcXTOXSAePTCxuXQqr
-LxrNtaXiqlzzF1km28vcxaEla9DGJP1smVbVW8HtGndyGltrk5c6yrPUX/+T6Cmd
-4fmSy0kCh8k=
-=2SWo
+iQIVAwUBVD7NtX++6N86nkqlAQh/0Q/+Jck94kZPlHeQZQtqA6n5eIS2LQQfnozo
+pMiQoKzzBuc3s7Uyx6CzQw5wA/jxFqdH+mkCQjjPoxa+ToMfuvY62+eOwaKaiRU8
+m0D80kcA3B+Q1+HxXkVkJmys6cTA6iCNozlyHoiN0kgSLYqhppMN9QF+W+eM6FGv
+AcJer88GIsc2hu4NKRrXLxCltJfvVX85bC39f2LVehw2+gO5icKV6SXi0OGKnRKy
+zEKSgC+tcNon7Xjg7RGVE/Bp0R0Ba2O9P3EHcGHoDonMumaOPxZvC/qEJyGQ2wns
+sipGFHm4xpwsQeVx2/ZQwpwq1GWmsHAv30IQ0Djl2+087Z2Y/yZAUBfwpnSnFWpV
+V/31oduKK3HiEZMgXHCAte7/EbS8mOzDZAqmKabMVouN7g/u9CXpfeShQ6U+Q588
+QBYbsxa+q+GUFi2VEkuD2Ol4LXZswB6DRBs/7P1k8prDND8gU3Pq03phWv3ip9Q8
+/yHdBRXXyuDakUDI/SyzrDbKUmAfU89KuFIaV3/ZE/LT2rNrczOnzXLzklyQzoK5
+9vk1EeOxdVTQNmPibYJDlr+M6q0okiKL2q8r96rmrjMNuStLKwluztpGokpEdLI0
+MooGb0UYnsZUlaXXLscWE5jJyTx953mMWl+Qx4rfMDlUt1GJgeLQ9n0I50LloYOt
+fy2O+omrQ+I=
+=wMsn
 -----END PGP SIGNATURE-----
