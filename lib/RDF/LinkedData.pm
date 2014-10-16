@@ -1,9 +1,10 @@
 package RDF::LinkedData;
 
-use Moose;
+use Moo;
 use namespace::autoclean;
+use Types::Standard qw(InstanceOf Str Bool Maybe Int HashRef);
 
-use RDF::Trine qw[iri literal blank statement variable];
+use RDF::Trine qw[iri literal blank statement];
 use RDF::Trine::Serializer;
 use RDF::Trine::Namespace;
 use Log::Log4perl qw(:easy);
@@ -13,18 +14,14 @@ use URI::NamespaceMap;
 use URI;
 use HTTP::Headers;
 use Module::Load::Conditional qw[can_load];
-use MooseX::UndefTolerant::Attribute;
 use Encode;
 use RDF::RDFa::Generator 0.102;
 use HTML::HTML5::Writer qw(DOCTYPE_XHTML_RDFA);
 use Data::Dumper;
 use Digest::MD5 ('md5_base64');
-use Carp;
 use Try::Tiny;
-use List::Util qw(any);
 
-
-with 'MooseX::Log::Log4perl::Easy';
+with 'MooX::Log::Any';
 
 BEGIN {
 	if ($ENV{TEST_VERBOSE}) {
@@ -47,11 +44,11 @@ RDF::LinkedData - A simple Linked Data server implementation
 
 =head1 VERSION
 
-Version 0.69_04
+Version 0.69_05
 
 =cut
 
- our $VERSION = '0.69_04';
+ our $VERSION = '0.69_05';
 
 
 =head1 SYNOPSIS
@@ -97,24 +94,18 @@ L<Plack::Request> object (must be passed before you call C<content>)
 and an C<endpoint_config> hashref if you want to have a SPARQL
 Endpoint running using the recommended module L<RDF::Endpoint>.
 
-This module can also provide additional triples to turn the response
+This module can also provide additional triples to turn the respons
 into a hypermedia type. If you don't want this, set the C<hypermedia>
 argument to false. Currently this entails setting the SPARQL endpoint
 and vocabularies used using the L<VoID vocabulary|http://vocab.deri.ie/void>.
 The latter is very limited at present, all it'll do is use the namespaces
 if you have C<namespaces_as_vocabularies> enabled, which it is by default.
 
-Finally, it can provide experimental L<Triple Pattern
-Fragments|http://www.hydra-cg.com/spec/latest/triple-pattern-fragments/>
-support.
-
 =item C<< BUILD >>
 
-Called by Moose to initialize an object.
+Called by Moo to initialize an object.
 
 =cut
-
-# TODO look at buildargs to replace UndefTolerant
 
 sub BUILD {
 	my $self = shift;
@@ -153,15 +144,28 @@ sub BUILD {
 		$self->void(RDF::Generator::Void->new(inmodel => $self->model, 
 														  dataset_uri => $dataset_uri,
 														  namespaces_as_vocabularies => $self->void_config->{namespaces_as_vocabularies}));
-		if ($self->has_fragments) {
-			$self->logger->debug('Triple Pattern Fragments config found with parameters: ' . Dumper($self->fragments_config) );
-		}
  	} else {
 		$self->logger->info('No VoID config found');
 	}
 }
 
-has store => (is => 'rw', isa => 'HashRef | Str' );
+=item C<< BUILDARGS >>
+
+Called by Moo to ensure that some attributes can be left unset.
+
+=cut
+
+around BUILDARGS => sub 
+  {
+	  my ($next, $self) = (shift, shift);
+	  my $args = $self->$next(@_);
+	  for (keys %$args) {
+		  delete $args->{$_} if not defined $args->{$_};
+	  }
+	  return $args;
+  };
+
+has store => (is => 'rw', isa => HashRef | Str );
 
 
 =item C<< model >>
@@ -170,7 +174,7 @@ Returns the RDF::Trine::Model object.
 
 =cut
 
-has model => (is => 'ro', isa => 'RDF::Trine::Model', lazy => 1, builder => '_build_model', 
+has model => (is => 'ro', isa => InstanceOf['RDF::Trine::Model'], lazy => 1, builder => '_build_model', 
 				  handles => { current_etag => 'etag' });
 
 sub _build_model {
@@ -201,20 +205,15 @@ Returns or sets the base URI for this handler.
 
 =cut
 
-has base_uri => (is => 'rw', isa => 'Str', default => '' );
+has base_uri => (is => 'rw', isa => Str, default => '' );
 
-has hypermedia => (is => 'ro', isa => 'Bool', default => 1);
+has hypermedia => (is => 'ro', isa => Bool, default => 1);
 
-has namespaces_as_vocabularies => (is => 'ro', isa => 'Bool', default => 1);
+has namespaces_as_vocabularies => (is => 'ro', isa => Bool, default => 1);
 
-has endpoint_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
-								isa=>'HashRef', predicate => 'has_endpoint_config');
+has endpoint_config => (is => 'rw',	isa=>Maybe[HashRef], predicate => 'has_endpoint_config');
 
-has void_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
-								isa=>'HashRef', predicate => 'has_void_config');
-
-has fragments_config => (is => 'rw', traits => [ qw(MooseX::UndefTolerant::Attribute)],
-								isa=>'HashRef', predicate => 'has_fragments');
+has void_config => (is => 'rw', isa=>Maybe[HashRef], predicate => 'has_void_config');
 
 
 
@@ -224,7 +223,7 @@ Returns the L<Plack::Request> object if it exists or sets it if a L<Plack::Reque
 
 =cut
 
-has request => ( is => 'rw', isa => 'Plack::Request');
+has request => ( is => 'rw', isa => InstanceOf['Plack::Request']);
 
 
 =item C<< current_etag >>
@@ -237,7 +236,7 @@ Returns or sets the last Etag of so that changes to the model can be detected.
 
 =cut
 
-has last_etag => ( is => 'rw', isa => 'Str', predicate => 'has_last_etag');
+has last_etag => ( is => 'rw', isa => Str, predicate => 'has_last_etag');
 
 
 =item namespaces ( { skos => 'http://www.w3.org/2004/02/skos/core#', dct => 'http://purl.org/dc/terms/' } )
@@ -247,7 +246,7 @@ Gets or sets the namespaces that some serializers use for pretty-printing.
 =cut
 
 has 'namespaces' => (is => 'rw', 
-							isa => 'URI::NamespaceMap',
+							isa => InstanceOf['URI::NamespaceMap'],
 							builder => '_build_namespaces',
 							lazy => 1,
 							handles => {
@@ -298,89 +297,6 @@ sub response {
 	  if ($uri->path eq $endpoint_path) {
 		 return $self->endpoint->run( $self->request );
 	  }
-	}
-
-	if ($self->has_fragments && ($uri->path eq $self->fragments_config->{fragments_path})) {
-		croak 'A VoID description is needed when using Triple Pattern Fragments' unless ($self->has_void);
-		my %params = $uri->query_form;
-		my %statement = (subject => undef,
-							  predicate => undef,
-							  object => undef);
-		foreach my $term (keys(%statement)) {
-			my $value = $params{$term};
-			next unless $value;
-			return _client_error($response, "$term is invalid") if ref($value);
-			if ($value =~ m/^\?(\S+)$/) {
-				$statement{$term} = variable($1);
-			} elsif (($term eq 'object') && ($value =~ m/^\"(.+)\"((\@|\^\^)(\S+))?$/)) {
-				my $string = $1;
-				my $lang_or_datatype = $3;
-				my $rest = $4;
-				if (defined($lang_or_datatype) && ($lang_or_datatype eq '@')) {
-					$statement{$term} = literal($string, $rest);
-				} else {
-					$statement{$term} = literal($string, undef, $rest);
-				}
-			} else {
-				try {
-					$statement{$term} = iri($value);
-				} catch {
-					return _client_error($response, 'Was not able to parse subject as a IRI');
-				}
-			}
-		}
-
-		$self->logger->debug('Getting fragment with this selector ' . Dumper(\%statement));
-		return _client_error($response, 'Returning the whole database not allowed') unless any { defined } values(%statement);
-		my $output_model = $self->_common_fragments_control;
-
-		my $iterator = $self->model->get_statements($statement{subject}, $statement{predicate}, $statement{object});
-		$output_model->begin_bulk_ops;
-		my $counter = 0;
-		while (my $st = $iterator->next) {
-			$counter++;
-			# TODO: Paging goes here
-			$output_model->add_statement($st);
-		}
-		$self->add_namespace_mapping(void => 'http://rdfs.org/ns/void#');
-		$self->add_namespace_mapping(hydra => 'http://www.w3.org/ns/hydra/core#');
-		my $cl = literal($counter, undef, 'http://www.w3.org/2001/XMLSchema#integer');
-		my $void = RDF::Trine::Namespace->new('http://rdfs.org/ns/void#');
-		$output_model->add_statement(statement(iri($uri), 
-															$void->triples,
-															$cl));
-		$output_model->add_statement(statement(iri($uri), 
-															iri('http://www.w3.org/ns/hydra/core#totalItems'),
-															$cl));
-		$output_model->add_statement(statement(iri($uri),
-															iri('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'),
-															$void->Dataset));
-		$output_model->add_statement(statement($self->void->dataset_uri,
-															$void->subset,
-															iri($uri)));
-		$output_model->end_bulk_ops;
-		my ($ct, $s);
-		try {
-			($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $headers_in,
-																		 base_uri => $self->base_uri,
-																		 namespaces => $self->_namespace_hashref);
-		} catch {
-			$response->status(406);
-			$response->headers->content_type('text/plain');
-			$response->body('HTTP 406: No serialization available any specified content type');
-			return $response;
-		};
-
-		$response->status(200);
-		$response->headers->header('Vary' => join(", ", qw(Accept)));
-		if (defined($self->last_etag)) {
-		  $response->headers->header('ETag' => '"' . $self->last_etag . '"');
-		}
-		my $body = $s->serialize_model_to_string($output_model);
-		$self->logger->trace("Fragment message body is $body");
-		$response->headers->content_type($ct);
-		$response->body(encode_utf8($body));
-		return $response;
 	}
 
 	if ($self->has_void) {
@@ -449,15 +365,6 @@ sub response {
 	return $response;
 }
 
-sub _client_error {
-	my ($response, $msg) = @_;
-	$response->status(400);
-	$response->headers->content_type('text/plain');
-	$response->body("HTTP 400: $msg");
-	return $response;
-}
-
-
 
 =item C<< helper_properties (  ) >>
 
@@ -466,7 +373,7 @@ it if a L<RDF::Helper::Properties> object is given as parameter.
 
 =cut
 
-has helper_properties => ( is => 'rw', isa => 'RDF::Helper::Properties', lazy => 1, builder => '_build_helper_properties');
+has helper_properties => ( is => 'rw', isa => InstanceOf['RDF::Helper::Properties'], lazy => 1, builder => '_build_helper_properties');
 
 sub _build_helper_properties {
 	my $self = shift;
@@ -481,7 +388,7 @@ Returns or sets the type of result to return, i.e. C<page>, in the case of a hum
 
 =cut
 
-has 'type' => (is => 'rw', isa => 'Str', default => ''); 
+has 'type' => (is => 'rw', isa => Str, default => ''); 
 
 
 =item C<< my_node >>
@@ -600,7 +507,7 @@ constructor, so you would most likely not use this method.
 =cut
 
 
-has endpoint => (is => 'rw', isa => 'RDF::Endpoint', predicate => 'has_endpoint');
+has endpoint => (is => 'rw', isa => InstanceOf['RDF::Endpoint'], predicate => 'has_endpoint');
 
 
 =item C<< void ( [ $voidg ] ) >>
@@ -614,13 +521,13 @@ method.
 =cut
 
 
-has void => (is => 'rw', isa => 'RDF::Generator::Void', predicate => 'has_void');
+has void => (is => 'rw', isa => InstanceOf['RDF::Generator::Void'], predicate => 'has_void');
 
 
 sub _negotiate {
 	my ($self, $headers_in) = @_;
 	my ($ct, $s);
-	eval {
+	try {
 		($ct, $s) = RDF::Trine::Serializer->negotiate('request_headers' => $headers_in,
 																	 base_uri => $self->base_uri,
 																	 namespaces => $self->_namespace_hashref,
@@ -631,7 +538,7 @@ sub _negotiate {
 																	);
 		$self->logger->debug("Got $ct content type");
 		1;
-	} or do {
+	} catch {
 		my $response = Plack::Response->new;
 		$response->status(406);
 		$response->headers->content_type('text/plain');
@@ -706,11 +613,6 @@ sub _void_content {
 			$self->last_etag($self->current_etag);
 		}
 
-		if ($self->has_fragments) {
-			$self->add_namespace_mapping(hydra => 'http://www.w3.org/ns/hydra/core#');
-			$self->_common_fragments_control($self->_voidmodel);
-		}
-
 		# Now start serializing.
 		my ($ct, $s) = $self->_negotiate($self->request->headers);
 		return $ct if ($ct->isa('Plack::Response')); # A hack to allow for the failed conneg case
@@ -744,59 +646,12 @@ sub _void_content {
 	}
 }
 
-has _voidmodel => (is => 'rw', isa => 'RDF::Trine::Model', predicate => '_has_voidmodel', clearer => '_clear_voidmodel');
+has _voidmodel => (is => 'rw', isa => InstanceOf['RDF::Trine::Model'], predicate => '_has_voidmodel', clearer => '_clear_voidmodel');
 
-has _current_extvoid_mtime => (is => 'rw', isa => 'Int');
+has _current_extvoid_mtime => (is => 'rw', isa => Int);
 
-has _last_extvoid_mtime => (is => 'rw', isa => 'Int');
+has _last_extvoid_mtime => (is => 'rw', isa => Int);
 
-sub _common_fragments_control {
-	my $self = shift;
-	my $model = shift || RDF::Trine::Model->temporary_model;
-	my $void = RDF::Trine::Namespace->new('http://rdfs.org/ns/void#');
-	my $xsd  = RDF::Trine::Namespace->new('http://www.w3.org/2001/XMLSchema#');
-	my $hydra = RDF::Trine::Namespace->new('http://www.w3.org/ns/hydra/core#');
-	my $rdf = RDF::Trine::Namespace->new('http://www.w3.org/1999/02/22-rdf-syntax-ns#');
-	$model->begin_bulk_ops;
-	my $void_subject = $self->void->dataset_uri;
-	$model->add_statement(statement($void_subject,
-											  $rdf->type,
-											  $hydra->Collection));
-	$model->add_statement(statement($void_subject,
-											  $rdf->type,
-											  $void->Dataset));
-	$model->add_statement(statement($void_subject,
-											  $hydra->search,
-											  blank('template')));
-	$model->add_statement(statement($void_subject,
-								 $void->uriLookupEndpoint,
-								 literal($self->base_uri . $self->fragments_config->{fragments_path}
-											. '{?subject,predicate,object}')));
-	$model->add_statement(statement(blank('template'),
-								 $hydra->template,
-								 literal($self->base_uri . $self->fragments_config->{fragments_path}
-											. '{?subject,predicate,object}')));
-	$model->add_statement(statement(blank('template'),
-								 $hydra->property,
-								 $rdf->subject));
-	$model->add_statement(statement(blank('template'),
-								 $hydra->variable,
-								 literal('subject')));
-	$model->add_statement(statement(blank('template'),
-								 $hydra->property,
-								 $rdf->predicate));
-	$model->add_statement(statement(blank('template'),
-								 $hydra->variable,
-								 literal('predicate')));
-	$model->add_statement(statement(blank('template'),
-								 $hydra->property,
-								 $rdf->object));
-	$model->add_statement(statement(blank('template'),
-								 $hydra->variable,
-								 literal('object')));
-	$model->end_bulk_ops;
-	return $model;
-}
 
 =back
 
@@ -804,6 +659,10 @@ sub _common_fragments_control {
 =head1 AUTHOR
 
 Kjetil Kjernsmo, C<< <kjetilk@cpan.org> >>
+
+=head1 CONTRIBUTORS
+
+Toby Inkster
 
 =head1 BUGS
 
@@ -854,8 +713,5 @@ under the same terms as Perl itself.
 
 
 =cut
-
-# TODO : immutable doesn't seem to work with UndefTolerant
-#__PACKAGE__->meta->make_immutable();
 
 1;

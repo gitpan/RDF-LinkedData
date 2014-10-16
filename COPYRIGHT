@@ -17,7 +17,6 @@ Files: INSTALL
  script/linked_data.psgi
  t/data/add.ttl
  t/data/basic.ttl
- t/data/fragments.ttl
 Copyright: Unknown
 License: Unknown
 
@@ -28,7 +27,6 @@ Files: Changes
  doap.ttl
  t/15-process.t
  t/17-hypermedia-ro.t
- t/18-fragments.t
  t/20-psgi-basic.t
  t/25-psgi-endpoint.t
  t/28-psgi-void.t
