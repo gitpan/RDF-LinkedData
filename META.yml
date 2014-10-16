@@ -35,7 +35,7 @@ provides:
     file: lib/Plack/App/RDF/LinkedData.pm
   RDF::LinkedData:
     file: lib/RDF/LinkedData.pm
-    version: 0.69_06
+    version: 0.69_07
 recommends:
   Config::JFDI: '0'
   JSON: '0'
@@ -47,10 +47,10 @@ requires:
   Encode: '0'
   HTML::HTML5::Writer: '0'
   HTTP::Headers: '0'
+  Log::Contextual: '0'
   Log::Log4perl: '0'
   Module::Load::Conditional: '0'
   Moo: '0'
-  MooX::Log::Any: '0'
   Plack: '0.9939'
   RDF::Helper::Properties: '0.10'
   RDF::RDFa::Generator: '0.102'
@@ -68,7 +68,7 @@ resources:
   homepage: https://metacpan.org/release/RDF-LinkedData
   license: http://dev.perl.org/licenses/
   repository: https://github.com/kjetilk/RDF-LinkedData/
-version: 0.69_06
+version: 0.69_07
 x_contributors:
   - 'Gregory Todd Williams <gwilliams@cpan.org>'
 x_provides_scripts:

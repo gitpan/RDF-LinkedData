@@ -47,7 +47,7 @@
 		doap-deps:on "RDF::RDFa::Generator 0.102"^^doap-deps:CpanId;
 	], [
 		doap-deps:on "HTML::HTML5::Writer"^^doap-deps:CpanId;
-	], [ doap-deps:on "Digest::MD5"^^doap-deps:CpanId ], [ doap-deps:on "Try::Tiny"^^doap-deps:CpanId ], [ doap-deps:on "Moo"^^doap-deps:CpanId ], [ doap-deps:on "Types::Standard"^^doap-deps:CpanId ], [ doap-deps:on "MooX::Log::Any"^^doap-deps:CpanId ], [ doap-deps:on "Log::Log4perl"^^doap-deps:CpanId ], [ doap-deps:on "RDF::Trine 0.133"^^doap-deps:CpanId ];
+	], [ doap-deps:on "Digest::MD5"^^doap-deps:CpanId ], [ doap-deps:on "Try::Tiny"^^doap-deps:CpanId ], [ doap-deps:on "Moo"^^doap-deps:CpanId ], [ doap-deps:on "Types::Standard"^^doap-deps:CpanId ], [ doap-deps:on "Log::Contextual"^^doap-deps:CpanId ], [ doap-deps:on "Log::Log4perl"^^doap-deps:CpanId ], [ doap-deps:on "RDF::Trine 0.133"^^doap-deps:CpanId ];
 	doap-deps:test-requirement [ doap-deps:on "Test::More 0.88"^^doap-deps:CpanId ], [ doap-deps:on "Test::RDF 1.16"^^doap-deps:CpanId ], [ doap-deps:on "FindBin"^^doap-deps:CpanId ], [
 		doap-deps:on "Test::WWW::Mechanize::PSGI"^^doap-deps:CpanId;
 	], [ doap-deps:on "Test::Exception"^^doap-deps:CpanId ], [ doap-deps:on "Config::JFDI"^^doap-deps:CpanId ], [ doap-deps:on "Test::JSON"^^doap-deps:CpanId ], [ doap-deps:on "RDF::RDFa::Parser"^^doap-deps:CpanId ];
@@ -61,7 +61,7 @@
 	doap:maintainer      <http://www.kjetil.kjernsmo.net/foaf#me>;
 	doap:name            "RDF-LinkedData";
 	doap:programming-language "Perl";
-	doap:release         <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/pre>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-58>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-60>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-62>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-64>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-66>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-68>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-69-06>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_01>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_02>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_03>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_05>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_06>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_08>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_09_1>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_10>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_12>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_14>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_16>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_18>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_20>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_30>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_40>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_42>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_44>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_50>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_52>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_54>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_56>;
+	doap:release         <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/pre>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-58>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-60>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-62>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-64>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-66>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-68>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-69-07>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_01>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_02>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_03>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_05>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_06>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_08>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_09_1>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_10>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_12>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_14>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_16>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_18>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_20>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_30>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_40>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_42>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_44>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_50>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_52>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_54>, <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_56>;
 	doap:repository      [
 		a doap:GitRepository;
 		doap:browse <https://github.com/kjetilk/RDF-LinkedData/>;
@@ -175,6 +175,9 @@
 	dc:issued            "2014-07-22"^^xsd:date;
 	doap-changeset:changeset [
 		doap-changeset:item [
+			a doap-changeset:Update;
+			rdfs:label "Many smaller documentation updates."@en;
+		], [
 			a doap-changeset:Change;
 			rdfs:label "Document the use of the PERLRDF_STORE environment variable."@en;
 		], [
@@ -183,15 +186,12 @@
 		], [
 			a doap-changeset:Change;
 			rdfs:label "Drop the weak ETag checking."@en;
-		], [
-			a doap-changeset:Update;
-			rdfs:label "Many smaller documentation updates."@en;
 		];
 	];
 	doap:revision        "0.68"^^xsd:string;
 	owl:sameAs           <http://packages.qa.debian.org/librdf-linkeddata-perl#upstreamsrc_0.68>.
 
-<http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-69-06>
+<http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0-69-07>
 	a                    doap:Version;
 	rdfs:label           "Triple Pattern Fragments support."@en;
 	dc:issued            "2014-10-16"^^xsd:date;
@@ -207,10 +207,13 @@
 			rdfs:label "Migrate object system from Moose to Moo."@en;
 		], [
 			a doap-changeset:Change;
+			rdfs:label "Use Log::Contextual to manage the logging."@en;
+		], [
+			a doap-changeset:Change;
 			rdfs:label "Use Dist::Inkt to package."@en;
 		];
 	];
-	doap:revision        "0.69_06"^^xsd:string.
+	doap:revision        "0.69_07"^^xsd:string.
 
 <http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/v_0_01>
 	a                    doap:Version;
@@ -465,6 +468,9 @@
 	doap-changeset:changeset [
 		doap-changeset:item [
 			a doap-changeset:Addition;
+			rdfs:label "Add tests for more browser Accept headers."@en;
+		], [
+			a doap-changeset:Addition;
 			rdfs:label "Improve documentation of configuration (thanks to Thomas Kappler for input)."@en;
 		], [
 			a doap-changeset:Change;
@@ -490,9 +496,6 @@
 		], [
 			a doap-changeset:Bugfix;
 			rdfs:label "Gives HTML page for default Firefox Accept header."@en;
-		], [
-			a doap-changeset:Addition;
-			rdfs:label "Add tests for more browser Accept headers."@en;
 		];
 	];
 	doap:revision        "0.20"^^xsd:string.

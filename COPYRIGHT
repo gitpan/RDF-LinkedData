@@ -8,7 +8,6 @@ Files: INSTALL
  MANIFEST
  MANIFEST.SKIP
  README
- lib/RDF/#LinkedData.pm#
  rdf_linkeddata.json
  rdf_linkeddata_acl.json
  rdf_linkeddata_dev.json

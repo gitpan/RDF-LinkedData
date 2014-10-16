@@ -14,7 +14,6 @@ SIGNATURE
 dist.ini
 doap.ttl
 lib/Plack/App/RDF/LinkedData.pm
-lib/RDF/#LinkedData.pm#
 lib/RDF/LinkedData.pm
 rdf_linkeddata.json
 rdf_linkeddata_acl.json

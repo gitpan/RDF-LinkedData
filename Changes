@@ -6,12 +6,13 @@ Home page:    <https://metacpan.org/release/RDF-LinkedData>
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
 Maintainer:   Kjetil Kjernsmo <kjetilk@cpan.org>
 
-0.69_06	2014-10-16	Triple Pattern Fragments support.
+0.69_07	2014-10-16	Triple Pattern Fragments support.
 
  - Added: Triple Pattern Fragments support.
  - Hand-maintain README.
  - Migrate object system from Moose to Moo.
  - Use Dist::Inkt to package.
+ - Use Log::Contextual to manage the logging.
 
 0.68	2014-07-22	Documentation updates and small fixes.
 
