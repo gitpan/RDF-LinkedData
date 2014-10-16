@@ -9,7 +9,7 @@ build_requires:
   Test::Exception: '0'
   Test::JSON: '0'
   Test::More: '0.88'
-  Test::RDF: '0.26'
+  Test::RDF: '1.16'
   Test::WWW::Mechanize::PSGI: '0'
 configure_requires:
   ExtUtils::MakeMaker: '6.17'
@@ -35,7 +35,7 @@ provides:
     file: lib/Plack/App/RDF/LinkedData.pm
   RDF::LinkedData:
     file: lib/RDF/LinkedData.pm
-    version: 0.69_05
+    version: 0.69_06
 recommends:
   Config::JFDI: '0'
   JSON: '0'
@@ -68,7 +68,7 @@ resources:
   homepage: https://metacpan.org/release/RDF-LinkedData
   license: http://dev.perl.org/licenses/
   repository: https://github.com/kjetilk/RDF-LinkedData/
-version: 0.69_05
+version: 0.69_06
 x_contributors:
   - 'Gregory Todd Williams <gwilliams@cpan.org>'
 x_provides_scripts:
