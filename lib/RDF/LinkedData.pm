@@ -48,11 +48,11 @@ RDF::LinkedData - A Linked Data server implementation
 
 =head1 VERSION
 
-Version 0.69_10
+Version 0.70
 
 =cut
 
- our $VERSION = '0.69_10';
+ our $VERSION = '0.70';
 
 
 =head1 SYNOPSIS
@@ -392,8 +392,8 @@ sub response {
 
 		$response->status(200);
 		$response->headers->header('Vary' => join(", ", qw(Accept)));
-		if (defined($self->last_etag)) {
-		  $response->headers->header('ETag' => '"' . $self->last_etag . '"');
+		if ($self->has_last_etag) {
+			$response->headers->header('ETag' => '"' . md5_base64($self->last_etag . $ct) . '"');
 		}
 		my $body = $s->serialize_model_to_string($output_model);
 		log_trace { "Fragment message body is $body" };

@@ -82,10 +82,10 @@
       },
       "RDF::LinkedData" : {
          "file" : "lib/RDF/LinkedData.pm",
-         "version" : "0.69_10"
+         "version" : "0.70"
       }
    },
-   "release_status" : "testing",
+   "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
          "web" : "https://github.com/kjetilk/RDF-LinkedData/issues"
@@ -103,7 +103,7 @@
       "x_mailinglist" : "http://lists.perlrdf.org/listinfo/dev",
       "x_wiki" : "http://wiki.perlrdf.org/"
    },
-   "version" : "0.69_10",
+   "version" : "0.70",
    "x_contributors" : [
       "Gregory Todd Williams <gwilliams@cpan.org>"
    ],

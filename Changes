@@ -8,7 +8,7 @@ Wiki:         <http://wiki.perlrdf.org/>
 Mailing list: <http://lists.perlrdf.org/listinfo/dev>
 Maintainer:   Kjetil Kjernsmo <kjetilk@cpan.org>
 
-0.69_10	2014-10-17	Triple Pattern Fragments support and modernization.
+0.70	2014-10-17	Triple Pattern Fragments support and modernization.
 
  - Added: Add the use of Expires module.
  - Added: Improve documentation.
