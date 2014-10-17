@@ -64,7 +64,7 @@ my $meta = {
                           },
   "provides"           => {
                             "Plack::App::RDF::LinkedData" => { file => "lib/Plack/App/RDF/LinkedData.pm" },
-                            "RDF::LinkedData" => { file => "lib/RDF/LinkedData.pm", version => "0.69_09" },
+                            "RDF::LinkedData" => { file => "lib/RDF/LinkedData.pm", version => "0.69_10" },
                           },
   "release_status"     => "testing",
   "resources"          => {
@@ -77,7 +77,7 @@ my $meta = {
                             x_mailinglist => "http://lists.perlrdf.org/listinfo/dev",
                             x_wiki        => "http://wiki.perlrdf.org/",
                           },
-  "version"            => "0.69_09",
+  "version"            => "0.69_10",
   "x_contributors"     => ["Gregory Todd Williams <gwilliams\@cpan.org>"],
   "x_provides_scripts" => { "linked_data.psgi" => { file => "script/linked_data.psgi" } },
 };
