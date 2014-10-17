@@ -8,10 +8,11 @@ Wiki:         <http://wiki.perlrdf.org/>
 Mailing list: <http://lists.perlrdf.org/listinfo/dev>
 Maintainer:   Kjetil Kjernsmo <kjetilk@cpan.org>
 
-0.69_08	2014-10-16	Triple Pattern Fragments support and modernization.
+0.69_09	2014-10-17	Triple Pattern Fragments support and modernization.
 
  - Added: Add the use of Expires module.
  - Added: Improve documentation.
+ - Added: Support the .well-known/void magic URL.
  - Added: Triple Pattern Fragments support.
  - Hand-maintain README.
  - Migrate object system from Moose to Moo.

@@ -32,6 +32,7 @@ my $meta = {
                                               "Encode"                    => 0,
                                               "HTML::HTML5::Writer"       => 0,
                                               "HTTP::Headers"             => 0,
+                                              "List::Util"                => 1.33,
                                               "Log::Contextual"           => 0,
                                               "Log::Log4perl"             => 0,
                                               "Module::Load::Conditional" => 0,
@@ -63,7 +64,7 @@ my $meta = {
                           },
   "provides"           => {
                             "Plack::App::RDF::LinkedData" => { file => "lib/Plack/App/RDF/LinkedData.pm" },
-                            "RDF::LinkedData" => { file => "lib/RDF/LinkedData.pm", version => "0.69_08" },
+                            "RDF::LinkedData" => { file => "lib/RDF/LinkedData.pm", version => "0.69_09" },
                           },
   "release_status"     => "testing",
   "resources"          => {
@@ -76,7 +77,7 @@ my $meta = {
                             x_mailinglist => "http://lists.perlrdf.org/listinfo/dev",
                             x_wiki        => "http://wiki.perlrdf.org/",
                           },
-  "version"            => "0.69_08",
+  "version"            => "0.69_09",
   "x_contributors"     => ["Gregory Todd Williams <gwilliams\@cpan.org>"],
   "x_provides_scripts" => { "linked_data.psgi" => { file => "script/linked_data.psgi" } },
 };
