@@ -44,23 +44,24 @@ BEGIN {
 
 =head1 NAME
 
-RDF::LinkedData - A simple Linked Data server implementation
+RDF::LinkedData - A Linked Data server implementation
 
 =head1 VERSION
 
-Version 0.69_07
+Version 0.69_08
 
 =cut
 
- our $VERSION = '0.69_07';
+ our $VERSION = '0.69_08';
 
 
 =head1 SYNOPSIS
 
 For just setting this up and get it to run, you would just use the
-C<linked_data.psgi> script in this distribution. The usage of that is documented in
-L<Plack::App::RDF::LinkedData>. If you want to try and use this
-directly, you'd do stuff like:
+C<linked_data.psgi> script in this distribution. The usage of that is
+documented in L<Plack::App::RDF::LinkedData>, with the README is a
+quick start guide. If you want to try and use this directly, you'd do
+stuff like:
 
 	my $ld = RDF::LinkedData->new(store => $config->{store},
                                  endpoint_config => $config->{endpoint},
@@ -74,12 +75,18 @@ See L<Plack::App::RDF::LinkedData> for a complete example.
 
 =head1 DESCRIPTION
 
-This module is used to create a minimal Linked Data server that can
+This module is used to create a Linked Data server that can
 serve RDF data out of an L<RDF::Trine::Model>. It will look up URIs in
 the model and do the right thing (known as the 303 dance) and mint
 URLs for that, as well as content negotiation. Thus, you can
 concentrate on URIs for your things, you need not be concerned about
-minting URLs for the pages to serve it.
+minting URLs for the pages to serve it. In addition, optional modules
+can provide other important functionalities: Cross-origin resource
+sharing, VoID description, cache headers, SPARQL Endpoint, Triple
+Pattern Fragments, etc. As such, it encompasses a fair share of
+Semantic Web best practices, but possibly not in a very flexible Big
+Data manner.
+
 
 =head1 METHODS
 
@@ -102,8 +109,6 @@ This module can also provide additional triples to turn the response
 into a hypermedia type. If you don't want this, set the C<hypermedia>
 argument to false. Currently this entails setting the SPARQL endpoint
 and vocabularies used using the L<VoID vocabulary|http://vocab.deri.ie/void>.
-The latter is very limited at present, all it'll do is use the namespaces
-if you have C<namespaces_as_vocabularies> enabled, which it is by default.
 
 Finally, it can provide experimental L<Triple Pattern
 Fragments|http://www.hydra-cg.com/spec/latest/triple-pattern-fragments/>
@@ -314,6 +319,8 @@ sub response {
 
 	if ($self->has_fragments && ($uri->path eq $self->fragments_config->{fragments_path})) {
 		croak 'A VoID description is needed when using Triple Pattern Fragments' unless ($self->has_void);
+
+		# First compute the selectors from the query parameters
 		my %params = $uri->query_form;
 		my %statement = (subject => undef,
 							  predicate => undef,
@@ -321,10 +328,10 @@ sub response {
 		foreach my $term (keys(%statement)) {
 			my $value = $params{$term};
 			next unless $value;
-			return _client_error($response, "$term is invalid") if ref($value);
-			if ($value =~ m/^\?(\S+)$/) {
+			return _client_error($response, "$term is invalid") if ref($value); # E.g. an array would be invalid
+			if ($value =~ m/^\?(\S+)$/) { # Regexp matching variable
 				$statement{$term} = variable($1);
-			} elsif (($term eq 'object') && ($value =~ m/^\"(.+)\"((\@|\^\^)(\S+))?$/)) {
+			} elsif (($term eq 'object') && ($value =~ m/^\"(.+)\"((\@|\^\^)(\S+))?$/)) { # regexp matching literal
 				my $string = $1;
 				my $lang_or_datatype = $3;
 				my $rest = $4;
@@ -333,7 +340,7 @@ sub response {
 				} else {
 					$statement{$term} = literal($string, undef, $rest);
 				}
-			} else {
+			} else { # Now, it may be an IRI
 				try {
 					$statement{$term} = iri($value);
 				} catch {
@@ -506,9 +513,6 @@ get a URI object containing the full URI of the node.
 
 sub my_node {
 	my ($self, $iri) = @_;
-    
-	# not happy with this, but it helps for clients that do content sniffing based on filename
-	$iri =~ s/.(nt|rdf|ttl)$//;
 	log_info { "Subject URI to be used: $iri" };
 	return RDF::Trine::Node::Resource->new( $iri );
 }

@@ -6,7 +6,6 @@ Source: https://metacpan.org/release/RDF-LinkedData
 Files: INSTALL
  LICENSE
  MANIFEST
- MANIFEST.SKIP
  README
  rdf_linkeddata.json
  rdf_linkeddata_acl.json

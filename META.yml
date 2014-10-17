@@ -35,11 +35,12 @@ provides:
     file: lib/Plack/App/RDF/LinkedData.pm
   RDF::LinkedData:
     file: lib/RDF/LinkedData.pm
-    version: 0.69_07
+    version: 0.69_08
 recommends:
   Config::JFDI: '0'
   JSON: '0'
   Plack::Middleware::CrossOrigin: '0'
+  Plack::Middleware::Expires: '0'
   RDF::Endpoint: '0.05'
   RDF::Generator::Void: '0.04'
 requires:
@@ -64,11 +65,13 @@ requires:
 resources:
   IRC: irc://irc.perl.org/#perlrdf
   Identifier: http://purl.org/NET/cpan-uri/dist/RDF-LinkedData/project
+  Mailinglist: http://lists.perlrdf.org/listinfo/dev
+  Wiki: http://wiki.perlrdf.org/
   bugtracker: https://github.com/kjetilk/RDF-LinkedData/issues
   homepage: https://metacpan.org/release/RDF-LinkedData
   license: http://dev.perl.org/licenses/
   repository: https://github.com/kjetilk/RDF-LinkedData/
-version: 0.69_07
+version: 0.69_08
 x_contributors:
   - 'Gregory Todd Williams <gwilliams@cpan.org>'
 x_provides_scripts:

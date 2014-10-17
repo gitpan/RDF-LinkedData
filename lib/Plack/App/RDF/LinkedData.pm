@@ -27,7 +27,8 @@ Plack::App::RDF::LinkedData - A Plack application for running RDF::LinkedData
 
 This module sets up a basic Plack application to use
 L<RDF::LinkedData> to serve Linked Data, while making sure it does
-follow best practices for doing so.
+follow best practices for doing so. See the README for quick start,
+the gory details are here.
 
 =head1 MAKE IT RUN
 
@@ -74,6 +75,7 @@ file C<rdf_linkeddata.json> that looks something like:
 	                 "resource_links": true
 	                }
                     },
+        "expires" : "A86400" ,
         "cors": {
                   "origins": "*"
                 },
@@ -96,6 +98,11 @@ in C</usr/local/bin>, go:
 The C<endpoint>-part of the config sets up a SPARQL Endpoint. This requires
 the L<RDF::Endpoint> module, which is recommended by this module. To
 use it, it needs to have some config, but will use defaults.
+
+It is also possible to set an C<expires> time. This needs
+L<Plack::Middleware::Expires> and uses Apache C<mod_expires> syntax,
+in the example above, it will set an expires header for all resources
+to expire after 1 day of access.
 
 The C<cors>-part of the config enables Cross-Origin Resource
 Sharing, which is a W3C Recommendation for relaxing security

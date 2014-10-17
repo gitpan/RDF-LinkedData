@@ -4,10 +4,14 @@ RDF-LinkedData
 Created:      2009-04-23
 Home page:    <https://metacpan.org/release/RDF-LinkedData>
 Bug tracker:  <https://github.com/kjetilk/RDF-LinkedData/issues>
+Wiki:         <http://wiki.perlrdf.org/>
+Mailing list: <http://lists.perlrdf.org/listinfo/dev>
 Maintainer:   Kjetil Kjernsmo <kjetilk@cpan.org>
 
-0.69_07	2014-10-16	Triple Pattern Fragments support.
+0.69_08	2014-10-16	Triple Pattern Fragments support and modernization.
 
+ - Added: Add the use of Expires module.
+ - Added: Improve documentation.
  - Added: Triple Pattern Fragments support.
  - Hand-maintain README.
  - Migrate object system from Moose to Moo.
